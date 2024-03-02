@@ -19,6 +19,9 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator screenOptions={({ route }) => ({
+      tabBarStyle: {
+        backgroundColor: '#6E9D9C',
+      },
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
@@ -34,7 +37,7 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#000000',
+      tabBarActiveTintColor: '#FFFFFF',
       tabBarInactiveTintColor: '#0A3332',
       headerShown: false,
     })}>

@@ -12,7 +12,7 @@ export default function Armoirecreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: '#F2F4F1',
     alignItems: 'center',
     justifyContent: 'center',
   },

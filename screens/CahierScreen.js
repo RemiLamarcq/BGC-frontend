@@ -12,7 +12,7 @@ export default function CahierScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'yellow',
+    backgroundColor: '#F2F4F1',
     alignItems: 'center',
     justifyContent: 'center',
   },

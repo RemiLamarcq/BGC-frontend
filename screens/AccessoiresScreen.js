@@ -12,7 +12,7 @@ export default function AccessoiresScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: '#F2F4F1',
     alignItems: 'center',
     justifyContent: 'center',
   },
