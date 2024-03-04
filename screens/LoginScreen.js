@@ -1,16 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View , Button } from 'react-native';
+import { useSelector } from 'react-redux';
+import Signin from '../components/Signin';
+import Signup from '../components/Signup';
 
 export default function LoginScreen({navigation}) {
-  return (
-    <View style={styles.container}>
-      <Text>Login</Text>
-      <Button
-       title="Aller à l'armoire"
-      onPress={() => navigation.navigate('TabNavigator')}
-      />
-    </View>
-  );
+
+  const login = useSelector((state) => state.login.value)
+
+  if (login === 'Signin') {
+    return <Signin/>
+  }
+
+  else if (login === 'Signup') {
+    return <Signup/>
+  }
+
 }
 
 const styles = StyleSheet.create({

@@ -7,10 +7,14 @@ import Armoirecreen from './screens/ArmoireScreen';
 import CahierScreen from './screens/CahierScreen';
 import StatScreen from './screens/StatScreen';
 import LoginScreen from './screens/LoginScreen';
+import { Provider } from 'react-redux';
+import { configureStore} from '@reduxjs/toolkit';
+import user from '../frontend/reducers/user';
+import login from '../frontend/reducers/login';
 
-
-
-
+const store = configureStore({
+  reducer: {user, login},
+ });
 
 
 const Stack = createNativeStackNavigator();
@@ -52,12 +56,13 @@ const TabNavigator = () => {
 export default function App() {
   return (
 
+    <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
-
+    </Provider>
   );
 }
