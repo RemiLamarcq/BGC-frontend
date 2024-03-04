@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AccessoiresScreen from './screens/AccessoiresScreen';
-import Armoirecreen from './screens/ArmoireScreen';
+import ArmoireScreen from './screens/ArmoireScreen';
 import CahierScreen from './screens/CahierScreen';
 import StatScreen from './screens/StatScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -45,7 +45,7 @@ const TabNavigator = () => {
       tabBarInactiveTintColor: '#0A3332',
       headerShown: false,
     })}>
-      <Tab.Screen name="Armoire" component={Armoirecreen} />
+      <Tab.Screen name="Armoire" component={ArmoireScreen} />
       <Tab.Screen name="Cahier" component={CahierScreen} />
       <Tab.Screen name="Stat" component={StatScreen} />
       <Tab.Screen name="Accessoires" component={AccessoiresScreen} />

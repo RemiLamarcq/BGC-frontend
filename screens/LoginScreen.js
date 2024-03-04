@@ -9,11 +9,12 @@ export default function LoginScreen({navigation}) {
   const login = useSelector((state) => state.login.value)
 
   if (login === 'Signin') {
-    return <Signin/>
+    console.log(navigation)
+    return <Signin navigation={navigation}/>
   }
 
   else if (login === 'Signup') {
-    return <Signup/>
+    return <Signup  navigation={navigation}/>
   }
 
 }
