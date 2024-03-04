@@ -9,8 +9,8 @@ import StatScreen from './screens/StatScreen';
 import LoginScreen from './screens/LoginScreen';
 import { Provider } from 'react-redux';
 import { configureStore} from '@reduxjs/toolkit';
-import user from '../frontend/reducers/user';
-import login from '../frontend/reducers/login';
+import user from './reducers/user';
+import login from './reducers/login';
 
 const store = configureStore({
   reducer: {user, login},
