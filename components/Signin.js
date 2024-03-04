@@ -29,7 +29,6 @@ fetch('http://192.168.1.98:3000/users/signin', {
         setPassword('');
 
         dispatch(login({token: data.token, username: data.username}));
-
         navigation.navigate('TabNavigator');
       }
     })
