@@ -1,8 +1,5 @@
 
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import Dice from './Dice';
-import Timer from './Timer';
-import Notepad from './Notepad';
 
 //Composant enfant de AccessoiresScreen.js
 
@@ -18,7 +15,7 @@ function Accessories({ name, image, onPress }) {
                   alignItems: 'center', 
                   backgroundColor: '#CDDCDB', 
                   margin: 3,
-                  borderRadius: 20,
+                  borderRadius: 15,
                 }}>
                 <Image 
                   source={image} 
