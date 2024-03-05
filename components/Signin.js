@@ -12,13 +12,14 @@ export default function Signin({navigation}) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('')
 
   const handleSignIn = () => {
 
 console.log("Email:", email);
 console.log("Password:", password);
 
-fetch('http://192.168.1.150:3000/users/signin', {
+fetch('http://192.168.1.57:3000/users/signin', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ email, password }),
@@ -30,6 +31,8 @@ fetch('http://192.168.1.150:3000/users/signin', {
 
         dispatch(login({token: data.token, username: data.username}));
         navigation.navigate('TabNavigator');
+      }else{
+        setError(data.error)
       }
     })
   };
@@ -41,8 +44,9 @@ fetch('http://192.168.1.150:3000/users/signin', {
 
   return (
 
-    <KeyboardAvoidingView style={styles.full} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> 
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> 
+    
+   
     {/* Titre et logo */}
 
     <View style={styles.logoTitle}>
@@ -73,6 +77,9 @@ fetch('http://192.168.1.150:3000/users/signin', {
         value={password}
         onChangeText={(value) => setPassword(value)}
       />
+      <TextInput style={styles.errorMsg}>
+        {error}
+      </TextInput>
 
       <TouchableOpacity style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Valider</Text>
@@ -83,20 +90,17 @@ fetch('http://192.168.1.150:3000/users/signin', {
 
     <View style={styles.bottomPart}>
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.signUpText}>S'inscrire</Text>
+      <TouchableOpacity style={styles.buttonSignUp} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>S'inscrire</Text>
       </TouchableOpacity>
 
     </View>
-  </View>
+  
   </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-  full: {
-    flex : 1,
-  },
     container: {
     flex: 1,
     backgroundColor: '#F2F4F1',
@@ -104,7 +108,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     },
     logoTitle:{
-      flex:1,
+      padding: 24,
+      flex:0.5,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -119,15 +124,21 @@ const styles = StyleSheet.create({
       color : '#423D3D',
     },
     middlePart: {
-      flex: 0.3,
       backgroundColor:'#CDDCDB',
+      justifyContent:'space-around',
       width: "70%",
+      height: 200,
       borderRadius: 25,
+    },
+    bottomPart:{
+      marginTop : 50,
+      flex: 0.3,
     },
     input : {
       backgroundColor :"white",
       borderRadius: 50,
       height: 40,
+   
       margin : 8,
     },
     button:{
@@ -136,15 +147,29 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 50,
       height: 40,
-      marginTop: 20,
-      margin : 12,
-      marginBottom: 10,
+      marginTop: 10,
+      margin: 8,
     },
     buttonText:{
       textAlign: 'center',
       fontSize: 20,
       color :'#423D3D',
       fontWeight: 'bold',
+    },
+    buttonSignUp:{
+      backgroundColor :"#88B7B6",
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 50,
+      height: 40,
+      width: 200,
+      marginTop: 10,
+      margin : 12,
+      marginBottom: 10,
+    }, 
+    errorMsg:{
+      color : 'red', 
+      textAlign:'center'
     }
   
     })
