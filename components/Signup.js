@@ -22,7 +22,7 @@ const handleSignUp = () => {
     console.log("Email:", email);
     console.log("Password:", password);
 
-    fetch(`http://${MY_IP}:3000/users/signup`, {
+    fetch('https://bgc-backend.vercel.app/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, username }),
