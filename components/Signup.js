@@ -21,7 +21,11 @@ const handleSignUp = () => {
     console.log("Email:", email);
     console.log("Password:", password);
 
+<<<<<<< HEAD
     fetch('http://192.168.1.12:3000/users/signup', {
+=======
+    fetch('http://192.168.1.98:3000/users/signup', {
+>>>>>>> f411c2690931316fbfb7f0f434c27bf3d665051d
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, username }),
