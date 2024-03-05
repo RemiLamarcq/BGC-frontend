@@ -18,7 +18,7 @@ export default function Signin({navigation}) {
 console.log("Email:", email);
 console.log("Password:", password);
 
-fetch('http://192.168.1.150:3000/users/signin', {
+fetch(`https://bgc-backend.vercel.app/users/signin`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ email, password }),
