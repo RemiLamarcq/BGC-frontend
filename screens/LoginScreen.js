@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View , Button } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, Keyboard , Text} from 'react-native';
 import { useSelector } from 'react-redux';
 import Signin from '../components/Signin';
 import Signup from '../components/Signup';
@@ -10,12 +10,22 @@ export default function LoginScreen({navigation}) {
 
   if (login === 'Signin') {
     console.log(navigation)
-    return <Signin navigation={navigation}/>
+    return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+      <Signin navigation={navigation}/>
+      </TouchableWithoutFeedback>
+    )
+    
   }
 
   else if (login === 'Signup') {
-    return <Signup  navigation={navigation}/>
+    return (      
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+      <Signup navigation={navigation}/>
+      </TouchableWithoutFeedback>
+    )
   }
+
 
 }
 
@@ -26,4 +36,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  version:{
+    alignContent:'flex-end',
+    fontSize:500,
+  }
 });
