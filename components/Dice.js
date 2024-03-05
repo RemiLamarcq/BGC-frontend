@@ -7,10 +7,10 @@ function Dice() {
   const [diceValues, setDiceValues] = useState([null]);
 
   const addDice = () => {
-    setDiceValues([...diceValues, null]);
+    setDiceValues([...diceValues, null]);//ajout d'un dé
   };
 
-  const generateRandomNumber = (index) => {
+  const generateRandomNumber = (index) => {//générer un nombre al&éatoire au lancer de dés de 1 à 20
     const newDiceValues = [...diceValues];
     newDiceValues[index] = Math.floor(Math.random() * 20) + 1;
     setDiceValues(newDiceValues);
@@ -20,7 +20,7 @@ function Dice() {
     <View style={styles.container}>
       <View style={styles.addDice}>
         <TouchableOpacity onPress={addDice}>
-          <AntDesign name="plus" size={30} color="black" />
+          <AntDesign name="plus" size={30} color="black" />{/*Logo + de AntDesign*/}
         </TouchableOpacity>
       </View>
 
@@ -28,13 +28,13 @@ function Dice() {
         <View key={index} style={styles.cardContainer}>
           <TouchableOpacity onPress={() => generateRandomNumber(index)}>
             <View style={styles.iconTextContainer}>
-              <FontAwesome5 name="dice" size={20} color="black" />
+              <FontAwesome5 name="dice" size={20} color="black" />{/*Logo dé à remplacer par logo fleche tournée */}
               <Text style={styles.lancerText}>Lancer le dé</Text>
             </View>
           </TouchableOpacity>
           {value !== null && (
             <View style={styles.resultContainer}>
-              <Text style={styles.result}>Résultat : {value}</Text>
+              <Text style={styles.result}>Résultat : {value}</Text>{/*On récupere la valeur du nombre généré aléatoirement*/}
             </View>
           )}
         </View>
