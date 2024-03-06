@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../reducers/user';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 
-function Header({ title, height, showSearchBar, onSearchChange }) {
+//Composant enfant de AccessoiresScreen.js
+
+/* Création d'une prop showMeeple dans le composant Header.
+dans l' écran AccessoiresScreen, passer la valeur à true pour afficher le logo de déconnexion
+Pour les autres écrans, passer la valeur à false*/
+
+function Header({ title, height, showSearchBar, onSearchChange,  showMeeple }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
@@ -15,11 +21,13 @@ function Header({ title, height, showSearchBar, onSearchChange }) {
     };
   return (
     <View style={[styles.headerContainer, { height: height }]}>{/* height à modifier dans les fichiers screens */}
+      {showMeeple && (
         <TouchableOpacity onPress={handleLogout}>
-        <View style={styles.logoContainer}>
-          <Image source={require('../assets/meeple.png')} style={styles.logoMeeple} />
-        </View>
-      </TouchableOpacity>
+          <View style={styles.logoContainer}>
+            <Image source={require('../assets/meeple.png')} style={styles.logoMeeple} />
+          </View>
+        </TouchableOpacity>
+      )}
     <View style={styles.header}>
       <Text style={styles.headerTitle}>{title}</Text>{/* Titre du header à modifier dans les fichiers screeens */}
       {/* Barre de recherche, conditionnellement affichée en fonction du screen */}

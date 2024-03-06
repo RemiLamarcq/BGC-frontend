@@ -1,87 +1,88 @@
-import React from 'react';
-import { useState } from 'react';
-import Accessories from '../components/Accessories';//on importe le composant Accessories
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import Dice from '../components/Dice';//on importe le composant Dice
-import Header from '../components/Header';//on importe le header
+import React, { useState } from 'react';
+import { View } from 'react-native';
+// Import du composant Header
+import Header from '../components/Header';
+// Import du composant Accessories
+import Accessories from '../components/Accessories';
+// Import du composant Modal
+import AccessoryModal from '../components/AccessoryModal';
+// Import du composant Dice
+import Dice from '../components/Dice';
+// Import du composant Timer
+import Timer from '../components/Timer';
+// Import du composant Notepad
+import Notepad from '../components/Notepad';
 
-//Composant parent de Accessories.js
 
 export default function AccessoiresScreen() {
-  
-  const [showModal, setShowModal] = useState(false);//initialisation l'état de la modale à false tant que l'on a pas cliqué sur une section
+  // États pour gérer l'affichage de la modal et son contenu
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+  const [modalTitle, setModalTitle] = useState('Accessoires');
 
 
-//Création d'une fonction pour cliquer une section accessoires.
+  // Fonction pour gérer le clic sur une zone accessoire
   const handleZoneClick = (zone) => {
     console.log(`${zone}`);
+    let title = '';
+   
+    // Définir le contenu et le titre en fonction de la zone
     if (zone === 1) {
-      setShowModal(true);//au clic sur la zone 1, la modale s'ouvre
+      setModalContent(<Dice />);
+      title = 'DÉS';
+    } else if (zone === 2) {
+      setModalContent(<Timer />);
+      title = 'TIMER';
+    } else if (zone === 3) {
+      setModalContent(<Notepad />);
+      title = 'BLOC-NOTES';
     }
+
+    // Mettre à jour le titre dynamique
+    setModalTitle(title);
+
+    // Afficher la modal
+    setShowModal(true);
   };
 
+  // Fonction pour fermer la modal
   const closeModal = () => {
-    setShowModal(false);//au clic sur la fonction closeModal, on set la fonction showModal pour l'initialiser à false
+    setShowModal(false);
+    
   };
 
-    return (
-      <View style={{ flex: 1, backgroundColor: '#F1F4F2' }}>{/*vue d'ensemble de la AccessoiresScreen*/}
-       <Header title="Accessoires" height={100} />{/*header title + taille du header à modifier selon les pages*/}
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>{/*style des 3 zones cliquables*/}
-            
-                <View style={{ width: '90%' }}>{/*largeur des zones cliquables*/}
-                {/*zone 1*/}
-                    <Accessories
-                      name="Lancer de dés"
-                      image={require('../assets/dice.png')}
-                      onPress={() => handleZoneClick(1)}
-                    />
-                    {/*zone 2*/}
-                    <Accessories
-                      name="Timer"
-                      image={require('../assets/timer.png')}
-                      onPress={() => handleZoneClick(2)}
-                    />
-                    {/*zone 3*/}
-                    <Accessories
-                      name="Bloc-notes"
-                      image={require('../assets/notepad.png')}
-                      onPress={() => handleZoneClick(3)}
-                    />
-                </View>
-          </View>
-          <Modal
-        visible={showModal}
-        transparent
-        animationType="slide"
-        onRequestClose={closeModal}
-      >
-         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-              <Text>Fermer</Text>{/*METTRE UNE ICONE A LA PLACE !!!!*/}
-            </TouchableOpacity>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Dice />{/* Inclure le composant Dice dans la modal*/}
-          </View>
+  // Retourner la structure de la page AccessoiresScreen
+  return (
+    <View style={{ flex: 1, backgroundColor: '#F1F4F2' }}>
+      {/* Affichage du composant Header avec le titre 'Accessoires' , une hauteur de 100, et le meeple à true pour logout depuis le screen */}
+      <Header title="Accessoires" height={100}  showMeeple={true}/>
+      {/* Vue principale de la page */}
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        {/* Vue contenant les zones cliquables avec une largeur de 90% de la vue parente */}
+        <View style={{ width: '90%' }}>
+          {/* Composant Accessories pour la zone 1 (Lancer de dés) avec une fonction onPress */}
+          <Accessories
+            name="Lancer de dés"
+            image={require('../assets/dice.png')}
+            onPress={() => handleZoneClick(1)}
+          />
+          {/* Composant Accessories pour la zone 2 (Timer) avec une fonction onPress */}
+          <Accessories
+            name="Timer"
+            image={require('../assets/timer.png')}
+            onPress={() => handleZoneClick(2)}
+          />
+          {/* Composant Accessories pour la zone 3 (Bloc-notes) avec une fonction onPress */}
+          <Accessories
+            name="Bloc-notes"
+            image={require('../assets/notepad.png')}
+            onPress={() => handleZoneClick(3)}
+          />
         </View>
-      </Modal>
+      </View>
 
+      {/* Affichage de la modal avec les propriétés isVisible, closeModal, et modalContent */}
+      <AccessoryModal isVisible={showModal} closeModal={closeModal} modalContent={modalContent} modalTitle={modalTitle} />
     </View>
-    );
-}
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#F1F4F2', // Fond semi-transparent pour masquer le contenu
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    width: '80%',
-    height: '80%',  // Ajustez la taille de la modale selon vos besoins
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-  },
-});
+  );
+};

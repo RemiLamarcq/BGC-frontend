@@ -2,6 +2,7 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 
 //Composant enfant de AccessoiresScreen.js
+// Composant représentant la mise en forme d'une zone cliquable pour un accessoire spécifique.
 
 function Accessories({ name, image, onPress }) {
    
