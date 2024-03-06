@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-export default function Armoirecreen() {
+export default function ArmoireScreen() {
 
   const [gamesData, setGamesData] = useState([]);
   const token = useSelector(state => state.user.value.token);
