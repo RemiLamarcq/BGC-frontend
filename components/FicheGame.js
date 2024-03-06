@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible}) {
+export default function FicheGame({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible}) {
     console.log(name, image, gameType, minPlayers, maxPlayers, duration, personalNote);
 
     //récupérer personalNote pour faire des étoiles
