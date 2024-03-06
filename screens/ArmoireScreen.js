@@ -35,7 +35,7 @@ export default function Armoirecreen() {
             setGamesData(formatedData);
         }
       });
-  }, []); 
+  }, [addGameIsVisible]); 
 
   const toggleModalAddGame = () => {
     setAddGameIsVisible(!addGameIsVisible);
