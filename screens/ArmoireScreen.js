@@ -40,26 +40,28 @@ export default function Armoirecreen() {
     setAddGameIsVisible(!addGameIsVisible);
   }  
 
-  const toggleModalVisibility = () => {
+  const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
+    setSelectedGame(gameData);
   };
 
   return (
   <ScrollView contentContainerStyle={styles.scrollView}>
     <View>
-      {gamesData.length > 20000 ? (
-        gamesData.map((data, i) => {
+      {gamesData.length > 0 ? (
+        gamesData.map((gameData, i) => {
           return <Game 
                     toggleModalVisibility={toggleModalVisibility} 
                     isVisible={isVisible} 
-                    key={data.objectId} 
-                    name={data.name} 
-                    image={data.urlImg} 
-                    minPlayers={data.minPlayers} 
-                    maxPlayers={data.maxPlayers} 
-                    duration={data.duration} 
-                    gameType={data.gameType} 
-                    personalNote={data.personalNote} />
+                    key={gameData.objectId} 
+                    name={gameData.name} 
+                    image={gameData.urlImg} 
+                    minPlayers={gameData.minPlayers} 
+                    maxPlayers={gameData.maxPlayers} 
+                    duration={gameData.duration} 
+                    gameType={gameData.gameType} 
+                    personalNote={gameData.personalNote}
+                    game={gameData} />
              })
       ) : (
         <View>
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     width: '95%',

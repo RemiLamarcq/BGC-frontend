@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible}) {
-    console.log(name, image, gameType, minPlayers, maxPlayers, duration, personalNote);
+export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game }) {
 
     //récupérer personalNote pour faire des étoiles
     const stars = [];
@@ -79,11 +78,75 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
         </View>
 
-    <Modal visible={isVisible} animationType="slide">
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-            <Text>This is a modal</Text>
-            <Button title="Close Modal" onPress={toggleModalVisibility} />
+   {/* modale et contenu qui sera à déplacer */}     
+
+    <Modal visible={isVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+
+            <View style={styles.top}>
+                <View style={styles.topLeft}>
+                    <TouchableOpacity onPress={toggleModalVisibility}>
+                        <FontAwesome 
+                            style={styles.goBackIcon}
+                            name="arrow-left"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.topRight}>
+                    <TouchableOpacity>
+                        <FontAwesome 
+                            style={styles.goBackIcon}
+                            name="pencil"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <FontAwesome 
+                            style={styles.goBackIcon}
+                            name="trash"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            <View style={styles.title}>
+                <View style={styles.titleAndScore}>
+                    <Text style={styles.textTitleAgain}>{name}</Text>
+                    <View style={styles.starsAgain}>{stars}</View>
+                </View>
+                <View style={styles.image}>
+                    <Image 
+                    source={{uri: image}}
+                    style={{height: '80%', width: '100%'}}/>
+                </View>
+            </View>
+
+            <View style={styles.info}>
+                <View style={styles.typeAndDuration}>
+                    <View style={styles.type}>
+                        <FontAwesome name="hashtag"/>
+                        <Text>{gameType}</Text>
+                    </View>
+                    <View style={styles.duration}>
+                        <FontAwesome name="heart"/>
+                        <Text>{duration}</Text>
+                    </View>
+                </View>
+                <View style={styles.nbPlayersAndStats}>
+
+                </View> 
+                <View style={styles.lastPlay}>
+
+                </View>
+            </View>
+
+            <View style={styles.extensions}>
+
+            </View>
+            
           </View>
         </View>
     </Modal>
@@ -175,7 +238,63 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
           flexDirection: 'row',
           alignSelf: 'flex-end',
           marginRight: 15
-        }
+        },
+
+//style de la modale
+
+        modalContainer: {
+            flex:1,
+            top: 15, 
+            marginBottom: 60,
+            width: '100%',
+            backgroundColor: '#F2F4F1',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderTopLeftRadius: 40, // Adjust the radius as needed
+            borderTopRightRadius: 40,
+          },
+
+          modalContent: {
+            padding: 20,
+            borderRadius: 10,
+            width: '95%',
+          },
+
+          top: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          },
+
+          goBackIcon: {
+            borderRadius: 50,
+            width: 30,
+            height: 30,
+          },
+
+          topRight: {
+            flexDirection: 'row',
+          },
+
+          textTitleAgain: {
+            fontWeight: '700',
+            fontSize: 18,
+            alignSelf: 'center',
+          },
+
+          starsAgain: {
+            flexDirection: 'row',
+            alignSelf: 'center',
+          },
+
+          info: {
+            backgroundColor: '#CDDCDB',
+            borderRadius: 30,
+          },
+
+          typeAndDuration: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          },
   
   
       })
