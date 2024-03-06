@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
-export default function AddGame() {
+export default function AddGame(props) {
     const user = useSelector((state) => state.user.value);
 
     // Liste des infos lié à un jeu suite au clic dans le dropdown
@@ -65,7 +65,7 @@ export default function AddGame() {
             headers: { 'Content-Type': 'application/json' },
             }).then(response=> response.json())
         .then(() => {
-        console.log('Jeu ajouté au closet!')
+        props.toggleModalAddGame()
         })
     }
     
@@ -92,6 +92,9 @@ export default function AddGame() {
         buttonCard = 
         <View style={styles.alreadyInCloset}>
             <Text>Ce jeu est déjà dans votre armoire</Text>
+            <TouchableOpacity onPress={() => props.toggleModalAddGame()} style={styles.buttonClose}>
+            <Text style={styles.textButtonClose}>Fermer</Text>
+            </TouchableOpacity>
         </View>
     }
     else {
