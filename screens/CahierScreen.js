@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import AddGame from '../components/AddGame';
 
 export default function CahierScreen() {
   return (
     <View style={styles.container}>
+      <AddGame/>
       <Text>Cahier</Text>
     </View>
   );
