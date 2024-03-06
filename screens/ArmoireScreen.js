@@ -43,7 +43,10 @@ export default function Armoirecreen() {
 
   const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
-    setSelectedGame(gameData);
+    if (!isVisible) {
+      setSelectedGame(gameData);
+    }
+    console.log("Selected game:", gameData);
   };
 
   return (
@@ -62,7 +65,8 @@ export default function Armoirecreen() {
                     duration={gameData.duration} 
                     gameType={gameData.gameType} 
                     personalNote={gameData.personalNote}
-                    game={gameData} />
+                    game={gameData}
+                    selectedGame={selectedGame} />
              })
       ) : (
         <View>
