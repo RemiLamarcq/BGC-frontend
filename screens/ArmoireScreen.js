@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
+import AddGame from '../components/AddGame';
 
 export default function Armoirecreen() {
 
@@ -77,10 +78,7 @@ export default function Armoirecreen() {
     </View>
     <Modal visible={addGameIsVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text>This is a modal</Text>
-            <Button title="Close Modal" onPress={toggleModalAddGame} />
-          </View>
+          <AddGame toggleModalAddGame={toggleModalAddGame}/>
         </View>
     </Modal>
   </ScrollView>
