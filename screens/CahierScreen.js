@@ -47,7 +47,7 @@ export default function ArmoireScreen() {
   return (
   <ScrollView contentContainerStyle={styles.scrollView}>
     <View>
-      {gamePlays.length > 20000 ? (
+      {gamePlays.length > 0 ? (
         gamePlays.map((data, i) => {
           return <Game 
                     toggleModalVisibility={toggleModalVisibility} 

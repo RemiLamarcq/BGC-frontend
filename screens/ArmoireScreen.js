@@ -6,13 +6,14 @@ import { useSelector } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
 
-export default function Armoirecreen() {
+export default function ArmoireScreen() {
 
   const [gamesData, setGamesData] = useState([]);
   const token = useSelector(state => state.user.value.token);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
+  console.log(token)
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -47,7 +48,7 @@ export default function Armoirecreen() {
   return (
   <ScrollView contentContainerStyle={styles.scrollView}>
     <View>
-      {gamesData.length > 20000 ? (
+      {gamesData.length > 0 ? (
         gamesData.map((data, i) => {
           return <Game 
                     toggleModalVisibility={toggleModalVisibility} 
