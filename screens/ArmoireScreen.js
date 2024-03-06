@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
+import AddGame from '../components/AddGame';
 
 export default function ArmoireScreen() {
 
@@ -41,26 +42,28 @@ export default function ArmoireScreen() {
     setAddGameIsVisible(!addGameIsVisible);
   }  
 
-  const toggleModalVisibility = () => {
+  const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
+    setSelectedGame(gameData);
   };
 
   return (
   <ScrollView contentContainerStyle={styles.scrollView}>
     <View>
       {gamesData.length > 0 ? (
-        gamesData.map((data, i) => {
+        gamesData.map((gameData, i) => {
           return <Game 
                     toggleModalVisibility={toggleModalVisibility} 
                     isVisible={isVisible} 
-                    key={data.objectId} 
-                    name={data.name} 
-                    image={data.urlImg} 
-                    minPlayers={data.minPlayers} 
-                    maxPlayers={data.maxPlayers} 
-                    duration={data.duration} 
-                    gameType={data.gameType} 
-                    personalNote={data.personalNote} />
+                    key={gameData.objectId} 
+                    name={gameData.name} 
+                    image={gameData.urlImg} 
+                    minPlayers={gameData.minPlayers} 
+                    maxPlayers={gameData.maxPlayers} 
+                    duration={gameData.duration} 
+                    gameType={gameData.gameType} 
+                    personalNote={gameData.personalNote}
+                    game={gameData} />
              })
       ) : (
         <View>
@@ -76,10 +79,7 @@ export default function ArmoireScreen() {
     </View>
     <Modal visible={addGameIsVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text>This is a modal</Text>
-            <Button title="Close Modal" onPress={toggleModalAddGame} />
-          </View>
+          <AddGame toggleModalAddGame={toggleModalAddGame}/>
         </View>
     </Modal>
   </ScrollView>
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     width: '95%',
