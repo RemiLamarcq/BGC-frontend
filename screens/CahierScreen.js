@@ -3,8 +3,9 @@ import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpac
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import Game from '../components/Game';
+import GamePlay from '../components/GamePlay';
 import FicheGame from '../components/FicheGame';
+import formatDate from '../modules/formatDate';
 
 export default function ArmoireScreen() {
 
@@ -13,30 +14,33 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGamePlays, setSelectedGamePlays] = useState(null);
   const [gamePlaysVisibility, setGamePlaysVisibility] = useState(false);
-  console.log(gamePlays);
+  // console.log(gamePlays);
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/gamePlays/${token}`)
       .then(response => response.json())
       .then(data => {
         if(data.result){
-            const formatedData = data.gamePlays.map(game => {
-              const { _id, startDate, endDate, players, urlImage, comment, place, isInterrupted } = game;
+            // console.log(data.gamePlays)
+            const formatedData = data.gamePlays.map(gamePlay => {
+              const { _id, idGame, startDate, endDate, players, urlImage, comment, place, isInterrupted } = gamePlay;
+              console.log(formatDate(startDate))
               return { 
                 id: _id,
-                startDate,
-                endDate, 
-                players,
-                urlImage, 
-                comment, 
-                place, 
-                isInterrupted, 
-                players: game.players.map(player => {
+                name: idGame.name,
+                gameImage: idGame.urlImg,
+                startDate: formatDate(startDate),
+                endDate: formatDate(endDate), 
+                players: players.map(player => {
                   return {
                     friendName: player.friendName,
                     isWinner: player.isWinner,
-                  }
-                })
+                  };
+                }),
+                gamePlayImages: urlImage, 
+                comment, 
+                place, 
+                isInterrupted,
               };
           });
             setGamePlays(formatedData);
@@ -56,18 +60,13 @@ export default function ArmoireScreen() {
   <ScrollView contentContainerStyle={styles.scrollView}>
     <View>
       {gamePlays.length > 0 ? (
-        gamePlays.map((data, i) => {
-          return <Game 
+        gamePlays.map((gamePlay, i) => {
+          return <GamePlay  
+                    key={i} 
+                    {...gamePlay}
                     toggleModalVisibility={toggleModalVisibility} 
-                    isVisible={isVisible} 
-                    key={data.objectId} 
-                    name={data.name} 
-                    image={data.urlImage} 
-                    minPlayers={data.minPlayers} 
-                    maxPlayers={data.maxPlayers} 
-                    duration={data.duration} 
-                    gameType={data.gameType} 
-                    personalNote={data.personalNote} />
+                    isVisible={isVisible}
+                   />
              })
       ) : (
         <View>
