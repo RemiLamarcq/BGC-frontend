@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 import { returnLogin } from '../reducers/login';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function Signup({navigation}) {
 
@@ -72,7 +73,7 @@ return (
     <View style={styles.middlePart}>
 
       <TouchableOpacity style={styles.returnButton} onPress={handleBackToSignin}>
-        <FontAwesome name="arrow-left" size={20} color='#000000' style={styles.deleteIcon}/>
+      <AntDesign name="arrowleft" size={24} color="black" />
       </TouchableOpacity>
 
       <TextInput
@@ -85,6 +86,9 @@ return (
       <TextInput
         style={styles.input}
         placeholder=" E-mail"
+        autoCapitalize='none'
+        keyboardType='email-address'
+        textContentType='emailAddress'
         value={email}
         onChangeText={(value) => setEmail(value)}
       />

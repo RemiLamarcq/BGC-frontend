@@ -3,8 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvo
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { AntDesign } from '@expo/vector-icons';
 
-export default function AddGame(props) {
+export default function AddGame({props, toggleModalAddGame}) {
     const user = useSelector((state) => state.user.value);
 
     // Liste des infos lié à un jeu suite au clic dans le dropdown
@@ -13,6 +15,8 @@ export default function AddGame(props) {
     const [gameList,setGameList] = useState ([]);
     // Type(s) d'un jeu isolé pour pouvoir mappé dessus après
     const [gameType, setGameType] = useState ([]); 
+    
+    const [gameCardVisible, setGameCardVisible] = useState(false);
 
     const formattedGameList = [];
     let gameCard;
@@ -23,16 +27,16 @@ export default function AddGame(props) {
     // Formate la durée d'un jeu en fonction de son numéro
     if (gameInfos.game) {
         if (gameInfos.game.duration === 1) {
-            gameDuration = '<30min'
+            gameDuration = '< 30min'
         }
         else if (gameInfos.game.duration === 2) {
-            gameDuration = 'entre 30 et 60min'
+            gameDuration = '30 à 60min'
         }
         else if (gameInfos.game.duration === 3) {
-            gameDuration = 'entre 1 et 2h'
+            gameDuration = '1 à 2h'
         }
         else if (gameInfos.game.duration === 4) {
-            gameDuration = 'plus de 2h'
+            gameDuration = '> 2h'
         }
     }
 
@@ -52,8 +56,9 @@ export default function AddGame(props) {
             .then(response => response.json())
             .then(data => {
                 setGameInfos(data);
-                setGameType(data.game.gameType)
-                console.log(gameInfos)
+                setGameType(data.game.gameType);
+                console.log(gameInfos);
+                setGameCardVisible(true);
             })
         }
     };
@@ -65,8 +70,13 @@ export default function AddGame(props) {
             headers: { 'Content-Type': 'application/json' },
             }).then(response=> response.json())
         .then(() => {
-        props.toggleModalAddGame()
+            toggleModalAddGame()
         })
+    }
+
+    const handleClearGameCard = () => {
+        setGameCardVisible(false);
+        setGameInfos({});
     }
     
     // Formate les noms d'un jeu sous forme d'objet avec un id et un title(nécessaire pour le dropdown)
@@ -83,7 +93,7 @@ export default function AddGame(props) {
     // Formate le(s) type(s) d'un jeu et l'affiche dans la card
     if (gameType.length > 0) {
         formatedGameType = gameType.map((e,i) => {
-            return <Text key={i}>•{e.type}</Text>
+            return <Text key={i}>   • {e.type}</Text>
         })
     }
 
@@ -91,16 +101,16 @@ export default function AddGame(props) {
     if (gameInfos.isInCloset) {
         buttonCard = 
         <View style={styles.alreadyInCloset}>
-            <Text>Ce jeu est déjà dans votre armoire</Text>
-            <TouchableOpacity onPress={() => props.toggleModalAddGame()} style={styles.buttonClose}>
-            <Text style={styles.textButtonClose}>Fermer</Text>
+            <Text style={{color: '#88B7B6', marginTop: 10}}>Ce jeu est déjà dans votre armoire</Text>
+            <TouchableOpacity onPress={handleClearGameCard} style={styles.buttonClose}>
+                <FontAwesome name="times" style={{color: '#423D3D'}}/>
             </TouchableOpacity>
         </View>
     }
     else {
         buttonCard =
-        <TouchableOpacity onPress={() => handleAdd()} style={styles.button}>
-        <Text style={styles.textButton}>Ajouter à l'armoire</Text>
+        <TouchableOpacity onPress={() => handleAdd()} style={styles.buttonX}>
+            <Text style={{color: '#423D3D', fontWeight: 600}}>Ajouter à l'armoire</Text>
         </TouchableOpacity>
     }
 
@@ -108,17 +118,17 @@ export default function AddGame(props) {
     if (gameInfos.game) {
         gameCard =
         <View style={styles.gameCardContainer}>
-            <Text>{gameInfos.game.name}</Text>
+            <Text style={{color: '#423D3D', fontWeight:800, fontSize: 18}}>{gameInfos.game.name}</Text>
             <Image style={styles.image} source={{uri:(gameInfos.game.urlImg)}} />
             <View style={styles.gameInfosContainer}>
                 <View style={styles.gameTypeContainer}>
-                    <Text>{formatedGameType}</Text>
+                    <Text style={{color: '#423D3D'}}>{formatedGameType}</Text>
                 </View>
                 <View style={styles.gameDurationContainer}>
-                    <Text>{gameDuration}</Text>
+                    <Text style={{color: '#423D3D'}}>{gameDuration}</Text>
                 </View>
                 <View style={styles.gamePlayerNumber}>
-                    <Text>De {gameInfos.game.minPlayers} à {gameInfos.game.maxPlayers} joueurs</Text>
+                    <Text style={{color: '#423D3D'}}>De {gameInfos.game.minPlayers} à {gameInfos.game.maxPlayers} joueurs</Text>
                 </View>
             </View>
             {buttonCard}
@@ -130,21 +140,32 @@ export default function AddGame(props) {
 
         return (
             <View style={styles.container}>
+                <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalAddGame}>
+                        <FontAwesome 
+                            name="arrow-left"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>
+                </TouchableOpacity>
                 <AutocompleteDropdownContextProvider>
-                <Text >Ajoutez un jeu</Text>
+                    <Text style={{alignSelf: 'center', fontSize: 20, margin: 10}}>Ajouter un jeu</Text>
                 <AutocompleteDropdown
                     dataSet={formattedGameList}
                     onSelectItem={(item) => handleSelect(item)}
                     textInputProps={{ placeholder: 'Rechercher un jeu' }}
                     closeOnSubmit
                     suggestionsListContainerStyle={{
-                        backgroundColor: 'red',
-                        
+                        backgroundColor: '#CDDCDB',
                       }}
-                    containerStyle={{flewGrow: 1, flexShrink: 1}}
+                    inputContainerStyle={{
+                        backgroundColor: 'white',
+                        borderRadius: 25,
+                        width: 350
+                      }}
+                    onClear={handleClearGameCard}
+                    onOpenSuggestionsList={handleClearGameCard}
                 />
                 </AutocompleteDropdownContextProvider>
-                {gameCard}
+                {gameCardVisible && gameCard}
             </View>
         );
       }
@@ -153,25 +174,77 @@ export default function AddGame(props) {
         container: {
           flex: 1,
           backgroundColor: '#F2F4F1',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderWidth: 1,
-          marginTop: 100,
-          width: '100%'
+          width: '100%',
+          borderRadius: 40,
+          padding: 20, 
+          alignItems: 'center'
         },
+
+        goBackTouchable: {
+            height: 30,
+            width: 30,
+            borderRadius: 50,
+            backgroundColor: "#88B7B6",
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'flex-start',
+            marginLeft: 10,
+          },
+
+          containerStyle: {
+            borderRadius: 40,
+          },
+
         gameCardContainer: {
-            backgroundColor: '#F2F4F1',
+            backgroundColor: '#CDDCDB',
             alignItems: 'center',
             justifyContent: 'center',
-            borderWidth: 1,
-            height: 400,
-            marginTop: 150
+            height: 'auto',
+            marginTop: 80, 
+            width: 300,
+            borderRadius: 40,
+            padding: 20
         },
+
         image: {
             height: 200,
-            width: 200
+            width: 200,
+            marginTop: 10,
+            marginBottom: 10
         },
+
         gameInfosContainer: {
-            borderWidth: 1,
+            alignItems: 'center'
         },
+
+        gameDurationContainer: {
+            padding: 10
+        },
+
+        alreadyInCloset: {
+            alignItems: 'center'
+        },
+
+        buttonClose: {
+            borderRadius: 50,
+            backgroundColor: "#88B7B6",
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 30,
+            width: 30, 
+            margin: 10,
+            marginTop: 10
+        },
+
+        buttonX: {
+            borderRadius: 50,
+            backgroundColor: "#88B7B6",
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 40,
+            width: 150, 
+            margin: 10,
+            marginTop: 10
+        }
+
       });

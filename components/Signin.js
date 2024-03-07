@@ -66,6 +66,9 @@ fetch('https://bgc-backend.vercel.app/users/signin', {
       <TextInput
         style={styles.input}
         placeholder=" E-mail"
+        autoCapitalize='none'
+        keyboardType='email-address'
+        textContentType='emailAddress'
         value={email}
         onChangeText={(value) => setEmail(value)}
       />

@@ -29,13 +29,13 @@ export default function AccessoiresScreen() {
     // Définir le contenu et le titre en fonction de la zone
     if (zone === 1) {
       setModalContent(<Dice />);
-      title = 'DÉS';
+      title = 'Dés';
     } else if (zone === 2) {
       setModalContent(<Timer />); 
-      title = 'TIMER';
+      title = 'Timer';
     } else if (zone === 3) {
       setModalContent(<Notepad />); 
-      title = 'BLOC-NOTES';
+      title = 'Bloc-notes';
     }
 
     // Mettre à jour le titre dynamique
