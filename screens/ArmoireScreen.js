@@ -12,6 +12,7 @@ import Header from '../components/Header';
 export default function ArmoireScreen() {
 
   const [gamesData, setGamesData] = useState([]);
+  const [initialGames, setInitialGames] = useState([])
   const token = useSelector(state => state.user.value.token);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
@@ -63,6 +64,7 @@ export default function ArmoireScreen() {
             };
           });
             setGamesData(formatedData);
+            setInitialGames(formatedData);
         }
       });
   }, [addGameIsVisible]); 
@@ -79,8 +81,9 @@ export default function ArmoireScreen() {
     // console.log("Selected game:", gameData);
   };
 
+  // Fonction qui permet de filtrer l'affichage des jeux en fonction de la valeur du champ de recherche récupérée grâce à l'inverse data flow
   const handleFilteredGamesChange = (value) => {
-    const filterGames = gamesData.filter(game => {
+    const filterGames = initialGames.filter(game => {
       return game.name.toLowerCase().includes(value.toLowerCase());
     });
     setGamesData(filterGames)
@@ -90,7 +93,7 @@ export default function ArmoireScreen() {
 
   return (
   <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={handleFilteredGamesChange}/>
+    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={(e) => handleFilteredGamesChange(e)}/>
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
