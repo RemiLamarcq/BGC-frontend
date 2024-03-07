@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
+import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
 
 export default function ArmoireScreen() {
@@ -22,7 +23,33 @@ export default function ArmoireScreen() {
       .then(response => response.json())
       .then(data => {
         if(data.result){
+            
             const formatedData = data.data.map(game => {
+
+                let gameDuration;
+                if (game.idGame.duration === 1) {
+                    gameDuration = '< 30min'
+                }
+                else if (game.idGame.duration === 2) {
+                    gameDuration = '30 à 60 min'
+                }
+                else if (game.idGame.duration === 3) {
+                    gameDuration = '1 à 2h'
+                }
+                else if (game.idGame.duration === 4) {
+                    gameDuration = '> 2h'
+                }
+
+                let stars = [];
+                for(let i= 0; i < 5; i++){
+                    if (i < game.personalNote -1) {
+                        stars.push(<AntDesign name="star" style={{color: '#0A3332'}}/>);
+                    } else {
+                        stars.push(<AntDesign name="staro" style={{color: '#0A3332'}}/>);
+                    }
+                    
+                }
+
             return { 
               personalNote : game.personalNote, 
               objectId: game._id, 
@@ -30,8 +57,9 @@ export default function ArmoireScreen() {
               urlImg: game.idGame.urlImg, 
               minPlayers: game.idGame.minPlayers, 
               maxPlayers: game.idGame.maxPlayers, 
-              duration: game.idGame.duration, 
-              gameType: game.idGame.gameType.map(type => type.type).join(', ') 
+              duration: gameDuration, 
+              gameType: game.idGame.gameType.map(type => type.type).join(', '),
+              stars: stars 
             };
           });
             setGamesData(formatedData);
@@ -51,9 +79,18 @@ export default function ArmoireScreen() {
     // console.log("Selected game:", gameData);
   };
 
+  const handleFilteredGamesChange = (value) => {
+    const filterGames = gamesData.filter(game => {
+      return game.name.toLowerCase().includes(value.toLowerCase());
+    });
+    setGamesData(filterGames)
+  };
+  console.log('Games data:',gamesData)
+  
+
   return (
   <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame}/>
+    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={handleFilteredGamesChange}/>
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
@@ -97,7 +134,7 @@ export default function ArmoireScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-
+    marginBottom: 90,
     marginTop: 20
   },
   scrollView: {
@@ -137,18 +174,12 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     top: 15, 
-    marginBottom: 60,
     width: '100%',
     backgroundColor: 'pink',
     justifyContent: 'center',
     alignItems: 'center',
     borderTopLeftRadius: 40, // Adjust the radius as needed
     borderTopRightRadius: 40,
-  },
-  modalContent: {
-    padding: 20,
-    borderRadius: 10,
-    width: '95%',
   },
 
 

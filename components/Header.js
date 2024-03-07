@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../reducers/user';
@@ -11,15 +11,23 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 dans l' écran AccessoiresScreen, passer la valeur à true pour afficher le logo de déconnexion
 Pour les autres écrans, passer la valeur à false*/
 
-function Header({ title, height, showSearchBar, onSearchChange,  showMeeple, toggleModalAddGame }) {
+function Header({ title, height, showSearchBar, showMeeple, toggleModalAddGame, onSearchGameChange }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
+    const [searchGame, setSearchGame] = useState('');
     const handleLogout = () => {
         dispatch(logout());
         // Redirection vers la page de connexion
         navigation.navigate('Login');
     };
+
+    // Permet de récupérer la valeur du champ de recherche et la renvoie au composant parent
+    const handleSearchChange = (value) => {
+      setSearchGame(value);
+      onSearchGameChange(value);
+    };
+
   return (
     <View style={[styles.headerContainer, { height: height }]}>{/* height à modifier dans les fichiers screens */}
       {showMeeple && (
@@ -37,7 +45,8 @@ function Header({ title, height, showSearchBar, onSearchChange,  showMeeple, tog
           <TextInput
             style={styles.searchBar}
             placeholder="Rechercher dans l'armoire..."
-            onChangeText={onSearchChange}
+            onChangeText={handleSearchChange}
+            value={searchGame}
           />
           <View style={styles.bottomHeader}>
             <View style={styles.filterButton}>

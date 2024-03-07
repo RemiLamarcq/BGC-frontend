@@ -12,8 +12,9 @@ import Header from '../components/Header';
 // - modalContent : Le contenu à afficher à l'intérieur de la modal.
 function AccessoryModal({ isVisible, closeModal, modalContent, modalTitle }) {
   return (
-    // Modal pour afficher le contenu de la zone cliquée
-    <Modal visible={isVisible} transparent animationType="none" onRequestClose={closeModal}>
+    <View style={styles.AccessoryModal}>
+    {/*Modal pour afficher le contenu de la zone cliquée*/}
+    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={closeModal}>
       {/* Afficher le composant Header avec le titre dynamique */}
       <Header title={modalTitle} height={100} />
       {/* Conteneur principal de la modal */}
@@ -26,6 +27,7 @@ function AccessoryModal({ isVisible, closeModal, modalContent, modalTitle }) {
         <View style={styles.modalContent}>{modalContent}</View>
       </View>
     </Modal>
+    </View>
   );
 }
 
@@ -45,9 +47,16 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
+    backgroundColor: '#88B7B6',
+    borderRadius: 50,
     top: 20,
     left: 20,
     zIndex: 1,
+    height: 40, 
+    width:40,
+    margin: 5,
+    alignItems: 'center',
+
   },
 });
 
