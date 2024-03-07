@@ -14,7 +14,7 @@ export default function GamePlay(props) {
     //1 jeu
     <TouchableOpacity style={styles.container} onPress={toggleModalVisibility}>
 
-        {/* partie gauche avec image, stats et notepad */}
+        {/* partie gauche avec image */}
 
         <View style={styles.left}>
 
@@ -26,7 +26,7 @@ export default function GamePlay(props) {
 
         </View>
 
-        {/* partie droite avec nom, type, caractéristiques et étoiles */}
+        {/* partie droite avec nom du jeu, date, joueurs */}
 
         <View style={styles.right}>
 
