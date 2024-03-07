@@ -14,7 +14,7 @@ export default function GamePlay(props) {
     //1 jeu
     <TouchableOpacity style={styles.container} onPress={toggleModalVisibility}>
 
-        {/* partie gauche avec image, stats et notepad */}
+        {/* partie gauche avec image du jeu */}
 
         <View style={styles.left}>
 
@@ -26,7 +26,7 @@ export default function GamePlay(props) {
 
         </View>
 
-        {/* partie droite avec nom, type, caractéristiques et étoiles */}
+        {/* partie droite avec nom du jeu, date, joueurs */}
 
         <View style={styles.right}>
 
@@ -36,82 +36,9 @@ export default function GamePlay(props) {
 
         </View>
 
-   {/* modale et contenu qui sera à déplacer */}     
-
-    {/* <Modal visible={isVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-
-            <View style={styles.top}>
-                <View style={styles.topLeft}>
-                    <TouchableOpacity onPress={toggleModalVisibility}>
-                        <FontAwesome 
-                            style={styles.goBackIcon}
-                            name="arrow-left"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.topRight}>
-                    <TouchableOpacity>
-                        <FontAwesome 
-                            style={styles.goBackIcon}
-                            name="pencil"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <FontAwesome 
-                            style={styles.goBackIcon}
-                            name="trash"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <View style={styles.title}>
-                <View style={styles.titleAndScore}>
-                    <Text style={styles.textTitleAgain}>{name}</Text>
-                    <View style={styles.starsAgain}>{stars}</View>
-                </View>
-                <View style={styles.image}>
-                    <Image 
-                    source={{uri: image}}
-                    style={{height: '80%', width: '100%'}}/>
-                </View>
-            </View>
-
-            <View style={styles.info}>
-                <View style={styles.typeAndDuration}>
-                    <View style={styles.type}>
-                        <FontAwesome name="hashtag"/>
-                        <Text>{gameType}</Text>
-                    </View>
-                    <View style={styles.duration}>
-                        <FontAwesome name="heart"/>
-                        <Text>{duration}</Text>
-                    </View>
-                </View>
-                <View style={styles.nbPlayersAndStats}>
-
-                </View> 
-                <View style={styles.lastPlay}>
-
-                </View>
-            </View>
-
-            <View style={styles.extensions}>
-
-            </View>
-            
-          </View>
-        </View>
-    </Modal> */}
-
     </TouchableOpacity>
    );
-    }
+}
     
     const styles = StyleSheet.create({
       
@@ -148,61 +75,4 @@ export default function GamePlay(props) {
           fontSize: 18,
         },
 
-//style de la modale
-
-        modalContainer: {
-            flex:1,
-            top: 15, 
-            marginBottom: 60,
-            width: '100%',
-            backgroundColor: '#F2F4F1',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderTopLeftRadius: 40, // Adjust the radius as needed
-            borderTopRightRadius: 40,
-          },
-
-          modalContent: {
-            padding: 20,
-            borderRadius: 10,
-            width: '95%',
-          },
-
-          top: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          },
-
-          goBackIcon: {
-            borderRadius: 50,
-            width: 30,
-            height: 30,
-          },
-
-          topRight: {
-            flexDirection: 'row',
-          },
-
-          textTitleAgain: {
-            fontWeight: '700',
-            fontSize: 18,
-            alignSelf: 'center',
-          },
-
-          starsAgain: {
-            flexDirection: 'row',
-            alignSelf: 'center',
-          },
-
-          info: {
-            backgroundColor: '#CDDCDB',
-            borderRadius: 30,
-          },
-
-          typeAndDuration: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          },
-  
-  
-      })
+      });
