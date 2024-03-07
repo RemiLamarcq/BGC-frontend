@@ -13,28 +13,36 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGamePlays, setSelectedGamePlays] = useState(null);
   const [gamePlaysVisibility, setGamePlaysVisibility] = useState(false);
+  console.log(gamePlays);
   
-  // useEffect(() => {
-  //   fetch(`http://localhost:3000/gamePlays/${token}`)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       if(data.result){
-  //           const formatedData = data.data.map(game => {
-  //           return { 
-  //             personalNote : game.personalNote, 
-  //             objectId: game._id, 
-  //             name: game.idGame.name, 
-  //             urlImg: game.idGame.urlImg, 
-  //             minPlayers: game.idGame.minPlayers, 
-  //             maxPlayers: game.idGame.maxPlayers, 
-  //             duration: game.idGame.duration, 
-  //             gameType: game.idGame.gameType.map(type => type.type).join(', ') 
-  //           };
-  //         });
-  //           setGamePlays(formatedData);
-  //       }
-  //     });
-  // }, []); 
+  useEffect(() => {
+    fetch(`https://bgc-backend.vercel.app/gamePlays/${token}`)
+      .then(response => response.json())
+      .then(data => {
+        if(data.result){
+            const formatedData = data.gamePlays.map(game => {
+              const { _id, startDate, endDate, players, urlImage, comment, place, isInterrupted } = game;
+              return { 
+                id: _id,
+                startDate,
+                endDate, 
+                players,
+                urlImage, 
+                comment, 
+                place, 
+                isInterrupted, 
+                players: game.players.map(player => {
+                  return {
+                    friendName: player.friendName,
+                    isWinner: player.isWinner,
+                  }
+                })
+              };
+          });
+            setGamePlays(formatedData);
+        }
+      });
+  }, []); 
 
   const toggleModalAddGame = () => {
     setGamePlaysVisibility(!gamePlaysVisibility);
@@ -54,7 +62,7 @@ export default function ArmoireScreen() {
                     isVisible={isVisible} 
                     key={data.objectId} 
                     name={data.name} 
-                    image={data.urlImg} 
+                    image={data.urlImage} 
                     minPlayers={data.minPlayers} 
                     maxPlayers={data.maxPlayers} 
                     duration={data.duration} 
