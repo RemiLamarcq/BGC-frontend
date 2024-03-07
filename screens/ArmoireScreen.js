@@ -28,16 +28,16 @@ export default function ArmoireScreen() {
 
                 let gameDuration;
                 if (game.idGame.duration === 1) {
-                    gameDuration = '<30min'
+                    gameDuration = '< 30min'
                 }
                 else if (game.idGame.duration === 2) {
-                    gameDuration = 'entre 30 et 60min'
+                    gameDuration = '30 à 60 min'
                 }
                 else if (game.idGame.duration === 3) {
-                    gameDuration = 'entre 1 et 2h'
+                    gameDuration = '1 à 2h'
                 }
                 else if (game.idGame.duration === 4) {
-                    gameDuration = 'plus de 2h'
+                    gameDuration = '> 2h'
                 }
 
                 let stars = [];
@@ -125,7 +125,7 @@ export default function ArmoireScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-
+    marginBottom: 90,
     marginTop: 20
   },
   scrollView: {
@@ -165,18 +165,12 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     top: 15, 
-    marginBottom: 60,
     width: '100%',
     backgroundColor: 'pink',
     justifyContent: 'center',
     alignItems: 'center',
     borderTopLeftRadius: 40, // Adjust the radius as needed
     borderTopRightRadius: 40,
-  },
-  modalContent: {
-    padding: 20,
-    borderRadius: 10,
-    width: '95%',
   },
 
 
