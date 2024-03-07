@@ -31,10 +31,10 @@ export default function AccessoiresScreen() {
       setModalContent(<Dice />);
       title = 'DÉS';
     } else if (zone === 2) {
-      setModalContent(<Timer />);
+      setModalContent(<Timer />); 
       title = 'TIMER';
     } else if (zone === 3) {
-      setModalContent(<Notepad />);
+      setModalContent(<Notepad />); 
       title = 'BLOC-NOTES';
     }
 
@@ -55,7 +55,7 @@ export default function AccessoiresScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#F1F4F2' }}>
       {/* Affichage du composant Header avec le titre 'Accessoires' , une hauteur de 100, et le meeple à true pour logout depuis le screen */}
-      <Header title="Accessoires" height={100}  showMeeple={true}/>
+      <Header title="Accessoires" height={100}  showMeeple={true} />
       {/* Vue principale de la page */}
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {/* Vue contenant les zones cliquables avec une largeur de 90% de la vue parente */}
@@ -86,3 +86,5 @@ export default function AccessoiresScreen() {
     </View>
   );
 };
+
+

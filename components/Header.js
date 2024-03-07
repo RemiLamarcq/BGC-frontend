@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../reducers/user';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 //Composant enfant de AccessoiresScreen.js
 
@@ -10,7 +11,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'reac
 dans l' écran AccessoiresScreen, passer la valeur à true pour afficher le logo de déconnexion
 Pour les autres écrans, passer la valeur à false*/
 
-function Header({ title, height, showSearchBar, onSearchChange,  showMeeple }) {
+function Header({ title, height, showSearchBar, onSearchChange,  showMeeple, toggleModalAddGame }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
@@ -32,11 +33,24 @@ function Header({ title, height, showSearchBar, onSearchChange,  showMeeple }) {
       <Text style={styles.headerTitle}>{title}</Text>{/* Titre du header à modifier dans les fichiers screeens */}
       {/* Barre de recherche, conditionnellement affichée en fonction du screen */}
       {showSearchBar && (
+        <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchBar}
             placeholder="Rechercher dans l'armoire..."
             onChangeText={onSearchChange}
           />
+          <View style={styles.bottomHeader}>
+            <View style={styles.filterButton}>
+              <FontAwesome name="filter" color="#423D3D" style={styles.filterIcon} />
+            </View>
+            <TouchableOpacity onPress={toggleModalAddGame} style={styles.buttonAddGame}>
+              <View style={styles.plusButton}>
+                <FontAwesome name="plus" color="#88B7B6" backgroundColor='#423D3D' style={styles.AddIcon} />
+              </View>
+              <Text>Ajouter un jeu</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         )}
     </View>
   </View>
@@ -58,8 +72,10 @@ const styles = StyleSheet.create({
 
       header: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
+        height: '100%',
+        marginTop: 20
       },
       headerTitle: {//titre de la section
         color: '#423D3D',
@@ -73,14 +89,40 @@ const styles = StyleSheet.create({
         height: 40, //hauteur du meeple
         alignSelf: 'center', // Pour centrer l'image horizontalement dans son conteneur
       },
-
+      searchContainer: {
+        justifyContent: 'space-around',
+        height: 100
+      },
       searchBar: { //barre de reserche à modifier !!!!
-        width: '80%',
         height: 40,
         borderRadius: 15,
         marginTop: 5,
         paddingLeft: 10,
+        backgroundColor: "white",
       },
+      bottomHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+      },
+      buttonAddGame: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 75,
+        backgroundColor: '#88B7B6',
+        borderRadius: 10,
+        width: '40%'
+      },
+      plusButton: {
+        borderRadius: 50,
+        marginRight: 5
+      },
+      filterButton: {
+        justifyContent: 'center',
+        marginRight: 75,
+        borderRadius: 50,
+        backgroundColor: '#88B7B6'
+      }
   
 });
 
