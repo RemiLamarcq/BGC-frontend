@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
+import Header from '../components/Header';
 
 export default function ArmoireScreen() {
 
@@ -51,46 +52,54 @@ export default function ArmoireScreen() {
   };
 
   return (
-  <ScrollView contentContainerStyle={styles.scrollView}>
-    <View>
-      {gamesData.length > 0 ? (
-        gamesData.map((gameData, i) => {
-          return <Game 
-                    toggleModalVisibility={toggleModalVisibility} 
-                    isVisible={isVisible} 
-                    key={gameData.objectId} 
-                    name={gameData.name} 
-                    image={gameData.urlImg} 
-                    minPlayers={gameData.minPlayers} 
-                    maxPlayers={gameData.maxPlayers} 
-                    duration={gameData.duration} 
-                    gameType={gameData.gameType} 
-                    personalNote={gameData.personalNote}
-                    game={gameData}
-                    selectedGame={selectedGame} />
-             })
-      ) : (
-        <View>
-          <Text style={styles.textAucunJeu}>Aucun jeu dans l'armoire</Text>
-          <View style={styles.divBigAjouterJeu}>
-            <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGame}>
-              <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
-            </TouchableOpacity>
-            <Text style={styles.textBigAjouterJeu}>Ajouter un jeu</Text>
+  <View style={styles.mainContainer}>
+    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame}/>
+    <ScrollView contentContainerStyle={styles.scrollView}>
+      <View>
+        {gamesData.length > 0 ? (
+          gamesData.map((gameData, i) => {
+            return <Game 
+                      toggleModalVisibility={toggleModalVisibility} 
+                      isVisible={isVisible} 
+                      key={gameData.objectId} 
+                      name={gameData.name} 
+                      image={gameData.urlImg} 
+                      minPlayers={gameData.minPlayers} 
+                      maxPlayers={gameData.maxPlayers} 
+                      duration={gameData.duration} 
+                      gameType={gameData.gameType} 
+                      personalNote={gameData.personalNote}
+                      game={gameData}
+                      selectedGame={selectedGame} />
+              })
+        ) : (
+          <View>
+            <Text style={styles.textAucunJeu}>Aucun jeu dans l'armoire</Text>
+            <View style={styles.divBigAjouterJeu}>
+              <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGame}>
+                <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
+              </TouchableOpacity>
+              <Text style={styles.textBigAjouterJeu}>Ajouter un jeu</Text>
+            </View>
           </View>
-        </View>
-      )}
-    </View>
-    <Modal visible={addGameIsVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <AddGame toggleModalAddGame={toggleModalAddGame}/>
-        </View>
-    </Modal>
-  </ScrollView>
+        )}
+      </View>
+      <Modal visible={addGameIsVisible} animationType="slide" transparent={true}>
+          <View style={styles.modalContainer}>
+            <AddGame toggleModalAddGame={toggleModalAddGame}/>
+          </View>
+      </Modal>
+    </ScrollView>
+  </View>
+
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+
+    marginTop: 20
+  },
   scrollView: {
     flexGrow:1,
     backgroundColor: '#F2F4F1',
