@@ -155,6 +155,8 @@ export default function AddGame({props, toggleModalAddGame}) {
                     closeOnSubmit
                     suggestionsListContainerStyle={{
                         backgroundColor: '#CDDCDB',
+                        marginTop: -40,
+                        borderRadius: 20
                       }}
                     inputContainerStyle={{
                         backgroundColor: 'white',
@@ -163,6 +165,7 @@ export default function AddGame({props, toggleModalAddGame}) {
                       }}
                     onClear={handleClearGameCard}
                     onOpenSuggestionsList={handleClearGameCard}
+                    ignoreAccents
                 />
                 </AutocompleteDropdownContextProvider>
                 {gameCardVisible && gameCard}

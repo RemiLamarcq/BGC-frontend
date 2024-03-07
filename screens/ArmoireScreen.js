@@ -65,7 +65,7 @@ export default function ArmoireScreen() {
             setGamesData(formatedData);
         }
       });
-  }, [addGameIsVisible]); 
+  }, [addGameIsVisible, isVisible]); 
 
   const toggleModalAddGame = () => {
     setAddGameIsVisible(!addGameIsVisible);
@@ -79,13 +79,25 @@ export default function ArmoireScreen() {
     console.log("Selected game:", gameData);
   };
 
+  const handleDeleteGame = () => {
+    console.log('yo');
+    console.log(selectedGame.name, token)
+    fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      }).then(response=> response.json())
+    .then(() => {
+      toggleModalVisibility()
+      console.log('coucou')
+    })
+  }
+
   const handleFilteredGamesChange = (value) => {
     const filterGames = gamesData.filter(game => {
       return game.name.toLowerCase().includes(value.toLowerCase());
     });
     setGamesData(filterGames)
   };
-  console.log('Games data:',gamesData)
   
 
   return (
@@ -107,7 +119,8 @@ export default function ArmoireScreen() {
                       gameType={gameData.gameType} 
                       personalNote={gameData.personalNote}
                       game={gameData}
-                      selectedGame={selectedGame} />
+                      selectedGame={selectedGame}
+                      handleDeleteGame={handleDeleteGame} />
               })
         ) : (
           <View>
@@ -134,7 +147,7 @@ export default function ArmoireScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginBottom: 90,
+    marginBottom: 200,
     marginTop: 20
   },
   scrollView: {
@@ -173,7 +186,7 @@ const styles = StyleSheet.create({
 
   modalContainer: {
     flex: 1,
-    top: 15, 
+    top: 45, 
     width: '100%',
     backgroundColor: 'pink',
     justifyContent: 'center',
