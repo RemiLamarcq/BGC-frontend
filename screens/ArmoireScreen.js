@@ -11,7 +11,6 @@ import Header from '../components/Header';
 export default function ArmoireScreen() {
 
   const [gamesData, setGamesData] = useState([]);
-  const [filteredGames, setFilteredGames] = useState([]);
   const token = useSelector(state => state.user.value.token);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
@@ -56,8 +55,9 @@ export default function ArmoireScreen() {
     const filterGames = gamesData.filter(game => {
       return game.name.toLowerCase().includes(value.toLowerCase());
     });
-    setFilteredGames(filterGames)
+    setGamesData(filterGames)
   };
+  console.log('Games data:',gamesData)
   
 
   return (
@@ -66,7 +66,7 @@ export default function ArmoireScreen() {
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
-          filteredGames.map((gameData, i) => {
+          gamesData.map((gameData, i) => {
             return <Game 
                       toggleModalVisibility={toggleModalVisibility} 
                       isVisible={isVisible} 
