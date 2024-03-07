@@ -36,7 +36,7 @@ export default function ArmoireScreen() {
             setGamesData(formatedData);
         }
       });
-  }, []); 
+  }, [addGameIsVisible]); 
 
   const toggleModalAddGame = () => {
     setAddGameIsVisible(!addGameIsVisible);
@@ -44,7 +44,10 @@ export default function ArmoireScreen() {
 
   const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
-    setSelectedGame(gameData);
+    if (!isVisible) {
+      setSelectedGame(gameData);
+    }
+    console.log("Selected game:", gameData);
   };
 
   return (
@@ -63,7 +66,8 @@ export default function ArmoireScreen() {
                     duration={gameData.duration} 
                     gameType={gameData.gameType} 
                     personalNote={gameData.personalNote}
-                    game={gameData} />
+                    game={gameData}
+                    selectedGame={selectedGame} />
              })
       ) : (
         <View>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game }) {
+export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame }) {
 
     //récupérer personalNote pour faire des étoiles
     const stars = [];
@@ -18,7 +18,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
    return (
     //1 jeu
-    <TouchableOpacity style={styles.container} onPress={toggleModalVisibility}>
+    <TouchableOpacity style={styles.container} onPress={() => toggleModalVisibility(game)}>
 
         {/* partie gauche avec image, stats et notepad */}
 
@@ -81,6 +81,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
    {/* modale et contenu qui sera à déplacer */}     
 
     <Modal visible={isVisible} animationType="slide" transparent={true}>
+        {selectedGame && 
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
 
@@ -114,13 +115,14 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
             <View style={styles.title}>
                 <View style={styles.titleAndScore}>
-                    <Text style={styles.textTitleAgain}>{name}</Text>
+                    <Text style={styles.textTitleAgain}>{selectedGame.name}</Text>
                     <View style={styles.starsAgain}>{stars}</View>
                 </View>
                 <View style={styles.image}>
                     <Image 
-                    source={{uri: image}}
-                    style={{height: '80%', width: '100%'}}/>
+                    source={{uri:(selectedGame.urlImg)}}
+                    style={{height: '80%', width: '100%'}}
+                    />
                 </View>
             </View>
 
@@ -128,11 +130,11 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
                 <View style={styles.typeAndDuration}>
                     <View style={styles.type}>
                         <FontAwesome name="hashtag"/>
-                        <Text>{gameType}</Text>
+                        <Text>{selectedGame.gameType}</Text>
                     </View>
                     <View style={styles.duration}>
                         <FontAwesome name="heart"/>
-                        <Text>{duration}</Text>
+                        <Text>{selectedGame.duration}</Text>
                     </View>
                 </View>
                 <View style={styles.nbPlayersAndStats}>
@@ -149,6 +151,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             
           </View>
         </View>
+}
     </Modal>
 
     </TouchableOpacity>
