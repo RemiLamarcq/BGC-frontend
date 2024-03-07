@@ -47,9 +47,16 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
+    backgroundColor: '#88B7B6',
+    borderRadius: 50,
     top: 20,
     left: 20,
     zIndex: 1,
+    height: 40, 
+    width:40,
+    margin: 5,
+    alignItems: 'center',
+
   },
 });
 

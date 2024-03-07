@@ -51,10 +51,12 @@ function Notepad() {
   return (
     <View style={styles.container}>
       {/* Bouton pour ajouter une note */}
+      <View style={styles.buttonContainer}>
       <TouchableOpacity style={styles.addButton} onPress={addNote}>
-        <FontAwesome5 name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
-        <Text>Ajouter une note</Text>
+      <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
+        <Text style={styles.buttonText}>Nouvelle note</Text>
       </TouchableOpacity>
+      </View>
       <View style={styles.cardContainer}>
       {/* Liste des notes */}
       <ScrollView style={styles.notesContainer}>
@@ -145,15 +147,25 @@ const styles = StyleSheet.create({
   },
 
   // Styles pour le bouton +
+  fabtn:{
+    marginLeft:5,
+  },
+
+  buttonText:{
+    marginLeft:5,
+  },
+
   addButton: {
     flexDirection: 'row',
+    backgroundColor :"#88B7B6",
     alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: '#88B7B6',
-    padding: 20,
-    borderRadius: 35,
-    width: 180,
-    height: 65,
+    borderRadius: 50,
+    height: 40,
+    width : 150,
+    marginTop: 20,
+    margin : 12,
+    marginBottom: 10,
+
   },
 
   savedNote: {
