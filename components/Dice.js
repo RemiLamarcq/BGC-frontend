@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
+import { Octicons } from '@expo/vector-icons';
 
 // Composant enfant de AccessoiresScreen.js
 function Dice() {
@@ -34,6 +35,13 @@ function Dice() {
   const decrementFaces = () => {
     // Assure que le nombre de faces reste supérieur à 1
     setNumFaces((prevNumFaces) => (prevNumFaces > 1 ? prevNumFaces - 1 : prevNumFaces));
+  };
+
+   // Fonction pour supprimer un dé
+   const removeDice = (index) => {
+    const newDiceValues = [...diceValues];
+    newDiceValues.splice(index, 1);
+    setDiceValues(newDiceValues);
   };
 
   return (
@@ -81,6 +89,10 @@ function Dice() {
               </View>
             </View>
           )}
+           {/* Bouton pour supprimer le dé */}
+           <TouchableOpacity onPress={() => removeDice(index)} style={styles.removeButton}>
+           <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
+          </TouchableOpacity>
         </View>
       ))}
     </View>
@@ -112,7 +124,7 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    height: 120,
+    height: 150,
     width: 340,
     flexDirection: 'row',
     padding: 10,
@@ -143,8 +155,7 @@ const styles = StyleSheet.create({
   },
 
   resultContainer: {
-    height: '77%',
-    marginTop: 20,
+    height: 80,
     padding: 10,
     backgroundColor: '#CDDCDB',
     borderRadius: 15,
@@ -152,7 +163,7 @@ const styles = StyleSheet.create({
   },
 
   result: {
-    color: 'black',
+    color: '#423D3D',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -175,7 +186,12 @@ const styles = StyleSheet.create({
   redo: {
     paddingLeft: 30,
     marginBottom: 15,
-  }
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+  },
 });
 
 export default Dice;
