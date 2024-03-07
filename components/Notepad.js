@@ -30,8 +30,6 @@ function Notepad() {
       });
   }, []);
 
-  
-
   // Fonction pour ajouter une nouvelle note à la liste
   const addNote = () => {
     if (title || note) {
@@ -60,16 +58,22 @@ function Notepad() {
       <View style={styles.cardContainer}>
       {/* Liste des notes */}
       <ScrollView style={styles.notesContainer}>
-        {notes.map((savedNote, index) => (
-          <View key={index} style={styles.savedNote}>
-            <TouchableOpacity onPress={() => deleteNote(index)} style={styles.deleteButton}>
-            <Feather name="x-circle" size={24} color="black" />            
-            </TouchableOpacity>
-            <Text style={styles.noteTitle}>{savedNote.title}</Text>
-            <Text style={styles.noteContent}>{savedNote.note}</Text>
-          </View>
-        ))}
-      </ScrollView>
+  {notes.map((savedNote, index) => (
+    <View key={index} style={styles.savedNote}>
+      <TouchableOpacity onPress={() => deleteNote(index)} style={styles.deleteButton}>
+        <Feather name="x-circle" size={24} color="black" />
+      </TouchableOpacity>
+      {savedNote && savedNote.title && savedNote.note ? (
+        <>
+          <Text style={styles.noteTitle}>{savedNote.title}</Text>
+          <Text style={styles.noteContent}>{savedNote.note}</Text>
+        </>
+      ) : (
+        <Text>La note est mal formatée</Text>
+      )}
+    </View>
+  ))}
+</ScrollView>
 
       <View style={styles.inputContainer}>
         {/* titre de la note */}
