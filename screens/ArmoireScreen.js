@@ -48,7 +48,7 @@ export default function ArmoireScreen() {
     if (!isVisible) {
       setSelectedGame(gameData);
     }
-    console.log("Selected game:", gameData);
+    // console.log("Selected game:", gameData);
   };
 
   return (

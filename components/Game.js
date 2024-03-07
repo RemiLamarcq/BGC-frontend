@@ -151,12 +151,12 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             
           </View>
         </View>
-}
+        }
     </Modal>
 
     </TouchableOpacity>
    );
-    }
+}
     
     const styles = StyleSheet.create({
       
