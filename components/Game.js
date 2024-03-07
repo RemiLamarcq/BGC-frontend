@@ -3,18 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvo
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { AntDesign } from '@expo/vector-icons';
 
-export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame }) {
-
-    //récupérer personalNote pour faire des étoiles
-    const stars = [];
-    for(let i= 0; i < 5; i++){
-        let style = { 'padding': 2, 'size': 10 };
-        if (i < personalNote -1) {
-            style = { 'color': '#0A3332', 'padding': 2, 'size': 10 };
-        }
-        stars.push(<FontAwesome name="star" style={style}/>);
-    }
+export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame, stars }) {
 
    return (
     //1 jeu
@@ -32,14 +23,14 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
             <View style={styles.editAndStats}>
                 <TouchableOpacity style={styles.editTouchable}>
-                    <FontAwesome 
-                        name="heart"
+                    <AntDesign 
+                        name="addfile"
                         color="#0A3332" 
                         backgroundColor="#88B7B6"/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.statsTouchable}>
-                    <FontAwesome 
-                        name="heart"
+                    <AntDesign 
+                        name="linechart"
                         color="#0A3332" 
                         backgroundColor="#88B7B6"/>
                 </TouchableOpacity>
@@ -53,7 +44,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
             <View style={styles.titleAndType}>
                 <Text style={styles.textTitle}>{name}</Text>
-                <Text style={styles.textType}>{gameType}</Text>
+                <Text style={{color:'#423D3D'}}>{gameType}</Text>
             </View>
 
             <View style={styles.nbPlayersAndDuration}>
@@ -62,14 +53,14 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
                     <FontAwesome 
                         name="users"
                         color="#0A3332"/>
-                    <Text> {minPlayers} à {maxPlayers}</Text>
+                    <Text style={{color:'#423D3D'}}> {minPlayers} à {maxPlayers}</Text>
                 </View>
 
                 <View style={styles.duration}>
-                    <FontAwesome 
-                        name="users"
+                    <AntDesign 
+                        name="clockcircle"
                         color="#0A3332"/>
-                    <Text> {duration}</Text>
+                    <Text style={{color:'#423D3D'}}> {duration} </Text>
                 </View>
 
             </View>
@@ -80,32 +71,23 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
    {/* modale et contenu qui sera à déplacer */}     
 
-    <Modal visible={isVisible} animationType="slide" transparent={true}>
+    <Modal visible={isVisible} animationType="fade" transparent={true}>
         {selectedGame && 
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
 
             <View style={styles.top}>
                 <View style={styles.topLeft}>
-                    <TouchableOpacity onPress={toggleModalVisibility}>
+                    <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalVisibility}>
                         <FontAwesome 
-                            style={styles.goBackIcon}
                             name="arrow-left"
                             color="#0A3332" 
                             backgroundColor="#88B7B6"/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.topRight}>
-                    <TouchableOpacity>
+                    <TouchableOpacity style={styles.deleteTouchable}>
                         <FontAwesome 
-                            style={styles.goBackIcon}
-                            name="pencil"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <FontAwesome 
-                            style={styles.goBackIcon}
                             name="trash"
                             color="#0A3332" 
                             backgroundColor="#88B7B6"/>
@@ -116,33 +98,45 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             <View style={styles.title}>
                 <View style={styles.titleAndScore}>
                     <Text style={styles.textTitleAgain}>{selectedGame.name}</Text>
-                    <View style={styles.starsAgain}>{stars}</View>
+                    <View style={styles.starsAgain}>{selectedGame.stars}</View>
                 </View>
                 <View style={styles.image}>
                     <Image 
                     source={{uri:(selectedGame.urlImg)}}
-                    style={{height: '80%', width: '100%'}}
+                    style={{height: 300, width: 300}}
                     />
                 </View>
             </View>
 
             <View style={styles.info}>
+
                 <View style={styles.typeAndDuration}>
                     <View style={styles.type}>
-                        <FontAwesome name="hashtag"/>
-                        <Text>{selectedGame.gameType}</Text>
+                        <FontAwesome name="hashtag" style={{color: '#423D3D'}}/>
+                        <Text style={{color: '#423D3D'}}> {selectedGame.gameType}</Text>
                     </View>
-                    <View style={styles.duration}>
-                        <FontAwesome name="heart"/>
-                        <Text>{selectedGame.duration}</Text>
+                    <View style={styles.durationAgain}>
+                        <AntDesign name="clockcircle" style={{color: '#423D3D'}}/>
+                        <Text style={{color: '#423D3D'}}> {selectedGame.duration}</Text>
                     </View>
                 </View>
+
                 <View style={styles.nbPlayersAndStats}>
-
+                    <View style={styles.nbPlayersAgain}>
+                        <FontAwesome name="users" style={{color: '#423D3D'}}/>
+                        <Text style={{color: '#423D3D'}}> {selectedGame.minPlayers} à {selectedGame.maxPlayers}</Text>
+                    </View>
+                    <TouchableOpacity style={styles.stats}>
+                        <AntDesign name="linechart" style={{color: '#423D3D'}}/>
+                        <Text style={{color: '#423D3D'}}> voir les stats</Text>
+                    </TouchableOpacity>
                 </View> 
-                <View style={styles.lastPlay}>
 
+                <View style={styles.lastPlay}>
+                        <FontAwesome name="calendar" style={{color: '#423D3D'}}/>
+                        <Text style={{color: '#423D3D'}}> dernière partie : le 14/02/2024 à 15h</Text>
                 </View>
+
             </View>
 
             <View style={styles.extensions}>
@@ -215,6 +209,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
         textTitle: {
           fontWeight: '700',
           fontSize: 18,
+          color:'#423D3D'
         },
   
         nbPlayersAndDuration:{
@@ -248,11 +243,8 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
         modalContainer: {
             flex:1,
             top: 15, 
-            marginBottom: 60,
             width: '100%',
             backgroundColor: '#F2F4F1',
-            justifyContent: 'center',
-            alignItems: 'center',
             borderTopLeftRadius: 40, // Adjust the radius as needed
             borderTopRightRadius: 40,
           },
@@ -261,42 +253,98 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             padding: 20,
             borderRadius: 10,
             width: '95%',
+            height: '100%',
           },
 
           top: {
             flexDirection: 'row',
             justifyContent: 'space-between',
+            marginBottom: 10,
           },
 
-          goBackIcon: {
-            borderRadius: 50,
-            width: 30,
+          goBackTouchable: {
             height: 30,
+            width: 30,
+            borderRadius: 50,
+            backgroundColor: "#88B7B6",
+            justifyContent: 'center',
+            alignItems: 'center',
           },
 
-          topRight: {
-            flexDirection: 'row',
+          deleteTouchable: {
+            height: 30,
+            width: 30,
+            borderRadius: 50,
+            backgroundColor: "#88B7B6",
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+
+          title: {
+            marginBottom: 20,
           },
 
           textTitleAgain: {
             fontWeight: '700',
             fontSize: 18,
             alignSelf: 'center',
+            marginBottom: 5,
+            color: '#423D3D',
           },
 
           starsAgain: {
             flexDirection: 'row',
             alignSelf: 'center',
+            marginBottom: 10,
           },
 
           info: {
             backgroundColor: '#CDDCDB',
             borderRadius: 30,
+            paddingTop: 15,
+            paddingBottom: 15,
+            paddingLeft: 15,
+            paddingRight: 15,
           },
 
           typeAndDuration: {
             flexDirection: 'row',
             justifyContent: 'space-between',
+            marginBottom: 10,
+          },
+
+          type: {
+            flexDirection: 'row',
+            alignItems: 'center',
+          },
+
+          durationAgain: {
+            flexDirection: 'row',
+            alignItems: 'center',
+          },
+
+          nbPlayersAndStats: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+          },
+
+          nbPlayersAgain: {
+            flexDirection: 'row',
+            alignItems: 'center',
+          },
+
+          stats: {
+            backgroundColor: '#88B7B6',
+            borderRadius: 30,
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 5,
+          },
+
+          lastPlay: {
+            flexDirection: 'row',
+            alignItems: 'center',
           },
   
   

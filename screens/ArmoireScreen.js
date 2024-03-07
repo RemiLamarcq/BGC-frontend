@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function Armoirecreen() {
 
@@ -20,7 +21,33 @@ export default function Armoirecreen() {
       .then(response => response.json())
       .then(data => {
         if(data.result){
+            
             const formatedData = data.data.map(game => {
+
+                let gameDuration;
+                if (game.idGame.duration === 1) {
+                    gameDuration = '<30min'
+                }
+                else if (game.idGame.duration === 2) {
+                    gameDuration = 'entre 30 et 60min'
+                }
+                else if (game.idGame.duration === 3) {
+                    gameDuration = 'entre 1 et 2h'
+                }
+                else if (game.idGame.duration === 4) {
+                    gameDuration = 'plus de 2h'
+                }
+
+                let stars = [];
+                for(let i= 0; i < 5; i++){
+                    if (i < game.personalNote -1) {
+                        stars.push(<AntDesign name="star" style={{color: '#0A3332'}}/>);
+                    } else {
+                        stars.push(<AntDesign name="staro" style={{color: '#0A3332'}}/>);
+                    }
+                    
+                }
+
             return { 
               personalNote : game.personalNote, 
               objectId: game._id, 
@@ -28,8 +55,9 @@ export default function Armoirecreen() {
               urlImg: game.idGame.urlImg, 
               minPlayers: game.idGame.minPlayers, 
               maxPlayers: game.idGame.maxPlayers, 
-              duration: game.idGame.duration, 
-              gameType: game.idGame.gameType.map(type => type.type).join(', ') 
+              duration: gameDuration, 
+              gameType: game.idGame.gameType.map(type => type.type).join(', '),
+              stars: stars 
             };
           });
             setGamesData(formatedData);
@@ -66,7 +94,9 @@ export default function Armoirecreen() {
                     gameType={gameData.gameType} 
                     personalNote={gameData.personalNote}
                     game={gameData}
-                    selectedGame={selectedGame} />
+                    stars={gameData.stars}
+                    selectedGame={selectedGame}
+                     />
              })
       ) : (
         <View>

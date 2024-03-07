@@ -11,6 +11,8 @@ import { Provider } from 'react-redux';
 import { configureStore} from '@reduxjs/toolkit';
 import user from './reducers/user';
 import login from './reducers/login';
+import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const store = configureStore({
   reducer: {user, login},
@@ -30,16 +32,16 @@ const TabNavigator = () => {
         let iconName = '';
 
         if (route.name === 'Armoire') {
-          iconName = 'heart';
+          iconName = 'database';
         } else if (route.name === 'Cahier') {
-          iconName = 'heart';
-        } else if (route.name === 'Stat') {
-          iconName = 'heart';
+          iconName = 'book';
+        } else if (route.name === 'Stats') {
+          iconName = 'linechart';
         } else if (route.name === 'Accessoires') {
-          iconName = 'heart';
+          return <FontAwesome5 name="dice" size={24} color={color} />;
         } 
 
-        return <FontAwesome name={iconName} size={size} color={color} />;
+        return <AntDesign name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: '#FFFFFF',
       tabBarInactiveTintColor: '#0A3332',
@@ -47,7 +49,7 @@ const TabNavigator = () => {
     })}>
       <Tab.Screen name="Armoire" component={ArmoireScreen} />
       <Tab.Screen name="Cahier" component={CahierScreen} />
-      <Tab.Screen name="Stat" component={StatScreen} />
+      <Tab.Screen name="Stats" component={StatScreen} />
       <Tab.Screen name="Accessoires" component={AccessoiresScreen} />
     </Tab.Navigator>
   );
