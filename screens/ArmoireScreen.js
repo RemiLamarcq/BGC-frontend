@@ -79,9 +79,18 @@ export default function ArmoireScreen() {
     console.log("Selected game:", gameData);
   };
 
+  const handleFilteredGamesChange = (value) => {
+    const filterGames = gamesData.filter(game => {
+      return game.name.toLowerCase().includes(value.toLowerCase());
+    });
+    setGamesData(filterGames)
+  };
+  console.log('Games data:',gamesData)
+  
+
   return (
   <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame}/>
+    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={handleFilteredGamesChange}/>
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
