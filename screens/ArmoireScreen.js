@@ -14,6 +14,7 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
+  console.log(token)
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -35,7 +36,7 @@ export default function ArmoireScreen() {
             setGamesData(formatedData);
         }
       });
-  }, []); 
+  }, [addGameIsVisible]); 
 
   const toggleModalAddGame = () => {
     setAddGameIsVisible(!addGameIsVisible);
@@ -43,7 +44,10 @@ export default function ArmoireScreen() {
 
   const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
-    setSelectedGame(gameData);
+    if (!isVisible) {
+      setSelectedGame(gameData);
+    }
+    console.log("Selected game:", gameData);
   };
 
   return (
@@ -62,7 +66,8 @@ export default function ArmoireScreen() {
                     duration={gameData.duration} 
                     gameType={gameData.gameType} 
                     personalNote={gameData.personalNote}
-                    game={gameData} />
+                    game={gameData}
+                    selectedGame={selectedGame} />
              })
       ) : (
         <View>
@@ -139,5 +144,3 @@ const styles = StyleSheet.create({
 
 
 });
-   
-  
