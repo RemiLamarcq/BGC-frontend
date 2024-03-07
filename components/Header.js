@@ -28,6 +28,8 @@ function Header({ title, height, showSearchBar, showMeeple, toggleModalAddGame, 
       onSearchGameChange(value);
     };
 
+    console.log(searchGame)
+
   return (
     <View style={[styles.headerContainer, { height: height }]}>{/* height à modifier dans les fichiers screens */}
       {showMeeple && (
