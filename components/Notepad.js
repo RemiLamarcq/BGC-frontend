@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
 import { Feather } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 // Composant enfant de AccessoiresScreen.js
 function Notepad() {
@@ -9,13 +11,28 @@ function Notepad() {
   const [title, setTitle] = useState('');
   const [note, setNote] = useState('');
   const [notes, setNotes] = useState([]);
+  const token = useSelector(state => state.user.value.token);
+
+  //Fetch GET pour récuperer les notes existantes de l'utilisateur en BDD
+  useEffect(() => {
+    fetch(`https://bgc-backend.vercel.app/notePad/${token}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.result) {
+          setNotes(data.notePad);
+          console.log(data.notePad)
+        } else {
+          console.error(data.error);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
 
   // Fonction pour ajouter une nouvelle note à la liste
   const addNote = () => {
     if (title || note) {
-      // Ajoutez la nouvelle note à la liste des notes
-      const newNote = { title, note };
-      setNotes([...notes, newNote]);
 
       // Réinitialise le titre et la note après avoir ajouté la note
       setTitle('');
@@ -41,16 +58,22 @@ function Notepad() {
       <View style={styles.cardContainer}>
       {/* Liste des notes */}
       <ScrollView style={styles.notesContainer}>
-        {notes.map((savedNote, index) => (
-          <View key={index} style={styles.savedNote}>
-            <TouchableOpacity onPress={() => deleteNote(index)} style={styles.deleteButton}>
-            <Feather name="x-circle" size={24} color="black" />            
-            </TouchableOpacity>
-            <Text style={styles.noteTitle}>{savedNote.title}</Text>
-            <Text style={styles.noteContent}>{savedNote.note}</Text>
-          </View>
-        ))}
-      </ScrollView>
+  {notes.map((savedNote, index) => (
+    <View key={index} style={styles.savedNote}>
+      <TouchableOpacity onPress={() => deleteNote(index)} style={styles.deleteButton}>
+        <Feather name="x-circle" size={24} color="black" />
+      </TouchableOpacity>
+      {savedNote && savedNote.title && savedNote.note ? (
+        <>
+          <Text style={styles.noteTitle}>{savedNote.title}</Text>
+          <Text style={styles.noteContent}>{savedNote.note}</Text>
+        </>
+      ) : (
+        <Text>La note est mal formatée</Text>
+      )}
+    </View>
+  ))}
+</ScrollView>
 
       <View style={styles.inputContainer}>
         {/* titre de la note */}

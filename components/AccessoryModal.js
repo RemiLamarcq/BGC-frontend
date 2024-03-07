@@ -14,7 +14,7 @@ function AccessoryModal({ isVisible, closeModal, modalContent, modalTitle }) {
   return (
     <View style={styles.AccessoryModal}>
     {/*Modal pour afficher le contenu de la zone cliquée*/}
-    <Modal visible={isVisible} transparent animationType="none" onRequestClose={closeModal}>
+    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={closeModal}>
       {/* Afficher le composant Header avec le titre dynamique */}
       <Header title={modalTitle} height={100} />
       {/* Conteneur principal de la modal */}
