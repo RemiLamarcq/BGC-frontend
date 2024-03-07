@@ -15,6 +15,7 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
+  console.log(token)
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -42,8 +43,12 @@ export default function ArmoireScreen() {
     setAddGameIsVisible(!addGameIsVisible);
   }  
 
-  const toggleModalVisibility = () => {
+  const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
+    if (!isVisible) {
+      setSelectedGame(gameData);
+    }
+    console.log("Selected game:", gameData);
   };
 
   return (
@@ -52,18 +57,20 @@ export default function ArmoireScreen() {
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
-          gamesData.map((data, i) => {
+          gamesData.map((gameData, i) => {
             return <Game 
                       toggleModalVisibility={toggleModalVisibility} 
                       isVisible={isVisible} 
-                      key={data.objectId} 
-                      name={data.name} 
-                      image={data.urlImg} 
-                      minPlayers={data.minPlayers} 
-                      maxPlayers={data.maxPlayers} 
-                      duration={data.duration} 
-                      gameType={data.gameType} 
-                      personalNote={data.personalNote} />
+                      key={gameData.objectId} 
+                      name={gameData.name} 
+                      image={gameData.urlImg} 
+                      minPlayers={gameData.minPlayers} 
+                      maxPlayers={gameData.maxPlayers} 
+                      duration={gameData.duration} 
+                      gameType={gameData.gameType} 
+                      personalNote={gameData.personalNote}
+                      game={gameData}
+                      selectedGame={selectedGame} />
               })
         ) : (
           <View>
@@ -84,6 +91,7 @@ export default function ArmoireScreen() {
       </Modal>
     </ScrollView>
   </View>
+
   );
 }
 
@@ -138,7 +146,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     width: '95%',
@@ -146,5 +153,3 @@ const styles = StyleSheet.create({
 
 
 });
-   
-  
