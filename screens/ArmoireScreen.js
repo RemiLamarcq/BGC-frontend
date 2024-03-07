@@ -7,7 +7,7 @@ import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
 
-export default function Armoirecreen() {
+export default function ArmoireScreen() {
 
   const [gamesData, setGamesData] = useState([]);
   const token = useSelector(state => state.user.value.token);
