@@ -81,7 +81,6 @@ export default function ArmoireScreen() {
     console.log("Selected game:", gameData);
   };
 
-<<<<<<< HEAD
   const handleDeleteGame = () => {
     console.log('yo');
     console.log(selectedGame.name, token)
@@ -95,9 +94,7 @@ export default function ArmoireScreen() {
     })
   }
 
-=======
   // Fonction qui permet de filtrer l'affichage des jeux en fonction de la valeur du champ de recherche récupérée grâce à l'inverse data flow
->>>>>>> 05da30a610fef2dabdcea4aa72469a458a96b4c6
   const handleFilteredGamesChange = (value) => {
     const filterGames = initialGames.filter(game => {
       return game.name.toLowerCase().includes(value.toLowerCase());
