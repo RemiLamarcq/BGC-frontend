@@ -15,6 +15,8 @@ function Notepad() {
 
   //Fetch GET pour récuperer les notes existantes de l'utilisateur en BDD
   useEffect(() => {
+    // Commenté pour désactiver la requête
+    /*
     fetch(`https://bgc-backend.vercel.app/notePad/${token}`)
       .then(response => response.json())
       .then(data => {
@@ -28,16 +30,19 @@ function Notepad() {
       .catch(error => {
         console.error(error);
       });
+    */
   }, []);
 
   // Fonction pour ajouter une nouvelle note à la liste
   const addNote = () => {
+    // Commenté pour désactiver la fonction
+    /*
     if (title || note) {
-
       // Réinitialise le titre et la note après avoir ajouté la note
       setTitle('');
       setNote('');
     }
+    */
   };
 
   // Fonction pour supprimer une note de la liste

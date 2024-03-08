@@ -29,7 +29,7 @@ export default function StatScreen({navigation}) {
       .then(data => {
         if (data.result) {
             setNotes(data.notePad);
-            console.log(data.notePad)
+        
         } else {
           console.error(data.error);
         }
