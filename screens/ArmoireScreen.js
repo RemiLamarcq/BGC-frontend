@@ -17,7 +17,6 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
-  console.log(token)
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -43,7 +42,7 @@ export default function ArmoireScreen() {
 
                 let stars = [];
                 for(let i= 0; i < 5; i++){
-                    if (i < game.personalNote -1) {
+                    if (i < game.personalNote) {
                         stars.push(<AntDesign name="star" style={{color: '#0A3332'}}/>);
                     } else {
                         stars.push(<AntDesign name="staro" style={{color: '#0A3332'}}/>);
@@ -60,7 +59,7 @@ export default function ArmoireScreen() {
               maxPlayers: game.idGame.maxPlayers, 
               duration: gameDuration, 
               gameType: game.idGame.gameType.map(type => type.type).join(', '),
-              stars: stars 
+              stars: stars,
             };
           });
             setGamesData(formatedData);
@@ -105,7 +104,7 @@ export default function ArmoireScreen() {
 
   return (
   <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={(e) => handleFilteredGamesChange(e)}/>
+    <Header title="Armoire" height={150}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={(e) => handleFilteredGamesChange(e)}/>
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
@@ -122,6 +121,7 @@ export default function ArmoireScreen() {
                       gameType={gameData.gameType} 
                       personalNote={gameData.personalNote}
                       game={gameData}
+                      stars={gameData.stars}
                       selectedGame={selectedGame}
                       handleDeleteGame={handleDeleteGame} />
               })
@@ -139,7 +139,7 @@ export default function ArmoireScreen() {
       </View>
       <Modal visible={addGameIsVisible} animationType="slide" transparent={true}>
           <View style={styles.modalContainer}>
-            <AddGame toggleModalAddGame={toggleModalAddGame}/>
+            <AddGame toggleModalAddGame={toggleModalAddGame} />
           </View>
       </Modal>
     </ScrollView>
@@ -150,7 +150,7 @@ export default function ArmoireScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginBottom: 200,
+    marginBottom: 150,
     marginTop: 20
   },
   scrollView: {
