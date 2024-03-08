@@ -6,13 +6,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function GamePlay(props) {
 
-    const {id, name, gameImage, startDate, endDate, players, gamePlayImages, comment, place, isInterrupted, toggleModalVisibility, isVisible, selectedGame, gamePlay } = props;
+    const {id, name, gameImage, startDate, endDate, players, gamePlayImages, comment, place, isInterrupted } = props;
 
     const friendNames = players.map(player => player.friendName).join(' - ');
 
    return (
     //1 jeu
-    <TouchableOpacity style={styles.container} onPress={() => toggleModalVisibility(gamePlay)}>
+    <TouchableOpacity style={styles.container} >
 
         {/* partie gauche avec image du jeu */}
 

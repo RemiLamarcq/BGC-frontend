@@ -17,7 +17,7 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
-  console.log(token)
+  // console.log(token)
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -88,12 +88,21 @@ export default function ArmoireScreen() {
     });
     setGamesData(filterGames)
   };
-  console.log('Games data:',gamesData)
+  // console.log('Games data:',gamesData)
   
 
   return (
   <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={(e) => handleFilteredGamesChange(e)}/>
+    <Header 
+      title="Armoire" 
+      height={200} 
+      showMeeple={true} 
+      showSearchBar={true} 
+      toggleModalAddGame={toggleModalAddGame} 
+      gamesData={gamesData} 
+      onSearchGameChange={(e) => handleFilteredGamesChange(e)}
+      isInNotebook={false}
+    />
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (

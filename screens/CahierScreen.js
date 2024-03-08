@@ -6,14 +6,14 @@ import { useSelector } from 'react-redux';
 import GamePlay from '../components/GamePlay';
 import formatDate from '../modules/formatDate';
 import Header from '../components/Header';
+import AddGamePlay from '../components/AddGamePlay';
 
 export default function CahierScreen() {
 
   const [gamePlays, setGamePlays] = useState([]);
   const token = useSelector(state => state.user.value.token);
   const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
-  const [addGamePlaysVisible, setAddGamePlaysVisible] = useState(false);
-  const [selectedGamePlays, setSelectedGamePlays] = useState(null);
+  const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
   // console.log(gamePlays);
   
   useEffect(() => {
@@ -45,22 +45,29 @@ export default function CahierScreen() {
             setGamePlays(formatedData);
         }
       });
-  }, [addGamePlaysVisible]); 
+  }, [addGamePlayVisible]); 
 
-  const toggleModalGamePlays = () => {
-    setAddGamePlaysVisible(!addGamePlaysVisible);
+  const toggleModalAddGamePlay = () => {
+    setAddGamePlayVisible(!addGamePlayVisible);
   }  
 
-  const toggleModalVisibility = (gamePlay) => {
-    setGamePlaySheetVisible(!gamePlaySheetVisible);
-    if (!gamePlaySheetVisible) {
-      setSelectedGamePlays(gamePlay);
-    }
-  };
+  // const toggleModalVisibility = (gamePlay) => {
+  //   setGamePlaySheetVisible(!gamePlaySheetVisible);
+  //   if (!gamePlaySheetVisible) {
+  //     setSelectedGamePlays(gamePlay);
+  //   }
+  // };
 
   return (
     <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame}/>
+    <Header 
+      title="Cahier" 
+      height={200} 
+      showMeeple={true} 
+      showSearchBar={true} 
+      isInNotebook={true}
+      toggleModalAddGamePlay={toggleModalAddGamePlay}
+    />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View>
           {gamePlays.length > 0 ? (
@@ -68,17 +75,15 @@ export default function CahierScreen() {
               return <GamePlay  
                         key={i} 
                         {...gamePlay}
-                        toggleModalVisibility={toggleModalVisibility} 
-                        gamePlaySheetVisible={gamePlaySheetVisible}
-                        selectedGame={selectedGamePlays}
-                        gamePlay
+                        // toggleModalVisibility={toggleModalVisibility} 
+                        // gamePlaySheetVisible={gamePlaySheetVisible}
                       />
                 })
           ) : (
             <View>
               <Text style={styles.textAucunJeu}>Aucune parties enregistrées</Text>
               <View style={styles.divBigAjouterJeu}>
-                <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalGamePlays}>
+                <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGamePlay}>
                   <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
                 </TouchableOpacity>
                 <Text style={styles.textBigAjouterJeu}>Ajouter une partie</Text>
@@ -86,10 +91,9 @@ export default function CahierScreen() {
             </View>
           )}
         </View>
-        <Modal visible={addGamePlaysVisible} animationType="slide" transparent={true}>
+        <Modal visible={addGamePlayVisible} animationType="slide" transparent={true}>
             <View style={styles.modalContainer}>
-              {/* <AddGame toggleModalAddGame={toggleModalAddGame}/> */}
-              <Text>blabla</Text>
+              <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
             </View>
         </Modal>
       </ScrollView>
@@ -140,10 +144,9 @@ const styles = StyleSheet.create({
     top: 15, 
     marginBottom: 60,
     width: '100%',
-    backgroundColor: 'pink',
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopLeftRadius: 40, // Adjust the radius as needed
+    borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
   },
   modalContent: {
