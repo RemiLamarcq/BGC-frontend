@@ -102,7 +102,6 @@ export default function ArmoireScreen() {
     setGamesData(filterGames)
   };
   
-
   return (
   <View style={styles.mainContainer}>
     <Header 
