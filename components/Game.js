@@ -82,7 +82,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
     </TouchableOpacity>
    );
-    }
+}
     
     const styles = StyleSheet.create({
       

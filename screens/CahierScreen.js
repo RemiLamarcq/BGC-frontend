@@ -4,16 +4,16 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import GamePlay from '../components/GamePlay';
-import FicheGame from '../components/FicheGame';
 import formatDate from '../modules/formatDate';
+import Header from '../components/Header';
+import AddGamePlay from '../components/AddGamePlay';
 
-export default function ArmoireScreen() {
+export default function CahierScreen() {
 
   const [gamePlays, setGamePlays] = useState([]);
   const token = useSelector(state => state.user.value.token);
-  const [isVisible, setIsVisible] = useState(false);
-  const [selectedGamePlays, setSelectedGamePlays] = useState(null);
-  const [gamePlaysVisibility, setGamePlaysVisibility] = useState(false);
+  const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
+  const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
   // console.log(gamePlays);
   
   useEffect(() => {
@@ -24,7 +24,6 @@ export default function ArmoireScreen() {
             // console.log(data.gamePlays)
             const formatedData = data.gamePlays.map(gamePlay => {
               const { _id, idGame, startDate, endDate, players, urlImage, comment, place, isInterrupted } = gamePlay;
-              console.log(formatDate(startDate))
               return { 
                 id: _id,
                 name: idGame.name,
@@ -46,53 +45,66 @@ export default function ArmoireScreen() {
             setGamePlays(formatedData);
         }
       });
-  }, []); 
+  }, [addGamePlayVisible]); 
 
-  const toggleModalAddGame = () => {
-    setGamePlaysVisibility(!gamePlaysVisibility);
+  const toggleModalAddGamePlay = () => {
+    setAddGamePlayVisible(!addGamePlayVisible);
   }  
 
-  const toggleModalVisibility = () => {
-    setIsVisible(!isVisible);
-  };
+  // const toggleModalVisibility = (gamePlay) => {
+  //   setGamePlaySheetVisible(!gamePlaySheetVisible);
+  //   if (!gamePlaySheetVisible) {
+  //     setSelectedGamePlays(gamePlay);
+  //   }
+  // };
 
   return (
-  <ScrollView contentContainerStyle={styles.scrollView}>
-    <View>
-      {gamePlays.length > 0 ? (
-        gamePlays.map((gamePlay, i) => {
-          return <GamePlay  
-                    key={i} 
-                    {...gamePlay}
-                    toggleModalVisibility={toggleModalVisibility} 
-                    isVisible={isVisible}
-                   />
-             })
-      ) : (
+    <View style={styles.mainContainer}>
+    <Header 
+      title="Cahier" 
+      height={200} 
+      showMeeple={true} 
+      showSearchBar={true} 
+      isInNotebook={true}
+      toggleModalAddGamePlay={toggleModalAddGamePlay}
+    />
+      <ScrollView contentContainerStyle={styles.scrollView}>
         <View>
-          <Text style={styles.textAucunJeu}>Aucune parties enregistrées</Text>
-          <View style={styles.divBigAjouterJeu}>
-            <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGame}>
-              <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
-            </TouchableOpacity>
-            <Text style={styles.textBigAjouterJeu}>Ajouter une partie</Text>
-          </View>
+          {gamePlays.length > 0 ? (
+            gamePlays.map((gamePlay, i) => {
+              return <GamePlay  
+                        key={i} 
+                        {...gamePlay}
+                        // toggleModalVisibility={toggleModalVisibility} 
+                        // gamePlaySheetVisible={gamePlaySheetVisible}
+                      />
+                })
+          ) : (
+            <View>
+              <Text style={styles.textAucunJeu}>Aucune parties enregistrées</Text>
+              <View style={styles.divBigAjouterJeu}>
+                <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGamePlay}>
+                  <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
+                </TouchableOpacity>
+                <Text style={styles.textBigAjouterJeu}>Ajouter une partie</Text>
+              </View>
+            </View>
+          )}
         </View>
-      )}
+        <Modal visible={addGamePlayVisible} animationType="slide" transparent={true}>
+            <View style={styles.modalContainer}>
+              <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
+            </View>
+        </Modal>
+      </ScrollView>
     </View>
-    <Modal visible={gamePlaysVisibility} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text>This is a modal</Text>
-            <Button title="Close Modal" onPress={toggleModalAddGame} />
-          </View>
-        </View>
-    </Modal>
-  </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    marginTop: 20,
+  },
   scrollView: {
     flexGrow:1,
     backgroundColor: '#F2F4F1',
@@ -132,10 +144,9 @@ const styles = StyleSheet.create({
     top: 15, 
     marginBottom: 60,
     width: '100%',
-    backgroundColor: 'pink',
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopLeftRadius: 40, // Adjust the radius as needed
+    borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
   },
   modalContent: {

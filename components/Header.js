@@ -11,7 +11,16 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 dans l' écran AccessoiresScreen, passer la valeur à true pour afficher le logo de déconnexion
 Pour les autres écrans, passer la valeur à false*/
 
-function Header({ title, height, showSearchBar, showMeeple, toggleModalAddGame, onSearchGameChange }) {
+function Header({ 
+  title, 
+  height, 
+  showSearchBar, 
+  showMeeple, 
+  toggleModalAddGame, 
+  onSearchGameChange, 
+  isInNotebook, 
+  toggleModalAddGamePlay, 
+}) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
@@ -28,7 +37,7 @@ function Header({ title, height, showSearchBar, showMeeple, toggleModalAddGame, 
       onSearchGameChange(value);
     };
 
-    console.log(searchGame)
+    // console.log(searchGame)
 
   return (
     <View style={[styles.headerContainer, { height: height }]}>{/* height à modifier dans les fichiers screens */}
@@ -46,19 +55,21 @@ function Header({ title, height, showSearchBar, showMeeple, toggleModalAddGame, 
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchBar}
-            placeholder="Rechercher dans l'armoire..."
+            placeholder={ !isInNotebook ? "Rechercher dans l'armoire..." : "Rechercher par jeu" }
             onChangeText={handleSearchChange}
             value={searchGame}
           />
           <View style={styles.bottomHeader}>
+            {!isInNotebook &&
             <View style={styles.filterButton}>
               <FontAwesome name="filter" color="#423D3D" style={styles.filterIcon} />
             </View>
-            <TouchableOpacity onPress={toggleModalAddGame} style={styles.buttonAddGame}>
+            }
+            <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : toggleModalAddGamePlay } style={styles.buttonAddGame}>
               <View style={styles.plusButton}>
                 <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
               </View>
-              <Text>Ajouter un jeu</Text>
+              <Text>{ !isInNotebook ? "Ajouter un jeu" : "Ajouter une partie" }</Text>
             </TouchableOpacity>
           </View>
         </View>
