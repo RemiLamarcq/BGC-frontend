@@ -31,9 +31,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
     const [friendRegistered, toggleFriendRegistered] = useState(false);
     // Liste des joueurs de la partie et leurs infos
     const [players, setPlayers] = useState([]);
-    const [isWinner, setIsWinner] = useState(false);
 
-    // console.log(location)
+    console.log(players)
 
     // A l'initialisation récupère tous les noms des jeux de la BDD
     useEffect(() => {
@@ -121,6 +120,87 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         }]);
     }
 
+    function handleIsWinner(player){
+        const { friendName, isWinner, team, character, score } = player;
+        setPlayers([
+            ...players.filter(obj => obj.friendName !== friendName),
+            { friendName, isWinner: !isWinner, team, character, score }
+        ]);
+    }
+    function handleTeam(player, value){
+        const { friendName, isWinner, character, score } = player;
+        setPlayers([
+            ...players.filter(obj => obj.friendName !== friendName),
+            { friendName, isWinner, team: value, character, score }
+        ]);
+    }
+    function handleCharacter(player, value){
+        const { friendName, isWinner, team, score } = player;
+        setPlayers([
+            ...players.filter(obj => obj.friendName !== friendName),
+            { friendName, isWinner, team, character: value, score }
+        ]);
+    }
+    function handleScore(player, value){
+        const { friendName, isWinner, team, character } = player;
+        setPlayers([
+            ...players.filter(obj => obj.friendName !== friendName),
+            { friendName, isWinner, team, character, score: value }
+        ]);
+    }
+
+    const playersJSX = players.map((player, i) => {
+        const { friendName, isWinner, team, character, score } = player;
+        return (
+            <View key={i} style={styles.playerCtn}>
+                <View style={styles.playerCtnTop}>
+                    <Text style={ styles.player }>{friendName}</Text>
+                    <View style={styles.radioBtnBloc}>
+                        <View style={styles.radioBtnCtn}>
+                            <RadioButton
+                                value="winner"
+                                status={isWinner ? 'checked' : 'unchecked'}
+                                onPress={() => handleIsWinner(player)}
+                                style={styles.radioBtn}
+                                color="#0A3332"
+                            />
+                        </View>
+                        <Text>Vainqueur</Text>
+                    </View>
+                    <TouchableOpacity style={styles.closeBtn} >
+                        <FontAwesome name="close" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.playerCtnBottom}>
+                    <TextInput
+                        style={[ styles.input, styles.playerInput ]}
+                        placeholder="Equipe"
+                        placeholderTextColor= 'grey'
+                        inputMode='text'
+                        onChangeText={value => handleTeam(player, value)}
+                        value={team}
+                    />
+                    <TextInput
+                        style={[ styles.input, styles.playerInput ]}
+                        placeholder="Personnage"
+                        placeholderTextColor= 'grey'
+                        inputMode='text'
+                        onChangeText={value => handleCharacter(player, value)}
+                        value={character}
+                    />
+                    <TextInput
+                        style={[ styles.input, styles.playerInput ]}
+                        placeholder="Score"
+                        placeholderTextColor= 'grey'
+                        inputMode='text'
+                        onChangeText={value => handleScore(player, value)}
+                        value={score}
+                    />
+                </View>
+            </View>            
+        );
+    })
+
     return(
         <ScrollView style={styles.scrollView}>
             <View style={styles.container}>
@@ -193,7 +273,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                     <AutocompleteDropdownContextProvider>
                         <AutocompleteDropdown
                             dataSet={formattedFriendsList}
-                            onSelectItem={item => handleAddPlayer(item?.title)}
+                            onSelectItem={item => item && handleAddPlayer(item.title)}
                             textInputProps={{ 
                                 placeholder: 'Ajouter un joueur à la partie',
                                 placeholderTextColor: 'grey',
@@ -225,52 +305,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         <FontAwesome name="plus" color="#0A3332" size={20} />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.playerCtn}>
-                    <View style={styles.playerCtnTop}>
-                        <Text style={ styles.player }>Joueur 1</Text>
-                        <View style={styles.radioBtnBloc}>
-                            <View style={styles.radioBtnCtn}>
-                                <RadioButton
-                                    value="winner"
-                                    status={isWinner ? 'checked' : 'unchecked'}
-                                    onPress={() => setIsWinner(!isWinner)}
-                                    style={styles.radioBtn}
-                                    color="#0A3332"
-                                />
-                            </View>
-                            <Text>Vainqueur</Text>
-                        </View>
-                        <TouchableOpacity style={styles.closeBtn} >
-                            <FontAwesome name="close" color="#0A3332" backgroundColor="#88B7B6" size={20} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.playerCtnBottom}>
-                        <TextInput
-                            style={[ styles.input, styles.playerInput ]}
-                            placeholder="Equipe"
-                            placeholderTextColor= 'grey'
-                            inputMode='text'
-                            // onChangeText={handleTeam}
-                            // value={team}
-                        />
-                        <TextInput
-                            style={[ styles.input, styles.playerInput ]}
-                            placeholder="Personnage"
-                            placeholderTextColor= 'grey'
-                            inputMode='text'
-                            // onChangeText={handleCharacter}
-                            // value={character}
-                        />
-                        <TextInput
-                            style={[ styles.input, styles.playerInput ]}
-                            placeholder="Score"
-                            placeholderTextColor= 'grey'
-                            inputMode='text'
-                            // onChangeText={handleScore}
-                            // value={score}
-                        />
-                    </View>
-                </View>
+                {playersJSX}
                 <View style={styles.photosCtn} >
                     <TouchableOpacity style={styles.photo}>
                         <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
