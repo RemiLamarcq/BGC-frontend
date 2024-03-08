@@ -18,6 +18,8 @@ export default function AddGame({props, toggleModalAddGame}) {
     
     const [gameCardVisible, setGameCardVisible] = useState(false);
 
+    const [addPersonalNote, setAddPersonalNote] = useState(0);
+
     const formattedGameList = [];
     let gameCard;
     let formatedGameType;
@@ -70,8 +72,16 @@ export default function AddGame({props, toggleModalAddGame}) {
             headers: { 'Content-Type': 'application/json' },
             }).then(response=> response.json())
         .then(() => {
-            toggleModalAddGame()
-        })
+            fetch(`https://bgc-backend.vercel.app/games/score/${gameInfos.game.name}/${user.token}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({score: addPersonalNote}),
+            }).then(response=> response.json())
+                .then(() => {
+                    toggleModalAddGame()
+                })
+        })    
+        
     }
 
     const handleClearGameCard = () => {
@@ -114,6 +124,39 @@ export default function AddGame({props, toggleModalAddGame}) {
         </TouchableOpacity>
     }
 
+    //Affichage des étoiles (cliquables si le jeu n'est pas encore dans l'armoire)
+
+    let starsAddGame = [];
+    for(let i= 0; i < 5; i++){
+        if (i < gameInfos.personalNote -1) {
+            starsAddGame.push(<AntDesign name="star" style={{color: '#0A3332'}}/>);
+        } else {
+            starsAddGame.push(<AntDesign name="staro" style={{color: '#0A3332'}}/>);
+        }
+        
+    }
+
+    if(!gameInfos.isInCloset){
+        starsAddGame = [];
+        for(let i= 0; i < 5; i++){
+            if (i < addPersonalNote) {
+                starsAddGame.push(
+                <TouchableOpacity onPress={() => setAddPersonalNote(i+1)}>
+                    <AntDesign name="star" style={{color: '#0A3332'}} />
+                </TouchableOpacity>
+                );
+            } else {
+                starsAddGame.push(
+                <TouchableOpacity onPress={() => setAddPersonalNote(i+1)}>
+                    <AntDesign name="staro" style={{color: '#0A3332'}} />
+                </TouchableOpacity>
+                );
+                console.log(addPersonalNote);
+            }
+            
+        }
+    }
+
     // Affichage des infos du jeu suite au choix du jeu dans le dropdown
     if (gameInfos.game) {
         gameCard =
@@ -130,6 +173,9 @@ export default function AddGame({props, toggleModalAddGame}) {
                 <View style={styles.gamePlayerNumber}>
                     <Text style={{color: '#423D3D'}}>De {gameInfos.game.minPlayers} à {gameInfos.game.maxPlayers} joueurs</Text>
                 </View>
+            </View>
+            <View style={styles.starsAddGame}>
+                {starsAddGame}
             </View>
             {buttonCard}
         </View>
@@ -226,6 +272,11 @@ export default function AddGame({props, toggleModalAddGame}) {
 
         alreadyInCloset: {
             alignItems: 'center'
+        },
+
+        starsAddGame: {
+            marginTop: 15,
+            flexDirection: 'row',
         },
 
         buttonClose: {

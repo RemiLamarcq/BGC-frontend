@@ -67,7 +67,7 @@ function Header({
             }
             <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : toggleModalAddGamePlay } style={styles.buttonAddGame}>
               <View style={styles.plusButton}>
-                <FontAwesome name="plus" color="#88B7B6" backgroundColor='#423D3D' style={styles.AddIcon} />
+                <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
               </View>
               <Text>{ !isInNotebook ? "Ajouter un jeu" : "Ajouter une partie" }</Text>
             </TouchableOpacity>
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
       },
 
       logoContainer: {
-        width: 50, //largeur
-        height: 50, //hauteur
+        width: 40, //largeur
+        height: 40, //hauteur
         marginLeft: 20, //espace gauche logoContainer
         marginTop: 12, //espace haut logoContainer
       },
@@ -131,14 +131,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: 75,
+        marginBottom: 10,
         backgroundColor: '#88B7B6',
-        borderRadius: 10,
-        width: '40%'
+        borderRadius: 20,
+        width: 130,
+        height: 30
       },
       plusButton: {
         borderRadius: 50,
-        marginRight: 5
+        marginRight: 5,
+        backgroundColor:'#423D3D'
       },
+
       filterButton: {
         justifyContent: 'center',
         marginRight: 75,

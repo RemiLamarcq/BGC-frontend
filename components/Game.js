@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
+import FicheGame from './FicheGame';
 
 export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame, stars, handleDeleteGame }) {
 
@@ -73,79 +74,10 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
     <Modal visible={isVisible} animationType="fade" transparent={true}>
         {selectedGame && 
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
 
-            <View style={styles.top}>
-                <View style={styles.topLeft}>
-                    <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalVisibility}>
-                        <FontAwesome 
-                            name="arrow-left"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.topRight}>
-                    <TouchableOpacity style={styles.deleteTouchable} onPress={handleDeleteGame}>
-                        <FontAwesome 
-                            name="trash"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <View style={styles.title}>
-                <View style={styles.titleAndScore}>
-                    <Text style={styles.textTitleAgain}>{selectedGame.name}</Text>
-                    <View style={styles.starsAgain}>{selectedGame.stars}</View>
-                </View>
-                <View style={styles.image}>
-                    <Image 
-                    source={{uri:(selectedGame.urlImg)}}
-                    style={{height: 300, width: 300}}
-                    />
-                </View>
-            </View>
-
-            <View style={styles.info}>
-
-                <View style={styles.typeAndDuration}>
-                    <View style={styles.type}>
-                        <FontAwesome name="hashtag" style={{color: '#423D3D'}}/>
-                        <Text style={{color: '#423D3D'}}> {selectedGame.gameType}</Text>
-                    </View>
-                    <View style={styles.durationAgain}>
-                        <AntDesign name="clockcircle" style={{color: '#423D3D'}}/>
-                        <Text style={{color: '#423D3D'}}> {selectedGame.duration}</Text>
-                    </View>
-                </View>
-
-                <View style={styles.nbPlayersAndStats}>
-                    <View style={styles.nbPlayersAgain}>
-                        <FontAwesome name="users" style={{color: '#423D3D'}}/>
-                        <Text style={{color: '#423D3D'}}> {selectedGame.minPlayers} à {selectedGame.maxPlayers}</Text>
-                    </View>
-                    <TouchableOpacity style={styles.stats}>
-                        <AntDesign name="linechart" style={{color: '#423D3D'}}/>
-                        <Text style={{color: '#423D3D'}}> voir les stats</Text>
-                    </TouchableOpacity>
-                </View> 
-
-                <View style={styles.lastPlay}>
-                        <FontAwesome name="calendar" style={{color: '#423D3D'}}/>
-                        <Text style={{color: '#423D3D'}}> dernière partie : le 14/02/2024 à 15h</Text>
-                </View>
-
-            </View>
-
-            <View style={styles.extensions}>
-
-            </View>
-            
-          </View>
-        </View>
-        }
+          <FicheGame selectedGame={selectedGame} toggleModalVisibility={toggleModalVisibility} handleDeleteGame={handleDeleteGame}/>
+          
+      }
     </Modal>
 
     </TouchableOpacity>
@@ -306,6 +238,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             paddingBottom: 15,
             paddingLeft: 15,
             paddingRight: 15,
+            height: 'auto'
           },
 
           typeAndDuration: {
