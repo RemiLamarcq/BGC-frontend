@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
 
-export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame, stars }) {
+export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame, stars, handleDeleteGame }) {
 
    return (
     //1 jeu
@@ -86,7 +86,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
                     </TouchableOpacity>
                 </View>
                 <View style={styles.topRight}>
-                    <TouchableOpacity style={styles.deleteTouchable}>
+                    <TouchableOpacity style={styles.deleteTouchable} onPress={handleDeleteGame}>
                         <FontAwesome 
                             name="trash"
                             color="#0A3332" 
@@ -145,12 +145,12 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             
           </View>
         </View>
-}
+        }
     </Modal>
 
     </TouchableOpacity>
    );
-    }
+}
     
     const styles = StyleSheet.create({
       
@@ -242,11 +242,12 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
         modalContainer: {
             flex:1,
-            top: 15, 
+            top: 45, 
             width: '100%',
             backgroundColor: '#F2F4F1',
             borderTopLeftRadius: 40, // Adjust the radius as needed
             borderTopRightRadius: 40,
+            alignItems: 'center'
           },
 
           modalContent: {

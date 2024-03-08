@@ -17,7 +17,7 @@ export default function ArmoireScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
-  console.log(token)
+  // console.log(token)
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -67,7 +67,7 @@ export default function ArmoireScreen() {
             setInitialGames(formatedData);
         }
       });
-  }, [addGameIsVisible]); 
+  }, [addGameIsVisible, isVisible]); 
 
   const toggleModalAddGame = () => {
     setAddGameIsVisible(!addGameIsVisible);
@@ -78,8 +78,21 @@ export default function ArmoireScreen() {
     if (!isVisible) {
       setSelectedGame(gameData);
     }
-    console.log("Selected game:", gameData);
+    // console.log("Selected game:", gameData);
   };
+
+  const handleDeleteGame = () => {
+    console.log('yo');
+    console.log(selectedGame.name, token)
+    fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      }).then(response=> response.json())
+    .then(() => {
+      toggleModalVisibility()
+      console.log('coucou')
+    })
+  }
 
   // Fonction qui permet de filtrer l'affichage des jeux en fonction de la valeur du champ de recherche récupérée grâce à l'inverse data flow
   const handleFilteredGamesChange = (value) => {
@@ -88,12 +101,20 @@ export default function ArmoireScreen() {
     });
     setGamesData(filterGames)
   };
-  console.log('Games data:',gamesData)
   
 
   return (
   <View style={styles.mainContainer}>
-    <Header title="Armoire" height={200}  showMeeple={true} showSearchBar={true} toggleModalAddGame={toggleModalAddGame} gamesData={gamesData} onSearchGameChange={(e) => handleFilteredGamesChange(e)}/>
+    <Header 
+      title="Armoire" 
+      height={200} 
+      showMeeple={true} 
+      showSearchBar={true} 
+      toggleModalAddGame={toggleModalAddGame} 
+      gamesData={gamesData} 
+      onSearchGameChange={(e) => handleFilteredGamesChange(e)}
+      isInNotebook={false}
+    />
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
         {gamesData.length > 0 ? (
@@ -110,7 +131,8 @@ export default function ArmoireScreen() {
                       gameType={gameData.gameType} 
                       personalNote={gameData.personalNote}
                       game={gameData}
-                      selectedGame={selectedGame} />
+                      selectedGame={selectedGame}
+                      handleDeleteGame={handleDeleteGame} />
               })
         ) : (
           <View>
@@ -137,7 +159,7 @@ export default function ArmoireScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginBottom: 90,
+    marginBottom: 200,
     marginTop: 20
   },
   scrollView: {
@@ -176,7 +198,7 @@ const styles = StyleSheet.create({
 
   modalContainer: {
     flex: 1,
-    top: 15, 
+    top: 45, 
     width: '100%',
     backgroundColor: 'pink',
     justifyContent: 'center',

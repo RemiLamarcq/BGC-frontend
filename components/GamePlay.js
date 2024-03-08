@@ -6,13 +6,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function GamePlay(props) {
 
-    const {id, name, gameImage, startDate, endDate, players, gamePlayImages, comment, place, isInterrupted, toggleModalVisibility, isVisible } = props;
+    const {id, name, gameImage, startDate, endDate, players, gamePlayImages, comment, place, isInterrupted } = props;
 
     const friendNames = players.map(player => player.friendName).join(' - ');
 
    return (
     //1 jeu
-    <TouchableOpacity style={styles.container} onPress={toggleModalVisibility}>
+    <TouchableOpacity style={styles.container} >
 
         {/* partie gauche avec image du jeu */}
 
@@ -75,4 +75,60 @@ export default function GamePlay(props) {
           fontSize: 18,
         },
 
-      });
+    //style de la modale
+
+        modalContainer: {
+            flex:1,
+            top: 15, 
+            marginBottom: 60,
+            width: '100%',
+            backgroundColor: '#F2F4F1',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderTopLeftRadius: 40, // Adjust the radius as needed
+            borderTopRightRadius: 40,
+        },
+
+        modalContent: {
+            padding: 20,
+            borderRadius: 10,
+            width: '95%',
+        },
+
+        top: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+        },
+
+        goBackIcon: {
+            borderRadius: 50,
+            width: 30,
+            height: 30,
+        },
+
+        topRight: {
+            flexDirection: 'row',
+        },
+
+        textTitleAgain: {
+            fontWeight: '700',
+            fontSize: 18,
+            alignSelf: 'center',
+        },
+
+        starsAgain: {
+            flexDirection: 'row',
+            alignSelf: 'center',
+        },
+
+        info: {
+            backgroundColor: '#CDDCDB',
+            borderRadius: 30,
+        },
+
+        typeAndDuration: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+        },
+
+    });

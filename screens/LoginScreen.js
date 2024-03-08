@@ -9,7 +9,7 @@ export default function LoginScreen({navigation}) {
   const login = useSelector((state) => state.login.value)
 
   if (login === 'Signin') {
-    console.log(navigation)
+    // console.log(navigation)
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
       <Signin navigation={navigation}/>
