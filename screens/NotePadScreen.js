@@ -63,7 +63,7 @@ export default function StatScreen({navigation}) {
       console.log('clic')
       console.log('token : ', token)
       console.log('notePad', notePad)
-      fetch(`http://192.168.1.63:3000/notePad`,{
+      fetch(`https://bgc-backend.vercel.app/notePad`,{
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({token,notePad})
