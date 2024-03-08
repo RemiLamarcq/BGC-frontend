@@ -11,7 +11,7 @@ import Dice from '../components/Dice';
 // Import du composant Timer
 import Timer from '../components/Timer';
 // Import du composant Notepad
-import Notepad from '../components/Notepad';
+//import Notepad from '../components/Notepad';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -32,13 +32,13 @@ export default function AccessoiresScreen() {
     if (zone === 1) {
       setModalContent(<Dice />);
       title = 'Dés';
-    } else if (zone === 2) {
+    } else if(zone === 2) {
       setModalContent(<Timer />); 
       title = 'Timer';
-    } else if (zone === 3) {
+    };/* else if (zone === 3) {
       setModalContent(<Notepad />); 
       title = 'Bloc-notes';
-    }
+    }*/
 
     // Mettre à jour le titre dynamique
     setModalTitle(title);
@@ -74,7 +74,7 @@ export default function AccessoiresScreen() {
             image={require('../assets/timer.png')}
             onPress={() => handleZoneClick(2)}
           />
-          {/* Composant Accessories pour la zone 3 (Bloc-notes) avec une fonction onPress */}
+          {/* Composant Accessories pour la zone 3 (Bloc-notes) avec une fonction onPress*/} 
           <Accessories
             name="Bloc-notes"
             image={require('../assets/notepad.png')}
