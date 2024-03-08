@@ -1,109 +1,103 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
+import Countdown from './Countdown';
+import Stopwatch from './Stopwatch';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
 
-function Timer() {
-  const [timers, setTimers] = useState([{ id: 1, time: 0 }]);
-  const [newTimer, setNewTimer] = useState(0);
-  const timerIdCounter = useRef(2);
-  const [seconds, setSeconds] = useState(0);
-  const [isActive, setIsActive] = useState(false);
+// Composant enfant de AccessoiresScreen.js
+// Composant parent de Countdown.js => minuteur et Stopwatch.js => chrono
 
-  const TimerComponent = ({ timer }) => {
-    return (
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerText}>{timer.time} seconds</Text>
-        <TouchableOpacity onPress={() => startStopTimer(timer.id)}>
-          <Text style={styles.startButton}>{isActive ? 'Stop' : 'Start'}</Text>
-        </TouchableOpacity>
-      </View>
-    );
+const Timer = () => {
+  // État pour stocker les minuteries ajoutées
+  const [timers, setTimers] = useState([
+    { type: 'countdown', key: Date.now(), duration: 60, isCountdownActive: false },
+    { type: 'stopwatch', key: Date.now() + 1, time: 0, running: false },
+  ]);
+
+  // Fonction pour ajouter une minuterie de type spécifié
+  const addTimer = (type) => {
+    // Création d'une nouvelle minuterie avec des propriétés initiales en fonction du type
+    const newTimer = {
+      type,
+      key: Date.now(),
+      ...(type === 'countdown' ? { duration: 60, isCountdownActive: false } : { time: 0, running: false }),
+    };
+
+    // Mise à jour de l'état avec la nouvelle minuterie
+    setTimers((prevTimers) => [...prevTimers, newTimer]);
   };
 
-  useEffect(() => {
-    let interval;
-
-    if (isActive) {
-      interval = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-
-    return () => clearInterval(interval);
-  }, [isActive]);
-
-  const startStopTimer = (id) => {
-    // Logic to start or stop the specific timer
-    setTimers((prevTimers) => {
-      return prevTimers.map((prevTimer) => {
-        if (prevTimer.id === id) {
-          return { ...prevTimer, time: seconds };
-        }
-        return prevTimer;
-      });
-    });
-    setIsActive(!isActive);
-  };
-
-  const addTimer = () => {
-    setTimers((prevTimers) => [...prevTimers, { id: timerIdCounter.current++, time: 0 }]);
+  // Fonction pour supprimer une minuterie en fonction de sa clé unique
+  const removeTimer = (key) => {
+    setTimers((prevTimers) => prevTimers.filter((timer) => timer.key !== key));
   };
 
   return (
     <View style={styles.container}>
-      {timers.map((timer) => (
-        <TimerComponent key={timer.id} timer={timer} />
-      ))}
+      {/* Titre de la section */}
+      <Text style={styles.addTimer}>Ajouter un timer</Text>
 
-      <View style={styles.addTimerContainer}>
-        <TextInput
-          style={styles.timerInput}
-          placeholder="Enter initial time"
-          keyboardType="numeric"
-          value={newTimer.toString()}
-          onChangeText={(text) => setNewTimer(text)}
-        />
-        <TouchableOpacity onPress={addTimer}>
-          <Text style={styles.addButton}>Add Timer</Text>
+      {/* Section pour ajouter une minuterie de type Countdown ou Stopwatch */}
+      <View style={styles.addButtonsContainer}>
+        {/* Bouton pour ajouter un minuteur */}
+        <TouchableOpacity style={styles.addButton} onPress={() => addTimer('countdown')}>
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
+          <Text style={styles.buttonText}>Ajouter un minuteur</Text>
+        </TouchableOpacity>
+
+        {/* Bouton pour ajouter un chronomètre */}
+        <TouchableOpacity style={styles.addButton} onPress={() => addTimer('stopwatch')}>
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
+          <Text style={styles.buttonText}>Ajouter un chrono</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Utilisation de ScrollView pour permettre le défilement des minuteries */}
+      <ScrollView>
+        {timers.map((timer) => (
+          <View key={timer.key}>
+            {timer.type === 'countdown' ? (
+              <Countdown timer={timer} removeTimer={removeTimer} />
+            ) : (
+              <Stopwatch timer={timer} removeTimer={removeTimer} />
+            )}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    padding: 10,
     alignItems: 'center',
   },
-  timerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  timerText: {
-    fontSize: 18,
-    marginRight: 10,
-  },
-  startButton: {
-    color: 'blue',
-    fontSize: 16,
-  },
-  addTimerContainer: {
-    marginTop: 20,
-  },
-  timerInput: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 8,
-    marginBottom: 10,
-    width: 200,
+  addButtonsContainer: {
+    flexDirection: 'column', // Disposition verticale des éléments enfants
+    justifyContent: 'space-around', // Espace équitable autour des éléments
+    borderColor: 'black', // Couleur de la bordure de la section des boutons
+    borderWidth: 1, // Largeur de la bordure de la section des boutons
+    marginBottom: 10, // Marge en bas de la section des boutons
   },
   addButton: {
-    color: 'green',
-    fontSize: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white', // Couleur de fond du bouton
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10, // Marge en bas du bouton
+  },
+  buttonText: {
+    fontSize: 12,
+  },
+  fabtn: {
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  addTimer: {
+    fontSize: 14,
   },
 });
 
