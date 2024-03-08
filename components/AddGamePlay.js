@@ -214,7 +214,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                     <AutocompleteDropdownContextProvider>
                         <AutocompleteDropdown
                             dataSet={formattedGameList}
-                            onSelectItem={item => setGame(item?.title)}
+                            onSelectItem={item => item && setGame(item.title)}
                             textInputProps={{
                                 placeholder: 'Rechercher un jeu',
                                 placeholderTextColor: 'grey',
@@ -222,6 +222,9 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                             closeOnSubmit
                             suggestionsListContainerStyle={{
                                 backgroundColor: '#CDDCDB',
+                                position: 'relative',
+                                top: -80,
+                                left: -20,
                             }}
                             inputContainerStyle={{
                                 backgroundColor: 'white',
@@ -281,6 +284,9 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                             closeOnSubmit
                             suggestionsListContainerStyle={{
                                 backgroundColor: '#CDDCDB',
+                                position: 'relative',
+                                top: -300,
+                                left: -20,
                             }}
                             inputContainerStyle={{
                                 backgroundColor: 'white',
