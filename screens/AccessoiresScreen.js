@@ -12,6 +12,7 @@ import Dice from '../components/Dice';
 import Timer from '../components/Timer';
 // Import du composant Notepad
 import Notepad from '../components/Notepad';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function AccessoiresScreen() {
@@ -19,6 +20,7 @@ export default function AccessoiresScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [modalTitle, setModalTitle] = useState('Accessoires');
+  const navigation = useNavigation();
 
 
   // Fonction pour gérer le clic sur une zone accessoire
@@ -76,7 +78,7 @@ export default function AccessoiresScreen() {
           <Accessories
             name="Bloc-notes"
             image={require('../assets/notepad.png')}
-            onPress={() => handleZoneClick(3)}
+            onPress={() => navigation.navigate('NotPad')}
           />
         </View>
       </View>

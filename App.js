@@ -7,6 +7,7 @@ import ArmoireScreen from './screens/ArmoireScreen';
 import CahierScreen from './screens/CahierScreen';
 import StatScreen from './screens/StatScreen';
 import LoginScreen from './screens/LoginScreen';
+import NotepadScreen  from './screens/NotePadScreen';
 import { Provider } from 'react-redux';
 import { configureStore} from '@reduxjs/toolkit';
 import user from './reducers/user';
@@ -63,6 +64,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="NotPad" component={NotepadScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
