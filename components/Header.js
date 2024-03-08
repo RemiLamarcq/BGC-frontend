@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
         color: '#423D3D',
         fontSize: 24,
         fontWeight: 'bold',
-        marginRight: '20%',
       },
      
       logoMeeple: {

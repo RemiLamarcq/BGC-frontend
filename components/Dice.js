@@ -49,7 +49,7 @@ function Dice() {
       {/* Bouton pour ajouter un nouveau dé */}
       <View >
         <TouchableOpacity style={styles.addButton} onPress={addDice}>
-        <FontAwesome5 name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
+        <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />{/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un dé</Text>
         </TouchableOpacity>
       </View>
@@ -64,18 +64,18 @@ function Dice() {
               <View style={styles.numberOfFaces}>
                 <View style={styles.resultCircle}>
                   <TouchableOpacity onPress={decrementFaces}>
-                    <AntDesign name="minus" size={24} color="#0A3332" />
+                    <AntDesign name="minus" size={20} color="#423D3D" />
                   </TouchableOpacity>
                 </View>
                 {/* Si nombre de face === 1 : afficher face, sinon afficher faces */}
                 <Text>{numFaces} {numFaces === 1 ? 'face' : 'faces'}</Text>
                 <View style={styles.resultCircle}>
                   <TouchableOpacity onPress={incrementFaces}>
-                    <AntDesign name="plus" size={24} color="#0A3332" />
+                    <AntDesign name="plus" size={20} color="#423D3D" />
                   </TouchableOpacity>
                 </View>
               </View>
-              <FontAwesome5 name="redo-alt" size={24} color="#0A3332" style={styles.redo} />
+              <FontAwesome5 name="redo-alt" size={35} color="#423D3D" style={styles.redo} />
               {/* Logo flèche tournée de FontAwesome5 */}
             </View>
           </TouchableOpacity>
@@ -91,7 +91,7 @@ function Dice() {
           )}
            {/* Bouton pour supprimer le dé */}
            <TouchableOpacity onPress={() => removeDice(index)} style={styles.removeButton}>
-           <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
+           <Octicons name="x-circle-fill" size={24} color="#423D3D" />
           </TouchableOpacity>
         </View>
       ))}
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     alignItems: 'center',
+    marginTop:30,
   },
 
   numberOfFaces: {
@@ -111,16 +112,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  fabtn: {
+    marginLeft: 5,
+    marginRight: 5,
+    height: 25,
+  },
 
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
     backgroundColor: '#88B7B6',
-    padding: 20,
     borderRadius: 35,
-    width: 180,
-    height: 65,
+    width: 110,
+    height: 40,
   },
 
   cardContainer: {
@@ -150,8 +154,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: '#423D3D',
-    fontWeight: 'bold',
+    fontSize: 10,
   },
 
   resultContainer: {
@@ -162,35 +165,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  result: {
-    color: '#423D3D',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
   resultCircle: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: 'white',
+    backgroundColor: '#F2F4F1',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight:15,
   },
 
   resultNumber: {
     color: '#423D3D',
     fontSize: 18,
-    fontWeight: 'bold',
   },
 
   redo: {
-    paddingLeft: 30,
+    paddingLeft: 10,
     marginBottom: 15,
   },
   removeButton: {
     position: 'absolute',
-    top: 5,
-    right: 5,
+    top: 10,
+    right: 10,
   },
 });
 

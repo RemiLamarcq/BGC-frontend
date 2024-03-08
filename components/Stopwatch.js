@@ -55,8 +55,8 @@ const Stopwatch = ({ timer, removeTimer }) => {
   // Rendu du composant Stopwatch
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.cardContent}>
         {/* Affichage du temps écoulé */}
+        
         <Text style={styles.timeText}>{time}s</Text>
   
         {/* Conteneur des boutons de contrôle du chronomètre */}
@@ -66,22 +66,21 @@ const Stopwatch = ({ timer, removeTimer }) => {
             style={styles.playButton}
             onPress={running ? pauseStopwatch : startStopwatch}
           >
-            <FontAwesome name={running ? "pause" : "play"} size={24} color="white" />
+            <FontAwesome name={running ? "pause" : "play"} size={35} color="#423D3D" />
           </TouchableOpacity>
   
           {/* Bouton pour réinitialiser le chronomètre (disponible uniquement lorsque le chronomètre est arrêté) */}
           {!running && (
             <TouchableOpacity style={styles.resetButton} onPress={resetStopwatch}>
-              <FontAwesome name="refresh" size={24} color="white" />
+              <FontAwesome name="refresh" size={35} color="#423D3D" />
             </TouchableOpacity>
           )}
-  
+        </View>
           {/* Bouton pour supprimer le chronomètre */}
           <TouchableOpacity style={styles.removeButton} onPress={() => removeTimer(timer.key)}>
-            <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
+            <Octicons name="x-circle-fill" size={15} color="#6E9D9C" />
           </TouchableOpacity>
-        </View>
-      </View>
+       
     </View>
   );
 };
@@ -89,50 +88,47 @@ const Stopwatch = ({ timer, removeTimer }) => {
 // Styles pour le composant Stopwatch
 const styles = StyleSheet.create({
   cardContainer: {
-    height: 150,
-    width: 340,
-    padding: 10,
-    backgroundColor: '#CDDCDB',
-    margin: 20,
-    borderRadius: 15,
-    justifyContent: 'center',
-  },
-  cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    flex: 1,
+    justifyContent: 'space-between',
+    height: 120,
+    width: 300,
+    margin:7,
+    padding:30,
+    backgroundColor: '#CDDCDB',
+    borderRadius: 15,
+    position: 'relative',
   },
   timeText: {
-    fontSize: 48,
+    fontSize: 30,
     marginRight: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: 20,
+    alignItems:'center',
   },
   playButton: {
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor: '#2ecc71',
+    backgroundColor:  '#CDDCDB',
   },
   resetButton: {
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor: '#e74c3c',
+    backgroundColor:  '#CDDCDB',
   },
   pauseButton: {
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor: '#f39c12',
+    backgroundColor:  '#CDDCDB',
   },
   removeButton: {
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#c0392b',
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
 });
 

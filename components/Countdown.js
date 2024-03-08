@@ -60,7 +60,7 @@ const Countdown = ({ timer, removeTimer }) => {
         {({ remainingTime }) => (
           <View style={styles.countdownContainer}>
             {/* Affichage du temps restant */}
-            <Text style={styles.remainingTime}>{Math.ceil(remainingTime)}</Text>
+            <Text style={styles.timeText}>{Math.ceil(remainingTime)}s</Text>
           </View>
         )}
       </CountdownCircleTimer>
@@ -79,24 +79,24 @@ const Countdown = ({ timer, removeTimer }) => {
         {/* Bouton pour mettre en pause le compte à rebours */}
         {isCountdownActive ? (
           <TouchableOpacity style={styles.pauseButton} onPress={handlePauseCountdown}>
-            <FontAwesome name="pause" size={24} color="black" />
+            <FontAwesome name="pause" size={35} color="#423D3D"  />
           </TouchableOpacity>
         ) : (
             <TouchableOpacity style={styles.playButton} onPress={handleStartCountdown}>
             {/* Bouton pour démarrer le compte à rebours */}
-            <FontAwesome name="play" size={24} color="black" />
+            <FontAwesome name="play" size={35} color="#423D3D"  />
           </TouchableOpacity>
         )}
 
         {/* Bouton pour réinitialiser le compte à rebours */}
         <TouchableOpacity style={styles.resetButton} onPress={handleResetCountdown}>
-          <FontAwesome name="refresh" size={24} color="black" />
+          <FontAwesome name="refresh" size={35} color="#423D3D"  />
         </TouchableOpacity>
       </View>
 
       {/* Bouton pour supprimer le minuteur */}
       <TouchableOpacity style={styles.removeButton} onPress={() => removeTimer(timer.key)}>
-        <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
+        <Octicons name="x-circle-fill" size={15} color="#6E9D9C" />
       </TouchableOpacity>
 
       {/* Affichage du nom du minuteur */}
@@ -111,19 +111,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 150,
+    height: 120,
     width: 300,
-    padding: 10,
+    margin:7,
+    padding:10,
     backgroundColor: '#CDDCDB',
-    margin: 20,
     borderRadius: 15,
     position: 'relative',
   },
   countdownContainer: {
     alignItems: 'center',
   },
-  remainingTime: {
-    fontSize: 24,
+  timeText: {
+    fontSize: 30,
     color: 'black',
   },
   timerInput: {
@@ -154,11 +154,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   removeButton: {
-    backgroundColor: '#c0392b',
-    borderRadius: 10,
     position: 'absolute',
-    top: 5,
-    right: 5,
+    top: 10,
+    right: 10,
   },
   timerName: {
     fontSize: 16,
