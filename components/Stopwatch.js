@@ -78,7 +78,7 @@ const Stopwatch = ({ timer, removeTimer }) => {
         </View>
           {/* Bouton pour supprimer le chronomètre */}
           <TouchableOpacity style={styles.removeButton} onPress={() => removeTimer(timer.key)}>
-            <Octicons name="x-circle-fill" size={15} color="#6E9D9C" />
+            <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
           </TouchableOpacity>
        
     </View>
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: -5,
+    right: -5,
   },
 });
 

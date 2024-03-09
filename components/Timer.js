@@ -35,7 +35,7 @@ function Timer() {
   return (
     <View style={styles.container}>
       {/* Titre de la section */}
-      <Text style={styles.addTimer}>Ajouter un timer</Text>
+      <Text style={styles.addTimer}>Ajouter un timer :</Text>
 
       {/* Section pour ajouter une minuterie de type Countdown ou Stopwatch */}
       <View style={styles.addButtonsContainer}>
@@ -96,7 +96,8 @@ const styles = StyleSheet.create({
     height: 25,
   },
   addTimer: {
-    fontSize: 14,
+    fontSize: 15,
+    color:"#423D3D",
   },
 });
 

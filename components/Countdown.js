@@ -96,7 +96,7 @@ const Countdown = ({ timer, removeTimer }) => {
 
       {/* Bouton pour supprimer le minuteur */}
       <TouchableOpacity style={styles.removeButton} onPress={() => removeTimer(timer.key)}>
-        <Octicons name="x-circle-fill" size={15} color="#6E9D9C" />
+        <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
       </TouchableOpacity>
 
       {/* Affichage du nom du minuteur */}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 30,
-    color: 'black',
+    color: "#423D3D",
   },
   timerInput: {
     borderWidth: 1,
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: -5,
+    right: -5,
   },
   timerName: {
     fontSize: 16,
