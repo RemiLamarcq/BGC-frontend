@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Alert } from 'react-native';
 
 
 export default function StatScreen({navigation}) {
@@ -39,19 +40,38 @@ export default function StatScreen({navigation}) {
       });
   }, [notes]);
 
-  const deleteNote = (id) =>{
-    console.log('yo');
-    console.log(notes._id, token)
-    fetch(`https://bgc-backend.vercel.app/notePad/${token}/${id}`,{
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      }).then(response=> response.json())
-    .then(() => {
-      const updatedNotes = notes.filter(note => note._id !== id);
-      setNotes(updatedNotes);
-      console.log('delete')
-    })
-  }
+  const deleteNote = (id, title) => {
+    // Utiliser Alert pour demander confirmation
+    Alert.alert(
+      'Confirmation',
+      `Voulez-vous vraiment supprimer la note "${title}" ?`,
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          onPress: () => {
+            // Effectuer la suppression si l'utilisateur confirme
+            fetch(`https://bgc-backend.vercel.app/notePad/${token}/${id}`, {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+            })
+              .then(response => response.json())
+              .then(() => {
+                const updatedNotes = notes.filter(note => note._id !== id);
+                setNotes(updatedNotes);
+                console.log('Note supprimée');
+              })
+              .catch(error => {
+                console.error('Erreur lors de la suppression de la note:', error);
+              });
+          },
+        },
+      ]
+    );
+  };
 
   const handlPressAddNote = () => {
     // POST d'ajout de note
@@ -81,7 +101,7 @@ export default function StatScreen({navigation}) {
     <View style={styles.notesCards}key={index}>
         <View style={styles.headLine}>
             <Text style={styles.title}>{savedNote.title}</Text>
-            <TouchableOpacity style={styles.deleteTouchable} onPress={() => deleteNote(savedNote._id)} >
+            <TouchableOpacity style={styles.deleteTouchable} onPress={() => deleteNote(savedNote._id, savedNote.title)}>
                         <FontAwesome 
                             name="trash"
                             color="#0A3332" 
