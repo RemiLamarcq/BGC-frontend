@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import GamePlay from '../components/GamePlay';
-import formatDate from '../modules/formatDate';
+import { formatDate } from '../modules/formatDate';
 import Header from '../components/Header';
 import AddGamePlay from '../components/AddGamePlay';
 
@@ -14,14 +14,14 @@ export default function CahierScreen() {
   const token = useSelector(state => state.user.value.token);
   const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
   const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
-  // console.log(gamePlays);
-  
+
+  /* Récupère l'ensemble des parties du user à l'initialisation et à chaque fermeture des modales 
+     addGamePlay et FicheGamePlay. */
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/gamePlays/${token}`)
       .then(response => response.json())
       .then(data => {
         if(data.result){
-            // console.log(data.gamePlays)
             const formatedData = data.gamePlays.map(gamePlay => {
               const { _id, idGame, startDate, endDate, players, urlImage, comment, place, isInterrupted } = gamePlay;
               return { 
@@ -91,10 +91,8 @@ export default function CahierScreen() {
             </View>
           )}
         </View>
-        <Modal visible={addGamePlayVisible} animationType="slide" transparent={true}>
-            <View style={styles.modalContainer}>
-              <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
-            </View>
+        <Modal visible={addGamePlayVisible} animationType="slide" transparent={false}>
+            <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
         </Modal>
       </ScrollView>
     </View>
@@ -103,7 +101,7 @@ export default function CahierScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginTop: 20,
+    marginBottom: 200,
   },
   scrollView: {
     flexGrow:1,
@@ -138,24 +136,6 @@ const styles = StyleSheet.create({
     color: '#423D3D',
     marginTop: 10,
   },
-
-  modalContainer: {
-    flex: 1,
-    top: 15, 
-    marginBottom: 60,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: '95%',
-  },
-
 
 });
    
