@@ -60,7 +60,7 @@ function Header({
           <TextInput
             style={styles.searchBar}
             placeholder={ !isInNotebook ? "Rechercher dans l'armoire..." : "Rechercher par jeu" }
-            onChangeText={handleSearchChange}
+            onChangeText={value => !isInNotebook && handleSearchChange(value)}
             value={searchGame}
           />
         </View>
