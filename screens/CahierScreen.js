@@ -10,10 +10,15 @@ import AddGamePlay from '../components/AddGamePlay';
 
 export default function CahierScreen() {
 
-  const [gamePlays, setGamePlays] = useState([]);
   const token = useSelector(state => state.user.value.token);
-  const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
+  // Liste des parties à afficher dans le cahier
+  const [gamePlays, setGamePlays] = useState([]);
+  // Valeur du champ de l'input de recherche par jeu
+  const [gamePlaysFilter, setGamePlaysFilter] = useState('');
+  // Contrôle la visibilité de la modale permettant d'ajouter une partie
   const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
+  // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
+  const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
 
   /* Récupère l'ensemble des parties du user à l'initialisation et à chaque fermeture des modales 
      addGamePlay et FicheGamePlay. */
@@ -49,47 +54,53 @@ export default function CahierScreen() {
 
   const toggleModalAddGamePlay = () => {
     setAddGamePlayVisible(!addGamePlayVisible);
-  }  
+  }
 
-  // const toggleModalVisibility = (gamePlay) => {
-  //   setGamePlaySheetVisible(!gamePlaySheetVisible);
-  //   if (!gamePlaySheetVisible) {
-  //     setSelectedGamePlays(gamePlay);
-  //   }
-  // };
+  // Fonction qui permet de filtrer l'affichage des parties en fonction du nom du jeu inscrit dans la barre de recherche
+  const handleGamePlaysFilter = (value) => {
+    setGamePlaysFilter(value);
+  };
+
+  const gamePlaysJSX = 
+    gamePlays
+    .filter(gamePlay => gamePlay.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
+    .map((gamePlay, i) => {
+      return (
+        <GamePlay  
+          key={i} 
+          {...gamePlay}
+          // gamePlaySheetVisible={gamePlaySheetVisible}
+        />
+      );
+    })
+  ;
 
   return (
     <View style={styles.mainContainer}>
-    <Header 
-      title="Cahier" 
-      height={200} 
-      showMeeple={true} 
-      showSearchBar={true} 
-      isInNotebook={true}
-      toggleModalAddGamePlay={toggleModalAddGamePlay}
-    />
+      <Header 
+        title="Cahier" 
+        height={200} 
+        showMeeple={true} 
+        showSearchBar={true} 
+        isInNotebook={true}
+        toggleModalAddGamePlay={toggleModalAddGamePlay}
+        handleGamePlaysFilter={handleGamePlaysFilter}
+      />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View>
-          {gamePlays.length > 0 ? (
-            gamePlays.map((gamePlay, i) => {
-              return <GamePlay  
-                        key={i} 
-                        {...gamePlay}
-                        // toggleModalVisibility={toggleModalVisibility} 
-                        // gamePlaySheetVisible={gamePlaySheetVisible}
-                      />
-                })
-          ) : (
-            <View>
-              <Text style={styles.textAucunJeu}>Aucune parties enregistrées</Text>
-              <View style={styles.divBigAjouterJeu}>
+          {gamePlays.length > 0 ? 
+            gamePlaysJSX
+          : 
+            (<View>
+              <Text style={styles.defaultTxt}>Aucune parties enregistrées</Text>
+              <View style={styles.bigAddGamePlayCtn}>
                 <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGamePlay}>
                   <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
                 </TouchableOpacity>
-                <Text style={styles.textBigAjouterJeu}>Ajouter une partie</Text>
+                <Text style={styles.bigAddGamePlayTxt}>Ajouter une partie</Text>
               </View>
-            </View>
-          )}
+            </View>)
+          }
         </View>
         <Modal visible={addGamePlayVisible} animationType="slide" transparent={false}>
             <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
@@ -104,25 +115,21 @@ const styles = StyleSheet.create({
     marginBottom: 200,
   },
   scrollView: {
-    flexGrow:1,
+    flexGrow: 1,
     backgroundColor: '#F2F4F1',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
-
-  textAucunJeu: {
+  defaultTxt: {
     flex: 0.5,
     fontSize: 35,
     marginTop: 40,
     color: '#423D3D',
     textAlign: 'center',
   },
-
-  divBigAjouterJeu: {
+  bigAddGamePlayCtn: {
     flex: 1,
     alignItems: 'center',
   },
-
   bigAddIcon: {
     padding: 15,
     borderRadius: 50,
@@ -130,13 +137,11 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingTop: 18,
   },
-
-  textBigAjouterJeu: {
+  bigAddGamePlayTxt: {
     fontSize: 30,
     color: '#423D3D',
     marginTop: 10,
   },
-
 });
    
   

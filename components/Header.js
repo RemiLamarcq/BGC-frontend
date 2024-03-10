@@ -17,14 +17,16 @@ function Header({
   showSearchBar, 
   showMeeple, 
   toggleModalAddGame, 
-  onSearchGameChange, 
-  isInNotebook, 
   toggleModalAddGamePlay, 
+  onSearchGameChange, 
+  handleGamePlaysFilter,
+  isInNotebook, 
 }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
     const [searchGame, setSearchGame] = useState('');
+    const [searchGamePlay, setSearchGamePlay] = useState('');
     const handleLogout = () => {
         dispatch(logout());
         // Redirection vers la page de connexion
@@ -33,8 +35,13 @@ function Header({
 
     // Permet de récupérer la valeur du champ de recherche et la renvoie au composant parent
     const handleSearchChange = (value) => {
-      setSearchGame(value);
-      onSearchGameChange(value);
+      if(!isInNotebook){
+        setSearchGame(value);
+        onSearchGameChange(value);
+      } else {
+        setSearchGamePlay(value);
+        handleGamePlaysFilter(value);
+      }
     };
 
     // console.log(searchGame)
@@ -60,8 +67,8 @@ function Header({
           <TextInput
             style={styles.searchBar}
             placeholder={ !isInNotebook ? "Rechercher dans l'armoire..." : "Rechercher par jeu" }
-            onChangeText={value => !isInNotebook && handleSearchChange(value)}
-            value={searchGame}
+            onChangeText={handleSearchChange}
+            value={ !isInNotebook ? searchGame : searchGamePlay}
           />
         </View>
         <View style={styles.bottomHeader}>
