@@ -52,6 +52,7 @@ const Stopwatch = ({ timer, removeTimer }) => {
     }
   }, []);
 
+  // Rendu du composant Stopwatch
   return (
     <View style={styles.cardContainer}>
         {/* Affichage du temps écoulé */}
