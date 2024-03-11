@@ -11,15 +11,18 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
     const token = useSelector((state) => state.user.value.token);
 
-    // Liste des noms de jeu dans le dropdown
+    // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
+    // pour l'affichage dans la dropdown et pour filtrer les View dans les players
     const [gameList, setGameList] = useState([]);
+    // Liste d'amis de l'user
     const [friendsList, setfriendsList] = useState([]);
     // Données formatées(noms des jeux / friends) pour l'affichage du contenu des dropdowns
-    const formattedGameList = [];
+    const formattedGameNames = [];
     const formattedFriendsList = [];
-
-    // Nom du jeu sélectionné
-    const [game, setGame] = useState(null);
+    // Nom du jeu sélectionné par l'user
+    const [chosenGameName, setChosenGameName] = useState(null);
+    // Objet jeu sélectionné par l'user
+    const chosenGame = gameList.find(game => game.name === chosenGameName);
     // Booléen indiquant si la partie est interrompue(true) ou terminée (false)
     const [isInterrupted, setIsInterrupted] = useState(false);
     // Stocke l'heure de début et de fin de la partie
@@ -42,12 +45,14 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         playerMissing: false
     });
 
-    // A l'initialisation, récupère tous les noms des jeux de la BDD
+    console.log(players)
+
+    // A l'initialisation, récupère tous les jeux de la BDD sous forme {name, isTeam, isCharacter, isScore}
     useEffect(() => {
         fetch(`https://bgc-backend.vercel.app/games/allNames/${token}`)
         .then(response => response.json())
         .then(data => {
-            setGameList(data.gameNames);
+            setGameList(data.gameData);
         });
     }, []);
 
@@ -65,9 +70,9 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         for (let i = 0; i < gameList.length; i++) {
             let newObj = {
                 id: i + 1,
-                title: gameList[i]
+                title: gameList[i].name
             };
-            formattedGameList.push(newObj);
+            formattedGameNames.push(newObj);
         }
     }
     // Formate les noms des amis sous forme d'objet avec un id et un title(nécessaire pour le dropdown)
@@ -125,9 +130,9 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         setPlayers([...players, {
             friendName,
             isWinner: false,
-            team: null,
-            character: null,
-            score: null,
+            team: '',
+            character: '',
+            score: '',
         }]);
     }
 
@@ -167,13 +172,13 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
         //Si un des champs suivants sont manquants(nom du jeu, date et 1 joueur minimum obligatoire), affiche un message d'erreur
         if(
-            !game ||
+            !chosenGameName ||
             !checkFormatDate(date.startDate) || 
             !checkFormatDate(date.endDate) ||
             players.length === 0)
         {
             invalidField.globalMessage = true;
-            !game ? (invalidField.gameMissing = true) : (invalidField.gameMissing = false);
+            !chosenGameName ? (invalidField.gameMissing = true) : (invalidField.gameMissing = false);
             (!checkFormatDate(date.startDate) || !checkFormatDate(date.endDate)) ?
                 (invalidField.invalidDate = true)
             :
@@ -187,7 +192,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     token,
-                    name: game,
+                    name: chosenGameName,
                     startDate: transformInDate(date.startDate),
                     endDate: transformInDate(date.endDate),
                     isInterrupted,
@@ -227,6 +232,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.playerCtnBottom}>
+                    { chosenGame?.isTeam &&
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Equipe"
@@ -235,6 +241,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         onChangeText={value => handleTeam(i, value)}
                         value={team}
                     />
+                    }
+                    { chosenGame?.isCharacter &&
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Personnage"
@@ -243,6 +251,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         onChangeText={value => handleCharacter(i, value)}
                         value={character}
                     />
+                    }
+                    { chosenGame?.isScore &&
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Score"
@@ -251,6 +261,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         onChangeText={value => handleScore(i, value)}
                         value={score}
                     />
+                    }
                 </View>
             </View>
         );
@@ -267,9 +278,9 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                             <Text style={ styles.title }>Ajouter une partie</Text>
                         </View>
                         <AutocompleteDropdown
-                            dataSet={formattedGameList}
-                            onSelectItem={item => item && setGame(item.title)}
-                            onClear={() => setGame(null)}
+                            dataSet={formattedGameNames}
+                            onSelectItem={item => item && setChosenGameName(item.title)}
+                            onClear={() => setChosenGameName(null)}
                             textInputProps={{
                                 placeholder: 'Rechercher un jeu',
                                 placeholderTextColor: 'grey',

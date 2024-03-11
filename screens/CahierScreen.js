@@ -32,7 +32,7 @@ export default function CahierScreen() {
               const { _id, idGame, startDate, endDate, players, urlImage, comment, place, isInterrupted } = gamePlay;
               return { 
                 id: _id,
-                name: idGame.name,
+                game: idGame,
                 gameImage: idGame.urlImg,
                 startDate: formatDate(startDate),
                 endDate: formatDate(endDate), 
@@ -46,7 +46,7 @@ export default function CahierScreen() {
             setGamePlays(formatedData);
         }
       });
-  }, [addGamePlayVisible]); 
+  }, [addGamePlayVisible, isFicheGamePlayVisible]); 
 
   const toggleModalAddGamePlay = () => {
     setAddGamePlayVisible(!addGamePlayVisible);
@@ -59,7 +59,7 @@ export default function CahierScreen() {
 
   const gamePlaysJSX = 
     gamePlays
-    .filter(gamePlay => gamePlay.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
+    .filter(gamePlay => gamePlay.game.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
     .map((gamePlay, i) => {
       return (
         <GamePlay  

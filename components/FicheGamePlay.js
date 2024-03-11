@@ -10,7 +10,8 @@ export default function FicheGamePlay(){
     const dispatch = useDispatch();
     const gamePlay = useSelector(state => state.ficheGamePlay.value.gamePlay);
     const token = useSelector(state => state.user.value.token);
-    const { id, name, endDate, players, gamePlayImages, comment } = gamePlay;
+    const { id, game, endDate, players, gamePlayImages, comment } = gamePlay;
+    const { name, isTeam, isScore, isCharacter } = game;
 
     function handleRemoveGamePlay(){
         fetch(`https://bgc-backend.vercel.app/gamePlays/${token}/${id}`, {
@@ -20,12 +21,12 @@ export default function FicheGamePlay(){
         .then(result => result.json())
         .then(data => {
             if(data.result){
-                Alert(`Partie de ${name} du ${endDate} supprimée`);
+                Alert.alert(`Partie de ${name} du ${endDate} supprimée`);
                 dispatch(resetFicheGamePlay());
             } else {
-                Alert(error);
+                Alert.alert(error);
             }
-        }).catch(error => Alert(error));
+        }).catch(error => Alert.alert(error));
     }
 
     const playersJSX = players.map((player, i) => {

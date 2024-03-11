@@ -7,7 +7,7 @@ import { toggleVisibility, setGamePlayData } from '../reducers/ficheGamePlay';
 
 export default function GamePlay(props) {
 
-    const {id, name, gameImage, startDate, endDate, players, gamePlayImages, comment, place, isInterrupted } = props;
+    const {id, game, gameImage, startDate, endDate, players, gamePlayImages, comment, place, isInterrupted } = props;
     const friendNames = players.map(player => player.friendName).join(' - ');
     const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ export default function GamePlay(props) {
             </View>
         </View>
         <View style={styles.right}>
-            <Text style={styles.textTitle}>{name}</Text>
+            <Text style={styles.textTitle}>{game.name}</Text>
             <Text style={styles.textType}>{endDate}</Text>
             <Text style={styles.textType}>{friendNames}</Text>
         </View>
