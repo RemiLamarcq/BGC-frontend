@@ -12,14 +12,14 @@ import FicheGamePlay from '../components/FicheGamePlay';
 export default function CahierScreen() {
 
   const token = useSelector(state => state.user.value.token);
+    // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
+  const isFicheGamePlayVisible = useSelector(state => state.ficheGamePlay.value.isModalVisible);
   // Liste des parties à afficher dans le cahier
   const [gamePlays, setGamePlays] = useState([]);
   // Valeur du champ de l'input de recherche par jeu
   const [gamePlaysFilter, setGamePlaysFilter] = useState('');
   // Contrôle la visibilité de la modale permettant d'ajouter une partie
   const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
-  // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
-  const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
 
   /* Récupère l'ensemble des parties du user à l'initialisation et à chaque fermeture des modales 
      addGamePlay et FicheGamePlay. */
@@ -36,12 +36,7 @@ export default function CahierScreen() {
                 gameImage: idGame.urlImg,
                 startDate: formatDate(startDate),
                 endDate: formatDate(endDate), 
-                players: players.map(player => {
-                  return {
-                    friendName: player.friendName,
-                    isWinner: player.isWinner,
-                  };
-                }),
+                players,
                 gamePlayImages: urlImage, 
                 comment, 
                 place, 
@@ -70,7 +65,6 @@ export default function CahierScreen() {
         <GamePlay  
           key={i} 
           {...gamePlay}
-          // gamePlaySheetVisible={gamePlaySheetVisible}
         />
       );
     })
@@ -106,8 +100,8 @@ export default function CahierScreen() {
         <Modal visible={addGamePlayVisible} animationType="slide" transparent={false}>
             <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
         </Modal>
-        <Modal visible={true} animationType='slide' transparent={false}>
-            <FicheGamePlay/>
+        <Modal visible={isFicheGamePlayVisible} animationType='slide' transparent={false}>
+            <FicheGamePlay />
         </Modal>
       </ScrollView>
     </View>

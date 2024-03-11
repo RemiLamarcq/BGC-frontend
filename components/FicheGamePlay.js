@@ -2,11 +2,31 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Keyboa
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { RadioButton } from 'react-native-paper';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetFicheGamePlay } from '../reducers/ficheGamePlay';
 
 export default function FicheGamePlay(){
 
-    const players = [];
+    const dispatch = useDispatch();
+    const gamePlay = useSelector(state => state.ficheGamePlay.value.gamePlay);
+    const token = useSelector(state => state.user.value.token);
+    const { id, name, endDate, players, gamePlayImages, comment } = gamePlay;
+
+    function handleRemoveGamePlay(){
+        fetch(`https://bgc-backend.vercel.app/gamePlays/${token}/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        })
+        .then(result => result.json())
+        .then(data => {
+            if(data.result){
+                Alert(`Partie de ${name} du ${endDate} supprimée`);
+                dispatch(resetFicheGamePlay());
+            } else {
+                Alert(error);
+            }
+        }).catch(error => Alert(error));
+    }
 
     const playersJSX = players.map((player, i) => {
         const { friendName, isWinner, team, character, score } = player;
@@ -17,9 +37,8 @@ export default function FicheGamePlay(){
                     <View style={styles.radioBtnBloc}>
                         <View style={styles.radioBtnCtn}>
                             <RadioButton
-                                // value="winner"
-                                // status={isWinner ? 'checked' : 'unchecked'}
-                                // onPress={() => handleIsWinner(i)}
+                                value="winner"
+                                status={isWinner ? 'checked' : 'unchecked'}
                                 style={styles.radioBtn}
                                 color="#0A3332"
                             />
@@ -34,7 +53,7 @@ export default function FicheGamePlay(){
                         placeholderTextColor= 'grey'
                         inputMode='text'
                         // onChangeText={value => handleTeam(i, value)}
-                        // value={team}
+                        value={team}
                     />
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
@@ -42,7 +61,7 @@ export default function FicheGamePlay(){
                         placeholderTextColor= 'grey'
                         inputMode='text'
                         // onChangeText={value => handleCharacter(i, value)}
-                        // value={character}
+                        value={character}
                     />
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
@@ -50,7 +69,7 @@ export default function FicheGamePlay(){
                         placeholderTextColor= 'grey'
                         inputMode='text'
                         // onChangeText={value => handleScore(i, value)}
-                        // value={score}
+                        value={score}
                     />
                 </View>
             </View>
@@ -62,18 +81,22 @@ export default function FicheGamePlay(){
             <View style={styles.container}>
                 <View style={styles.topCtn}>
                     <View style={styles.gameAndBtns}>
-                        <TouchableOpacity style={styles.goBackTouchable}>
+                        <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(resetFicheGamePlay())}>
                             <FontAwesome name="arrow-left" color="#0A3332" backgroundColor="#88B7B6" size={20} />
                         </TouchableOpacity>
-                        <Text style={styles.game}>7Wonders</Text>
-                        <TouchableOpacity style={styles.trash}>
+                        <Text style={styles.game}>
+                            {name}
+                        </Text>
+                        <TouchableOpacity style={styles.trash} onPress={handleRemoveGamePlay} >
                             <FontAwesome name="trash" color="#0A3332" backgroundColor="#88B7B6" size={20} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.date}>14/03/2014 - 14H30</Text>
+                    <Text style={styles.date}>{endDate}</Text>
                 </View>
                 <View style={styles.slider}>
-                    <View style={styles.photo}></View>
+                    <View style={styles.photo}>
+
+                    </View>
                     <View style={styles.sliderCircles}>
                         <View style={styles.circle}></View>
                         <View style={styles.circle}></View>
@@ -83,7 +106,11 @@ export default function FicheGamePlay(){
                 <View style={styles.playersCtn}>
                     {playersJSX}
                 </View>
-                <Text style={styles.comment}></Text>
+                <View style={styles.commentCtn}>
+                    <Text style={styles.comment}>
+                        {comment}
+                    </Text>
+                </View>
             </View>
         </ScrollView>
     );
@@ -162,7 +189,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
     },
     playersCtn: {
-
+        gap: 20,
     },
     playerCtn: {
         backgroundColor: '#CDDCDB',
@@ -179,15 +206,33 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
     },
+    radioBtnBloc: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    radioBtnCtn: {
+        backgroundColor: '#FFFFFF',
+        borderWidth: 2,
+        borderColor: '#0A3332',
+        borderRadius: 50,
+    },
     playerCtnBottom: {
         gap: 8,
     },
     playerInput: {
         width: '80%',
+        backgroundColor: 'white',
+        borderRadius: 25,
+        padding: 10,
+        fontSize: 16,
+    },
+    commentCtn: {
+        padding: 15,
+        backgroundColor: 'white',
+        borderRadius: 25,
     },
     comment: {
-        borderRadius: 25,
-        textAlign: 'center',
-        borderWidth: 2
-    },
+        fontSize: 16,
+    }
 });
