@@ -56,13 +56,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         fetch(`https://bgc-backend.vercel.app/games/allNames/${token}`)
         .then(response => response.json())
         .then(data => {
-<<<<<<< HEAD
             setGameList(data.gameData);
-=======
-            const gameNames = data.gameData.map(game => game.name);         
-            setGameList(gameNames)
-
->>>>>>> 1a7d7177d4f3cb48bd7e70f617e179e5a42ae9d7
         });
     }, [addGamePlayVisible]);
 
