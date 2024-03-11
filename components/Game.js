@@ -75,7 +75,11 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
     <Modal visible={isVisible} animationType="fade" transparent={true}>
         {selectedGame && 
 
-          <FicheGame selectedGame={selectedGame} toggleModalVisibility={toggleModalVisibility} handleDeleteGame={handleDeleteGame}/>
+          <FicheGame 
+            selectedGame={selectedGame} 
+            toggleModalVisibility={toggleModalVisibility} 
+            handleDeleteGame={handleDeleteGame} 
+            navigation={navigation}/>
           
       }
     </Modal>

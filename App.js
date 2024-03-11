@@ -13,11 +13,13 @@ import { configureStore} from '@reduxjs/toolkit';
 import user from './reducers/user';
 import login from './reducers/login';
 import ficheGamePlay from './reducers/ficheGamePlay';
+import addGamePlayVisible from './reducers/addGamePlayVisible';
+import selectedGame from './reducers/selectedGame';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const store = configureStore({
-  reducer: {user, login, ficheGamePlay},
+  reducer: {user, login, addGamePlayVisible, selectedGame, ficheGamePlay},
  });
 
 

@@ -2,11 +2,12 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import GamePlay from '../components/GamePlay';
 import { formatDate } from '../modules/formatDate';
 import Header from '../components/Header';
 import AddGamePlay from '../components/AddGamePlay';
+import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import FicheGamePlay from '../components/FicheGamePlay';
 
 export default function CahierScreen() {
@@ -19,7 +20,12 @@ export default function CahierScreen() {
   // Valeur du champ de l'input de recherche par jeu
   const [gamePlaysFilter, setGamePlaysFilter] = useState('');
   // Contrôle la visibilité de la modale permettant d'ajouter une partie
-  const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
+  // const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
+  // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
+  const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
+
+  const dispatch = useDispatch();
+  const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
 
   /* Récupère l'ensemble des parties du user à l'initialisation et à chaque fermeture des modales 
      addGamePlay et FicheGamePlay. */
@@ -49,7 +55,7 @@ export default function CahierScreen() {
   }, [addGamePlayVisible, isFicheGamePlayVisible]); 
 
   const toggleModalAddGamePlay = () => {
-    setAddGamePlayVisible(!addGamePlayVisible);
+    dispatch(setAddGamePlayVisible(!addGamePlayVisible));
   }
 
   // Fonction qui permet de filtrer l'affichage des parties en fonction du nom du jeu inscrit dans la barre de recherche
