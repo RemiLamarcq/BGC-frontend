@@ -252,13 +252,13 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         value={score}
                     />
                 </View>
-            </View>            
+            </View>
         );
     })
 
     return(
             <AutocompleteDropdownContextProvider>
-                <ScrollView contentContainerStyle={{ minHeight: '100%', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }} >
+                <ScrollView contentContainerStyle={ styles.scrollView } >
                     <View style={styles.container}>
                         <View style={styles.topContainer} >
                             <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalAddGamePlay}>
@@ -395,9 +395,18 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 }
 
 const styles = StyleSheet.create({
+    scrollView: {
+        flexGrow: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
     container: {
+        width: '100%',
+        minHeight:'95%',
         backgroundColor: '#F2F4F1',
-        borderRadius: 40,
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
         padding: 20, 
         gap: 10,
     },

@@ -7,6 +7,7 @@ import GamePlay from '../components/GamePlay';
 import { formatDate } from '../modules/formatDate';
 import Header from '../components/Header';
 import AddGamePlay from '../components/AddGamePlay';
+import FicheGamePlay from '../components/FicheGamePlay';
 
 export default function CahierScreen() {
 
@@ -104,6 +105,9 @@ export default function CahierScreen() {
         </View>
         <Modal visible={addGamePlayVisible} animationType="slide" transparent={false}>
             <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
+        </Modal>
+        <Modal visible={true} animationType='slide' transparent={false}>
+            <FicheGamePlay/>
         </Modal>
       </ScrollView>
     </View>
