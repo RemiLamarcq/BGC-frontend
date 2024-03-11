@@ -57,7 +57,7 @@ export default function AccessoiresScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#F1F4F2' }}>
       {/* Affichage du composant Header avec le titre 'Accessoires' , une hauteur de 100, et le meeple à true pour logout depuis le screen */}
-      <Header title="Accessoires" height={100}  showMeeple={true} />
+      <Header title="Accessoires" height={100} showMeeple={true} />
       {/* Vue principale de la page */}
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {/* Vue contenant les zones cliquables avec une largeur de 90% de la vue parente */}
@@ -84,7 +84,12 @@ export default function AccessoiresScreen() {
       </View>
 
       {/* Affichage de la modal avec les propriétés isVisible, closeModal, et modalContent */}
-      <AccessoryModal isVisible={showModal} closeModal={closeModal} modalContent={modalContent} modalTitle={modalTitle} />
+      <AccessoryModal 
+      isVisible={showModal} 
+      closeModal={closeModal} 
+      modalContent={modalContent} 
+      modalTitle={modalTitle} 
+      />
     </View>
   );
 };

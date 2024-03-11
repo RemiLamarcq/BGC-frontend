@@ -16,12 +16,12 @@ function AccessoryModal({ isVisible, closeModal, modalContent, modalTitle }) {
     {/*Modal pour afficher le contenu de la zone cliquée*/}
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={closeModal}>
       {/* Afficher le composant Header avec le titre dynamique */}
-      <Header title={modalTitle} height={100} />
+      <Header title={modalTitle} height={80} />
       {/* Conteneur principal de la modal */}
       <View style={styles.modalContainer}>
         {/* Bouton de fermeture de la modal */}
         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-          <AntDesign name="arrowleft" size={24} color="black" />
+          <AntDesign name="arrowleft" size={24} color="#423D3D" />
         </TouchableOpacity>
         {/* Contenu de la modal */}
         <View style={styles.modalContent}>{modalContent}</View>

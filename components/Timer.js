@@ -7,7 +7,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer F
 // Composant enfant de AccessoiresScreen.js
 // Composant parent de Countdown.js => minuteur et Stopwatch.js => chrono
 
-const Timer = () => {
+function Timer() {
   // État pour stocker les minuteries ajoutées
   const [timers, setTimers] = useState([
     { type: 'countdown', key: Date.now(), duration: 60, isCountdownActive: false },
@@ -19,7 +19,8 @@ const Timer = () => {
     // Création d'une nouvelle minuterie avec des propriétés initiales en fonction du type
     const newTimer = {
       type,
-      key: Date.now(),
+      key: timers.length,
+      name: type === 'countdown' ? `Minuteur ${timers.length + 1}` : `Chrono ${timers.length + 1}`,
       ...(type === 'countdown' ? { duration: 60, isCountdownActive: false } : { time: 0, running: false }),
     };
 
@@ -35,34 +36,38 @@ const Timer = () => {
   return (
     <View style={styles.container}>
       {/* Titre de la section */}
-      <Text style={styles.addTimer}>Ajouter un timer</Text>
+      <Text style={styles.addTimer}>Ajouter un timer :</Text>
 
       {/* Section pour ajouter une minuterie de type Countdown ou Stopwatch */}
       <View style={styles.addButtonsContainer}>
         {/* Bouton pour ajouter un minuteur */}
         <TouchableOpacity style={styles.addButton} onPress={() => addTimer('countdown')}>
-          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D"/>{/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un minuteur</Text>
         </TouchableOpacity>
 
         {/* Bouton pour ajouter un chronomètre */}
         <TouchableOpacity style={styles.addButton} onPress={() => addTimer('stopwatch')}>
-          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="black" />{/* Logo + de AntDesign */}
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />{/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un chrono</Text>
         </TouchableOpacity>
       </View>
 
       {/* Utilisation de ScrollView pour permettre le défilement des minuteries */}
       <ScrollView>
-        {timers.map((timer) => (
-          <View key={timer.key}>
-            {timer.type === 'countdown' ? (
-              <Countdown timer={timer} removeTimer={removeTimer} />
-            ) : (
-              <Stopwatch timer={timer} removeTimer={removeTimer} />
-            )}
-          </View>
-        ))}
+      {timers.map((timer) => (
+  <View key={timer.key} style={styles.timerContainer}>
+    <View style={styles.timerNameContainer}>
+      <Text style={styles.timerName}>{timer.name}</Text>
+    </View>
+
+    {timer.type === 'countdown' ? (
+      <Countdown timer={timer} removeTimer={removeTimer} />
+    ) : (
+      <Stopwatch timer={timer} removeTimer={removeTimer} />
+    )}
+  </View>
+))}
       </ScrollView>
     </View>
   );
@@ -71,33 +76,40 @@ const Timer = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     alignItems: 'center',
+    marginTop:10,
+  },
+  addTimer: {
+    fontSize: 15,
+    color:"#423D3D",
   },
   addButtonsContainer: {
-    flexDirection: 'column', // Disposition verticale des éléments enfants
-    justifyContent: 'space-around', // Espace équitable autour des éléments
-    borderColor: 'black', // Couleur de la bordure de la section des boutons
-    borderWidth: 1, // Largeur de la bordure de la section des boutons
-    marginBottom: 10, // Marge en bas de la section des boutons
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   addButton: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: 'white', // Couleur de fond du bouton
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10, // Marge en bas du bouton
+    backgroundColor: '#88B7B6',
+    borderRadius: 35,
+    width: 140,
+    height: 40,
+    margin: 5,
   },
-  buttonText: {
-    fontSize: 12,
+  timerContainer:{
+    marginTop:20,
   },
   fabtn: {
     marginLeft: 5,
     marginRight: 5,
+    height: 25,
   },
-  addTimer: {
-    fontSize: 14,
+  buttonText: {
+    fontSize: 10,
+  },
+  timerName: {
+    fontSize: 16,
+    color: "#423D3D",
   },
 });
 
