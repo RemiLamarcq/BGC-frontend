@@ -8,10 +8,13 @@ import { formatDate } from '../modules/formatDate';
 import Header from '../components/Header'; 
 import AddGamePlay from '../components/AddGamePlay';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
+import FicheGamePlay from '../components/FicheGamePlay';
 
 export default function CahierScreen() {
 
   const token = useSelector(state => state.user.value.token);
+    // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
+  const isFicheGamePlayVisible = useSelector(state => state.ficheGamePlay.value.isModalVisible);
   // Liste des parties à afficher dans le cahier
   const [gamePlays, setGamePlays] = useState([]);
   // Valeur du champ de l'input de recherche par jeu
@@ -35,16 +38,11 @@ export default function CahierScreen() {
               const { _id, idGame, startDate, endDate, players, urlImage, comment, place, isInterrupted } = gamePlay;
               return { 
                 id: _id,
-                name: idGame.name,
+                game: idGame,
                 gameImage: idGame.urlImg,
                 startDate: formatDate(startDate),
                 endDate: formatDate(endDate), 
-                players: players.map(player => {
-                  return {
-                    friendName: player.friendName,
-                    isWinner: player.isWinner,
-                  };
-                }),
+                players,
                 gamePlayImages: urlImage, 
                 comment, 
                 place, 
@@ -54,7 +52,7 @@ export default function CahierScreen() {
             setGamePlays(formatedData);
         }
       });
-  }, [addGamePlayVisible]); 
+  }, [addGamePlayVisible, isFicheGamePlayVisible]); 
 
   const toggleModalAddGamePlay = () => {
     dispatch(setAddGamePlayVisible(!addGamePlayVisible));
@@ -67,13 +65,12 @@ export default function CahierScreen() {
 
   const gamePlaysJSX = 
     gamePlays
-    .filter(gamePlay => gamePlay.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
+    .filter(gamePlay => gamePlay.game.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
     .map((gamePlay, i) => {
       return (
         <GamePlay  
           key={i} 
           {...gamePlay}
-          // gamePlaySheetVisible={gamePlaySheetVisible}
         />
       );
     })
@@ -108,6 +105,9 @@ export default function CahierScreen() {
         </View>
         <Modal visible={addGamePlayVisible} animationType="slide" transparent={false}>
             <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
+        </Modal>
+        <Modal visible={isFicheGamePlayVisible} animationType='slide' transparent={false}>
+            <FicheGamePlay />
         </Modal>
       </ScrollView>
     </View>
