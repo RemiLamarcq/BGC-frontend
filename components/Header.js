@@ -21,6 +21,8 @@ function Header({
   onSearchGameChange, 
   handleGamePlaysFilter,
   isInNotebook, 
+  showGameCounter,
+  initialGames
 }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -77,6 +79,11 @@ function Header({
             <FontAwesome name="filter" color="#423D3D" size={20} />
           </View>
           }
+          {showGameCounter && (
+            <View>
+                <Text style={styles.gameCounter}>{initialGames.length} jeux</Text>
+            </View>
+          )}
           <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : toggleModalAddGamePlay } style={styles.buttonAddGame}>
             <View style={styles.plusButton}>
               <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
@@ -157,6 +164,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#88B7B6',
         padding: 10,
         justifyContent: 'center',
+      },
+
+      gameCounter: {
+        alignSelf: 'center',
+        marginRight: 30,
+        marginBottom: -20,
+        marginTop: 15, 
+        color: '#88B7B6'
       }
 });
 

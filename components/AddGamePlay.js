@@ -6,10 +6,14 @@ import { useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
 import { transformInDate, checkFormatDate } from '../modules/formatDate';
+import addGamePlayVisible from '../reducers/addGamePlayVisible';
 
 export default function AddGamePlay({toggleModalAddGamePlay}) {
 
     const token = useSelector((state) => state.user.value.token);
+
+    const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
+    const selectedGame = useSelector(state => state.selectedGame.value);
 
     // Liste des noms de jeu dans le dropdown
     const [gameList, setGameList] = useState([]);
@@ -47,9 +51,12 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         fetch(`https://bgc-backend.vercel.app/games/allNames/${token}`)
         .then(response => response.json())
         .then(data => {
-            setGameList(data.gameNames);
+            const gameNames = data.gameData.map(game => game.name);         
+            setGameList(gameNames)
         });
-    }, []);
+    }, [addGamePlayVisible]);
+
+    console.log(gameList);
 
     // A l'initialisation et à chaque nouvel enregistrement d'un ami, récupère tous les noms des amis
     useEffect(() => {
@@ -255,6 +262,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
             </View>            
         );
     })
+
+
 
     return(
             <AutocompleteDropdownContextProvider>
