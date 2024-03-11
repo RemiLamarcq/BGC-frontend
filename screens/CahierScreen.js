@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import GamePlay from '../components/GamePlay';
 import { formatDate } from '../modules/formatDate';
-import Header from '../components/Header';
+import Header from '../components/Header'; 
 import AddGamePlay from '../components/AddGamePlay';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import FicheGamePlay from '../components/FicheGamePlay';

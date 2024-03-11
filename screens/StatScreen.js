@@ -8,25 +8,48 @@ import formatDate from '../modules/formatDate';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function StatScreen() {
 
+  const isFocused = useIsFocused();
   const user = useSelector((state) => state.user.value);
   const [statsByGame, setStatsByGame] = useState(true);
   const [gameStats, setGameStats] = useState(false);
   const [playerStats, setPlayersStats] = useState(false);
+  const [generalStats, setGeneralStats] = useState([]);
+
   const dataGameTest = [{id: 1, title: 'A'},{id: 2, title: 'B'},{id: 3, title: 'C'},{id: 4, title: 'D'},{id: 5, title: 'E'},{id: 6, title: 'F'}]
+  useEffect(() => {
+    fetch(`https://bgc-backend.vercel.app/stats/getGeneralsStats/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        if(data.result){
+          setGeneralStats(data);
+        }
+      });
+  }, [isFocused]); 
+
 
   const handleClearGameStats = () => {
-    console.log('1');
+    console.log(user.token);
   }
 
   const handleClearGameCard = () => {
     console.log('2');
   }
   const handleSelect = (item) => {
-    console.log('3');
-  }
+    if (item) {
+        fetch(`https://bgc-backend.vercel.app/stats/gameInfo/${item.title}/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+            setGameInfos(data);
+            setGameType(data.game.gameType);
+            // console.log(gameInfos);
+            setGameCardVisible(true);
+        })
+    }
+};
 
   const handleTest = () => {
     setGameStats(!gameStats)
@@ -41,7 +64,7 @@ export default function StatScreen() {
   }
 
   let backgroundColorStyle;
-  let backgroundColorUserButtonStyle;
+  let backgroundColorUsersButtonStyle;
   let backgroundColorChessButtonStyle
 
   if (gameStats) {
@@ -62,6 +85,7 @@ export default function StatScreen() {
   }
 
   return (
+    <AutocompleteDropdownContextProvider>
     <View style={styles.container}>
       <Header title="Stats" height={100}  showMeeple={true}/>
       <View style={styles.statsContainer}>
@@ -73,10 +97,9 @@ export default function StatScreen() {
             <FontAwesome name="users" size={60} color="#423D3D" backgroundColor={backgroundColorUsersButtonStyle} style={styles.usersIcon} onPress={handleUsersButton}/>
           </TouchableOpacity>
         </View>
-        {statsByGame && (
+        {statsByGame && (         
           <View style={styles.gameStatsContainer}>
                   <View style={styles.dropdownContainer}>
-                  <AutocompleteDropdownContextProvider>
                     <AutocompleteDropdown
                         dataSet={dataGameTest}
                         onSelectItem={(item) => handleSelect(item)}
@@ -84,7 +107,6 @@ export default function StatScreen() {
                         closeOnSubmit
                         suggestionsListContainerStyle={{
                           backgroundColor: '#CDDCDB',
-                          marginTop: -40,
                           borderRadius: 20
                           }}
                         inputContainerStyle={{
@@ -96,7 +118,6 @@ export default function StatScreen() {
                         onOpenSuggestionsList={handleClearGameCard}
                         ignoreAccents
                     />
-                  </AutocompleteDropdownContextProvider>
                     <TouchableOpacity style={{borderWidth: 1, backgroundColor:backgroundColorStyle}} onPress={handleTest}>
                       <Text>Bouton qui permet de simuler la fiche d'un jeu tant que la foutue dropdown fonctionne pas</Text>
                     </TouchableOpacity>
@@ -145,7 +166,7 @@ export default function StatScreen() {
             <View style={styles.infoStatsContainer}>
               <View style={styles.nbGamesInClosetContainer}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Nb de jeux dans l'armoire</Text>
-                <Text>22</Text>
+                <Text>{generalStats.gamesNumber}</Text>
               </View>
               <View style={styles.nbGamesPlayedContainer}>
                 <View style={styles.nbGamesPlayedTextContainer}>
@@ -154,7 +175,7 @@ export default function StatScreen() {
                 <View style={styles.nbGamesPlayedByFrequencyContainer}>
                   <View style={styles.nbGamesPlayedTotalContainer}>
                     <Text style={{fontWeight: 500, color:'#423D3D'}}>Total</Text>
-                    <Text>16</Text>
+                    <Text>{generalStats.gamePlaysNumber}</Text>
                   </View>
                   <View style={styles.nbGamesPlayedMonthlyContainer}>
                     <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
@@ -164,13 +185,67 @@ export default function StatScreen() {
               </View>
               <View style={styles.mostGamePlayed}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Jeu le plus joué</Text>
-                <Text> Les petits chevaux</Text>
-            </View>  
-        </View>
+                <Text>{generalStats.mostCommonGame}</Text>
+              </View>  
+            </View>
           )}
-          </View>)}
+          
+        </View>)}
+        {!statsByGame && (
+          <View style={styles.playerStatsContainer}>
+            <AutocompleteDropdown
+            dataSet={dataGameTest}
+            onSelectItem={(item) => handleSelect(item)}
+            textInputProps={{ placeholder: 'Rechercher un joueur' }}
+            closeOnSubmit
+            suggestionsListContainerStyle={{
+              backgroundColor: '#CDDCDB',
+              borderRadius: 20
+              }}
+            inputContainerStyle={{
+              backgroundColor: 'white',
+              borderRadius: 25,
+              width: 350
+              }}
+            onClear={handleClearGameStats}
+            onOpenSuggestionsList={handleClearGameCard}
+            ignoreAccents
+            />
+          <View style={styles.infoStatsContainer}>
+            <View style={styles.nbGamesPlayedContainer}>
+              <View style={styles.nbGamesPlayedTextContainer}>
+                <Text style={{fontWeight: 700, color:'#423D3D'}}>Parties Jouées</Text>
+              </View>
+              <View style={styles.nbGamesPlayedByFrequencyContainer}>
+                <View style={styles.nbGamesPlayedTotalContainer}>
+                  <Text style={{fontWeight: 500, color:'#423D3D'}}>Total</Text>
+                  <Text>{generalStats.gamePlaysNumber}</Text>
+                </View>
+                <View style={styles.nbGamesPlayedMonthlyContainer}>
+                  <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
+                  <Text>5</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.mostGamePlayed}>
+                <Text style={{fontWeight: 700, color:'#423D3D'}}>Nb de victoires</Text>
+                <Text>4</Text>
+            </View>
+            <View style={styles.mostGamePlayed}>
+                <Text style={{fontWeight: 700, color:'#423D3D'}}>Jeu le plus joué</Text>
+                <Text>Les petits chevaux</Text>
+            </View>
+            <View style={styles.mostGamePlayed}>
+                <Text style={{fontWeight: 700, color:'#423D3D'}}>Dernière partie</Text>
+                <Text>13/02/2024 - 15h30</Text>
+            </View>
+          </View>
+        </View>
+        )}
+      
       </View>
     </View>
+    </AutocompleteDropdownContextProvider>
   );
 }
 
@@ -180,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F4F1',
   },
   dropdownContainer: {
-    alignItems: 'center',
+    alignItems: 'center'
     },
   gameOrPlayerButtons: {
     flexDirection: 'row',
@@ -189,6 +264,9 @@ const styles = StyleSheet.create({
   },
   gameStatsContainer: {
     alignItems: 'center'
+  },
+  playerStatsContainer: {
+    alignItems:'center'
   },
   gameButton: {
     marginRight: 30,
