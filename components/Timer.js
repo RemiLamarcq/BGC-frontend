@@ -19,7 +19,7 @@ function Timer() {
     // Création d'une nouvelle minuterie avec des propriétés initiales en fonction du type
     const newTimer = {
       type,
-      key: timers.length,
+      key: Date.now(), // Utiliser une clé unique basée sur la date actuelle
       name: type === 'countdown' ? `Minuteur ${timers.length + 1}` : `Chrono ${timers.length + 1}`,
       ...(type === 'countdown' ? { duration: 60, isCountdownActive: false } : { time: 0, running: false }),
     };
@@ -42,36 +42,38 @@ function Timer() {
       <View style={styles.addButtonsContainer}>
         {/* Bouton pour ajouter un minuteur */}
         <TouchableOpacity style={styles.addButton} onPress={() => addTimer('countdown')}>
-          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D"/>{/* Logo + de FA5 */}
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D"/>
+          {/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un minuteur</Text>
         </TouchableOpacity>
 
         {/* Bouton pour ajouter un chronomètre */}
         <TouchableOpacity style={styles.addButton} onPress={() => addTimer('stopwatch')}>
-          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />{/* Logo + de FA5 */}
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />
+          {/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un chrono</Text>
         </TouchableOpacity>
       </View>
 
       {/* Utilisation de ScrollView pour permettre le défilement des minuteries */}
       <ScrollView>
-      {timers.map((timer) => (
-  <View key={timer.key} style={styles.timerContainer}>
-    <View style={styles.timerNameContainer}>
-      <Text style={styles.timerName}>{timer.name}</Text>
-    </View>
+        {timers.map((timer) => (
+          <View key={timer.key} style={styles.timerContainer}>
+            <View style={styles.timerNameContainer}>
+              <Text style={styles.timerName}>{timer.name}</Text>
+            </View>
 
-    {timer.type === 'countdown' ? (
-      <Countdown timer={timer} removeTimer={removeTimer} />
-    ) : (
-      <Stopwatch timer={timer} removeTimer={removeTimer} />
-    )}
-  </View>
-))}
+            {timer.type === 'countdown' ? (
+              <Countdown timer={timer} removeTimer={removeTimer} />
+            ) : (
+              <Stopwatch timer={timer} removeTimer={removeTimer} />
+            )}
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   addButton: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#88B7B6',
     borderRadius: 35,

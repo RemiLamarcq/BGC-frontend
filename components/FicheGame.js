@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
+import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
+import { addGamePlayVisible } from '../reducers/addGamePlayVisible';
 
-export default function FicheGame({ toggleModalVisibility, selectedGame, handleDeleteGame }) {
+export default function FicheGame({ toggleModalVisibility, selectedGame, handleDeleteGame, navigation }) {
+
+const dispatch = useDispatch();
 
 const [starsEditable, setStarsEditable] = useState(false);
 const [addPersonalNote, setAddPersonalNote] = useState(0);
@@ -67,6 +71,12 @@ if(!starsEditable) {
   }
 }
 
+const handleAddPlay = () => {
+  navigation.navigate('Cahier');
+  toggleModalVisibility();
+  dispatch(setAddGamePlayVisible(true));
+}
+
    return (
 
         <View style={styles.modalContainer}>
@@ -94,7 +104,6 @@ if(!starsEditable) {
             <View style={styles.title}>
                 <View style={styles.titleAndScore}>
                     <Text style={styles.textTitleAgain}>{selectedGame.name}</Text>
-                    <View style={styles.starsAgain}>{selectedGame.personalStars}</View>
                 </View>
                 <View style={styles.image}>
                     <Image 
@@ -133,12 +142,22 @@ if(!starsEditable) {
                     <Text style={{color: '#423D3D'}}> dernière partie : le 14/02/2024 à 15h</Text>
                 </View>
 
-                <View style={styles.editStars}>
-                  {editStars}
-                  <TouchableOpacity style={styles.pencilEditStarsButton} onPress={handlePressPencil}>
-                    <FontAwesome name="pencil"  style={{color: '#0A3332'}}/>
-                  </TouchableOpacity>
-                  {vButton}
+                <View style={styles.editStarsAndAddPlay}>
+                    <View style={styles.editStars}>
+                      {editStars}
+                      <TouchableOpacity style={styles.pencilEditStarsButton} onPress={handlePressPencil}>
+                        <FontAwesome name="pencil"  style={{color: '#0A3332'}}/>
+                      </TouchableOpacity>
+                      {vButton}
+                    </View>
+                    <View style={styles.AddPlay}>
+                        <TouchableOpacity onPress={handleAddPlay} style={styles.buttonAddPlay}>
+                            <View style={styles.plusButton}>
+                              <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
+                            </View>
+                            <Text>Ajouter une partie</Text>
+                      </TouchableOpacity>
+                    </View>
                 </View>
 
             </View>
@@ -200,14 +219,12 @@ if(!starsEditable) {
             fontWeight: '700',
             fontSize: 18,
             alignSelf: 'center',
-            marginBottom: 5,
+            marginBottom: 15,
             color: '#423D3D',
           },
 
-          starsAgain: {
-            flexDirection: 'row',
-            alignSelf: 'center',
-            marginBottom: 10,
+          image: {
+            alignSelf: 'center'
           },
 
           info: {
@@ -275,6 +292,29 @@ if(!starsEditable) {
             height: 20,
             width: 20,
             marginLeft: 5 
+          },
+
+          editStarsAndAddPlay: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          },
+
+          buttonAddPlay: {
+            backgroundColor: '#88B7B6',
+            borderRadius: 20,
+            padding: 5,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 15
+          },
+          
+          plusButton: {
+            borderRadius: 50,
+            marginRight: 5,
+            backgroundColor:'#423D3D',
+
           },
   
   

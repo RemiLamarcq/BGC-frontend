@@ -7,34 +7,42 @@ import { Octicons } from '@expo/vector-icons';
 // Composant enfant de AccessoiresScreen.js
 function Dice() {
   // État pour stocker les valeurs des dés
-  const [diceValues, setDiceValues] = useState([null]);
-  // État pour suivre le nombre de faces du dé
-  const [numFaces, setNumFaces] = useState(6); // Initialisé à 6 faces, par exemple
+  const [diceValues, setDiceValues] = useState([{ value: null, numFaces: 6 }]);
 
   // Fonction pour ajouter un nouveau dé
   const addDice = () => {
-    setDiceValues([...diceValues, null]); // Ajout d'un dé
+    const defaultName = `Dé ${diceValues.length + 1}`;
+    setDiceValues([...diceValues, { value: null, numFaces: 6, name: defaultName }]);
   };
 
   // Fonction pour générer un nombre aléatoire positif au lancer de dés
   const generateRandomNumber = (index) => {
     const newDiceValues = [...diceValues];
-    // Math.floor() pour arrondir le résultat à un nombre entier
-    // Math.random() pour obtenir un nombre décimal entre 1 et le nombre de faces du dé lancé.
-    newDiceValues[index] = Math.floor(Math.random() * numFaces) + 1;
+    newDiceValues[index].value = Math.floor(Math.random() * newDiceValues[index].numFaces) + 1;
     setDiceValues(newDiceValues);
   };
 
   // Fonction pour incrémenter le nombre de faces du dé
-  const incrementFaces = () => {
-    // Assure que le nombre de faces n'excède pas 100
-    setNumFaces((prevNumFaces) => (prevNumFaces < 100 ? prevNumFaces + 1 : prevNumFaces));
+  const incrementFaces = (index) => {
+    const newDiceValues = [...diceValues];
+    newDiceValues[index].numFaces = Math.min(newDiceValues[index].numFaces + 1, 100);
+    setDiceValues(newDiceValues);
   };
 
   // Fonction pour décrémenter le nombre de faces du dé
-  const decrementFaces = () => {
-    // Assure que le nombre de faces reste supérieur à 1
-    setNumFaces((prevNumFaces) => (prevNumFaces > 1 ? prevNumFaces - 1 : prevNumFaces));
+  const decrementFaces = (index) => {
+    const newDiceValues = [...diceValues];
+    newDiceValues[index].numFaces = Math.max(newDiceValues[index].numFaces - 1, 1);
+    setDiceValues(newDiceValues);
+  };
+
+  // Fonction pour lancer tous les dés en même temps
+  const rollAllDice = () => {
+    const newDiceValues = [...diceValues];
+    newDiceValues.forEach((die, index) => {
+      die.value = Math.floor(Math.random() * die.numFaces) + 1;
+    });
+    setDiceValues(newDiceValues);
   };
 
   // Fonction pour supprimer un dé
@@ -48,52 +56,66 @@ function Dice() {
     <View style={styles.container}>
       {/* Bouton pour ajouter un nouveau dé */}
       <View style={styles.addDiceSection}>
-        <TouchableOpacity style={styles.addButton} onPress={addDice}>
-          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />
-          {/* Logo + de FA5 */}
-          <Text style={styles.buttonText}>Ajouter un dé</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonAddRoll}>
+          <TouchableOpacity style={styles.addButton} onPress={addDice}>
+            <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />
+            {/* Logo + de FA5 */}
+            <Text style={styles.buttonText}>Ajouter un dé</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={rollAllDice} style={styles.rollAllButton}>
+            <FontAwesome5 name="redo-alt" size={24} color="#423D3D" />
+            <Text style={styles.rollAllButtonText}>Lancer les dés</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {diceValues.map((value, index) => (
-          <View key={index} style={styles.cardContainer}>
-            <View style={styles.iconTextContainer}>
-              <View style={styles.buttonContainer}>
-                {/* Boutons d'incrémentation et de décrémentation pour choisir le nombre de faces du dé */}
-                <View style={styles.numberOfFaces}>
-                  <TouchableOpacity onPress={decrementFaces}>
-                    <AntDesign name="minus" size={20} color="#423D3D" />
-                  </TouchableOpacity>
-                  {/* Si nombre de face === 1 : afficher face, sinon afficher faces */}
-                  <Text>{numFaces} {numFaces === 1 ? 'face' : 'faces'}</Text>
-                  <TouchableOpacity onPress={incrementFaces}>
-                    <AntDesign name="plus" size={20} color="#423D3D" />
-                  </TouchableOpacity>
+        {diceValues.map((die, index) => (
+          <View key={index}>
+            {/* Affichage du numéro du dé au-dessus de cardContainer */}
+            <View style={styles.dieNumberContainer}>
+              <Text style={styles.dieNumberText}>{`Dé ${index + 1}`}</Text>
+            </View>
+
+            <View style={styles.cardContainer}>
+              {/* Contenu du cardContainer */}
+              <View style={styles.iconTextContainer}>
+                <View style={styles.buttonContainer}>
+                  {/* Boutons d'incrémentation et de décrémentation pour choisir le nombre de faces du dé */}
+                  <View style={styles.numberOfFaces}>
+                    <TouchableOpacity onPress={() => decrementFaces(index)}>
+                      <AntDesign name="minus" size={20} color="#423D3D" />
+                    </TouchableOpacity>
+                    {/* Si le nombre de faces === 1 : afficher "face", sinon afficher "faces" */}
+                    <Text>{die.numFaces} {die.numFaces === 1 ? 'face' : 'faces'}</Text>
+                    <TouchableOpacity onPress={() => incrementFaces(index)}>
+                      <AntDesign name="plus" size={20} color="#423D3D" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {/* Logo flèche tournée de FontAwesome5 */}
+              </View>
+              {/* Afficher le résultat dans un cercle s'il y a une valeur générée, sinon afficher le resultCircle par défaut */}
+              <View style={styles.resultContainer}>
+                <View style={styles.centeredResultContainer}>
+                  <View style={styles.resultCircle}>
+                    {die.value !== null ? (
+                      <Text style={styles.resultNumber}>{die.value}</Text>
+                    ) : (
+                      <Text style={styles.resultNumber}>dé</Text>
+                    )}
+                  </View>
                 </View>
               </View>
-              {/* Logo flèche tournée de FontAwesome5 */}
-            </View>
-            {/* Afficher le résultat dans un cercle s'il y a une valeur générée, sinon afficher le resultCircle par défaut */}
-            <View style={styles.resultContainer}>
-              <View style={styles.centeredResultContainer}>
-                <View style={styles.resultCircle}>
-                  {value !== null ? (
-                    <Text style={styles.resultNumber}>{value}</Text>
-                  ) : (
-                    <Text style={styles.resultNumber}>dé</Text>
-                  )}
-                </View>
-              </View>
-            </View>
-            {/* Bouton pour supprimer le dé */}
-            <TouchableOpacity onPress={() => removeDice(index)} style={styles.removeButton}>
-              <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
-            </TouchableOpacity>
-            <View style={styles.buttonContainer}>
-              {/* Bouton "redo" à droite */}
-              <TouchableOpacity onPress={() => generateRandomNumber(index)} style={styles.redo}>
-                <FontAwesome5 name="redo-alt" size={35} color="#423D3D" />
+              {/* Bouton pour supprimer le dé */}
+              <TouchableOpacity onPress={() => removeDice(index)} style={styles.removeButton}>
+                <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
               </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                {/* Bouton "redo" à droite */}
+                <TouchableOpacity onPress={() => generateRandomNumber(index)} style={styles.redo}>
+                  <FontAwesome5 name="redo-alt" size={35} color="#423D3D" />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         ))}
@@ -130,6 +152,7 @@ const styles = StyleSheet.create({
   },
   addDiceSection:{
     marginTop:-20,
+    marginBottom:30,
   },
   cardContainer: {
     height: 120,
@@ -141,7 +164,7 @@ const styles = StyleSheet.create({
     margin: 7,
     borderRadius: 15,
     justifyContent: 'space-around',
-    marginTop:50,
+    marginTop:10,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -158,7 +181,7 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     height: 80,
-    padding: 17,
+    padding: 12,
     backgroundColor: '#CDDCDB',
     borderRadius: 15,
     alignItems: 'center',
@@ -176,14 +199,43 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   redo: {
-    paddingLeft: 100,
-    marginRight:20,
+    paddingLeft:100,
+    marginRight:40,
+    marginBottom:10,
   },
   removeButton: {
     position: 'absolute',
     top: -5,
     right: -5,
   },
+  rollAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#88B7B6',
+    borderRadius: 35,
+    width: 110,
+    height: 40,
+  },
+  rollAllButtonText: {
+    color: '#fff',
+    fontSize: 10,
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  buttonAddRoll: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '75%',
+    paddingHorizontal: 10,
+  },
+  dieNumberContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  dieNumberText: {
+    fontSize: 16,
+    color: '#423D3D',
+    marginBottom:-15,
+  },
 });
-
 export default Dice;
