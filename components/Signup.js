@@ -96,6 +96,9 @@ return (
       <TextInput
         style={styles.input}
         placeholder=" Confirmer e-mail"
+        autoCapitalize='none'
+        keyboardType='email-address'
+        textContentType='emailAddress'
         value={confirmEmail}
         onChangeText={(value) => setConfirmEmail(value)}
       />
