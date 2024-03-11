@@ -1,21 +1,24 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button } from 'react-native';
+import { ScrollView, Alert, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Game from '../components/Game';
 import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
 import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
+import { setSelectedGame } from '../reducers/selectedGame';
+import selectedGame from '../reducers/selectedGame';
+export default function ArmoireScreen({navigation}) {
 
-export default function ArmoireScreen() {
+  const dispatch = useDispatch();
+  const selectedGame = useSelector(state => state.selectedGame.value);
 
   const [gamesData, setGamesData] = useState([]);
   const [initialGames, setInitialGames] = useState([])
   const token = useSelector(state => state.user.value.token);
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedGame, setSelectedGame] = useState(null);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
   // console.log(token)
   
@@ -75,7 +78,7 @@ export default function ArmoireScreen() {
   const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
     if (!isVisible) {
-      setSelectedGame(gameData);
+      dispatch(setSelectedGame(gameData));
     }
     // console.log("Selected game:", gameData);
   };
@@ -83,14 +86,33 @@ export default function ArmoireScreen() {
   const handleDeleteGame = () => {
     // console.log('yo');
     // console.log(selectedGame.name, token)
-    fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      }).then(response=> response.json())
-    .then(() => {
-      toggleModalVisibility()
-      // console.log('coucou')
-    })
+    Alert.alert(
+      'Confirmation',
+      `Voulez-vous vraiment supprimer le jeu "${selectedGame.name}" ?`,
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          onPress: () => {
+            // Effectuer la suppression si l'utilisateur confirme
+            fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              }).then(response=> response.json())
+            .then(() => {
+              toggleModalVisibility()
+              // console.log('coucou')
+            })
+            .catch(error => {
+              console.error('Erreur lors de la suppression du jeu:', error);
+            });
+          },
+        },
+      ]
+    );
   }
 
   // Fonction qui permet de filtrer l'affichage des jeux en fonction de la valeur du champ de recherche récupérée grâce à l'inverse data flow
@@ -112,6 +134,8 @@ export default function ArmoireScreen() {
       gamesData={gamesData} 
       onSearchGameChange={(e) => handleFilteredGamesChange(e)}
       isInNotebook={false}
+      showGameCounter={true}
+      initialGames={initialGames}
     />
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
@@ -131,7 +155,8 @@ export default function ArmoireScreen() {
                       game={gameData}
                       stars={gameData.stars}
                       selectedGame={selectedGame}
-                      handleDeleteGame={handleDeleteGame} />
+                      handleDeleteGame={handleDeleteGame}
+                      navigation={navigation} />
               })
         ) : (
           <View>
