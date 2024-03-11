@@ -5,45 +5,44 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { FontAwesome } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 
-//Composant petit-enfant de AccessoiresScreen.js
+// Composant petit-enfant de AccessoiresScreen.js
 // Composant enfant de Timer.js
 // Frère de Stopwatch.js => chrono
-
 const Countdown = ({ timer, removeTimer }) => {
   // États locaux pour gérer la durée, l'état du compte à rebours, et la clé
   const [duration, setDuration] = useState(timer.duration);
   const [isCountdownActive, setIsCountdownActive] = useState(timer.isCountdownActive);
   const [key, setKey] = useState(timer.key);
-  
+
   // Fonction pour démarrer le compte à rebours
   const handleStartCountdown = () => {
     setIsCountdownActive(true);
   };
-  
+
   // Fonction pour mettre en pause le compte à rebours
   const handlePauseCountdown = () => {
     setIsCountdownActive(false);
   };
-  
+
   // Fonction pour réinitialiser le compte à rebours
   const handleResetCountdown = () => {
     setIsCountdownActive(false);
     setDuration(timer.duration);
     setKey((prevKey) => prevKey + 1);
   };
-  
+
   // Fonction pour gérer le changement de la durée du compte à rebours
   const handleDurationChange = (text) => {
     setIsCountdownActive(false);
     setDuration(parseInt(text) || 0);
     setKey((prevKey) => prevKey + 1);
   };
-  
+
   // Effet useEffect pour mettre à jour la clé lors du changement de la durée
   useEffect(() => {
     setKey((prevKey) => prevKey + 1);
   }, [duration]);
-    
+
   // Rendu du composant Countdown
   return (
     <View style={styles.cardContainer}>
@@ -79,18 +78,18 @@ const Countdown = ({ timer, removeTimer }) => {
         {/* Bouton pour mettre en pause le compte à rebours */}
         {isCountdownActive ? (
           <TouchableOpacity style={styles.pauseButton} onPress={handlePauseCountdown}>
-            <FontAwesome name="pause" size={35} color="#423D3D"  />
+            <FontAwesome name="pause" size={35} color="#423D3D" />
           </TouchableOpacity>
         ) : (
-            <TouchableOpacity style={styles.playButton} onPress={handleStartCountdown}>
+          <TouchableOpacity style={styles.playButton} onPress={handleStartCountdown}>
             {/* Bouton pour démarrer le compte à rebours */}
-            <FontAwesome name="play" size={35} color="#423D3D"  />
+            <FontAwesome name="play" size={35} color="#423D3D" />
           </TouchableOpacity>
         )}
 
         {/* Bouton pour réinitialiser le compte à rebours */}
         <TouchableOpacity style={styles.resetButton} onPress={handleResetCountdown}>
-          <FontAwesome name="refresh" size={35} color="#423D3D"  />
+          <FontAwesome name="refresh" size={35} color="#423D3D" />
         </TouchableOpacity>
       </View>
 
@@ -98,9 +97,6 @@ const Countdown = ({ timer, removeTimer }) => {
       <TouchableOpacity style={styles.removeButton} onPress={() => removeTimer(timer.key)}>
         <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
       </TouchableOpacity>
-
-      {/* Affichage du nom du minuteur */}
-      <Text style={styles.timerName}>{timer.name}</Text>
     </View>
   );
 };
@@ -113,8 +109,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 120,
     width: 300,
-    margin:7,
-    padding:10,
+    margin: 7,
+    padding: 10,
     backgroundColor: '#CDDCDB',
     borderRadius: 15,
     position: 'relative',
@@ -128,7 +124,7 @@ const styles = StyleSheet.create({
   },
   timerInput: {
     borderWidth: 1,
-    borderColor: '#0A3332',
+    borderColor: '#F2F4F1',
     borderRadius: 10,
     padding: 8,
     marginLeft: 10,
@@ -158,12 +154,7 @@ const styles = StyleSheet.create({
     top: -5,
     right: -5,
   },
-  timerName: {
-    fontSize: 16,
-    color: 'black',
-    marginTop: 5,
-  },
+ 
 });
 
-// Exportation du composant Countdown
 export default Countdown;

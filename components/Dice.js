@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Octicons } from '@expo/vector-icons';
 
 // Composant enfant de AccessoiresScreen.js
@@ -37,81 +37,68 @@ function Dice() {
     setNumFaces((prevNumFaces) => (prevNumFaces > 1 ? prevNumFaces - 1 : prevNumFaces));
   };
 
-   // Fonction pour supprimer un dé
-   const removeDice = (index) => {
+  // Fonction pour supprimer un dé
+  const removeDice = (index) => {
     const newDiceValues = [...diceValues];
     newDiceValues.splice(index, 1);
     setDiceValues(newDiceValues);
   };
 
   return (
-
     <View style={styles.container}>
       {/* Bouton pour ajouter un nouveau dé */}
       <View style={styles.addDiceSection}>
-      <View >
         <TouchableOpacity style={styles.addButton} onPress={addDice}>
-        <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />{/* Logo + de FA5 */}
+          <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />
+          {/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un dé</Text>
         </TouchableOpacity>
-        </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-
-      {diceValues.map((value, index) => (
-  <View key={index} style={styles.cardContainer}>
-    <View style={styles.iconTextContainer}>
-    <View style={styles.buttonContainer}>
-
-      {/* Boutons d'incrémentation et de décrémentation pour choisir le nombre de faces du dé */}
-      <View style={styles.numberOfFaces}>
-        <View >
-          <TouchableOpacity onPress={decrementFaces}>
-            <AntDesign name="minus" size={20} color="#423D3D" />
-          </TouchableOpacity>
-        </View>
-        {/* Si nombre de face === 1 : afficher face, sinon afficher faces */}
-        <Text>{numFaces} {numFaces === 1 ? 'face' : 'faces'}</Text>
-        <View >
-          <TouchableOpacity onPress={incrementFaces}>
-            <AntDesign name="plus" size={20} color="#423D3D" />
-          </TouchableOpacity>
+        {diceValues.map((value, index) => (
+          <View key={index} style={styles.cardContainer}>
+            <View style={styles.iconTextContainer}>
+              <View style={styles.buttonContainer}>
+                {/* Boutons d'incrémentation et de décrémentation pour choisir le nombre de faces du dé */}
+                <View style={styles.numberOfFaces}>
+                  <TouchableOpacity onPress={decrementFaces}>
+                    <AntDesign name="minus" size={20} color="#423D3D" />
+                  </TouchableOpacity>
+                  {/* Si nombre de face === 1 : afficher face, sinon afficher faces */}
+                  <Text>{numFaces} {numFaces === 1 ? 'face' : 'faces'}</Text>
+                  <TouchableOpacity onPress={incrementFaces}>
+                    <AntDesign name="plus" size={20} color="#423D3D" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {/* Logo flèche tournée de FontAwesome5 */}
+            </View>
+            {/* Afficher le résultat dans un cercle s'il y a une valeur générée, sinon afficher le resultCircle par défaut */}
+            <View style={styles.resultContainer}>
+              <View style={styles.centeredResultContainer}>
+                <View style={styles.resultCircle}>
+                  {value !== null ? (
+                    <Text style={styles.resultNumber}>{value}</Text>
+                  ) : (
+                    <Text style={styles.resultNumber}>dé</Text>
+                  )}
+                </View>
+              </View>
+            </View>
+            {/* Bouton pour supprimer le dé */}
+            <TouchableOpacity onPress={() => removeDice(index)} style={styles.removeButton}>
+              <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
+            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              {/* Bouton "redo" à droite */}
+              <TouchableOpacity onPress={() => generateRandomNumber(index)} style={styles.redo}>
+                <FontAwesome5 name="redo-alt" size={35} color="#423D3D" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </View>
-      {/* Logo flèche tournée de FontAwesome5 */}
+        ))}
+      </ScrollView>
     </View>
-
-    {/* Afficher le résultat dans un cercle s'il y a une valeur générée, sinon afficher le resultCircle par défaut */}
-    <View style={styles.resultContainer}>
-      <View style={styles.centeredResultContainer}>
-        <View style={styles.resultCircle}>
-          {value !== null ? (
-            <Text style={styles.resultNumber}>{value}</Text>
-          ) : (
-            <Text style={styles.resultNumber}>dé</Text>
-          )}
-        </View>
-      </View>
-    </View>
-
-    {/* Bouton pour supprimer le dé */}
-    <TouchableOpacity onPress={() => removeDice(index)} style={styles.removeButton}>
-      <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
-    </TouchableOpacity>
-    <View style={styles.buttonContainer}>
-
-    {/* Bouton "redo" à droite */}
-    <TouchableOpacity onPress={() => generateRandomNumber(index)} style={styles.redo}>
-      <FontAwesome5 name="redo-alt" size={35} color="#423D3D" />
-    </TouchableOpacity>
-    </View>
-  </View>
-))}
-    </ScrollView>
-
-    </View>
-
   );
 }
 
@@ -126,6 +113,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    marginLeft:30,
   },
   fabtn: {
     marginLeft: 5,
@@ -140,6 +128,9 @@ const styles = StyleSheet.create({
     width: 110,
     height: 40,
   },
+  addDiceSection:{
+    marginTop:-20,
+  },
   cardContainer: {
     height: 120,
     width: 300,
@@ -150,6 +141,7 @@ const styles = StyleSheet.create({
     margin: 7,
     borderRadius: 15,
     justifyContent: 'space-around',
+    marginTop:50,
   },
   buttonContainer: {
     flexDirection: 'row',
