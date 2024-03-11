@@ -44,11 +44,10 @@ export default function ArmoireScreen() {
                 let stars = [];
                 for(let i= 0; i < 5; i++){
                     if (i < game.personalNote) {
-                        stars.push(<AntDesign name="star" style={{color: '#0A3332'}}/>);
+                        stars.push(<AntDesign key={i} name="star" style={{color: '#0A3332'}}/>);
                     } else {
-                        stars.push(<AntDesign name="staro" style={{color: '#0A3332'}}/>);
+                        stars.push(<AntDesign key={i} name="staro" style={{color: '#0A3332'}}/>);
                     }
-                    
                 }
 
             return { 
@@ -82,15 +81,15 @@ export default function ArmoireScreen() {
   };
 
   const handleDeleteGame = () => {
-    console.log('yo');
-    console.log(selectedGame.name, token)
+    // console.log('yo');
+    // console.log(selectedGame.name, token)
     fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       }).then(response=> response.json())
     .then(() => {
       toggleModalVisibility()
-      console.log('coucou')
+      // console.log('coucou')
     })
   }
 
@@ -159,8 +158,7 @@ export default function ArmoireScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginBottom: 150,
-    marginTop: 20
+    marginBottom: 200,
   },
   scrollView: {
     flexGrow:1,

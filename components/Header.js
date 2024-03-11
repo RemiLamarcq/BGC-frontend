@@ -17,14 +17,16 @@ function Header({
   showSearchBar, 
   showMeeple, 
   toggleModalAddGame, 
-  onSearchGameChange, 
-  isInNotebook, 
   toggleModalAddGamePlay, 
+  onSearchGameChange, 
+  handleGamePlaysFilter,
+  isInNotebook, 
 }) {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
     const [searchGame, setSearchGame] = useState('');
+    const [searchGamePlay, setSearchGamePlay] = useState('');
     const handleLogout = () => {
         dispatch(logout());
         // Redirection vers la page de connexion
@@ -33,122 +35,129 @@ function Header({
 
     // Permet de récupérer la valeur du champ de recherche et la renvoie au composant parent
     const handleSearchChange = (value) => {
-      setSearchGame(value);
-      onSearchGameChange(value);
+      if(!isInNotebook){
+        setSearchGame(value);
+        onSearchGameChange(value);
+      } else {
+        setSearchGamePlay(value);
+        handleGamePlaysFilter(value);
+      }
     };
 
     // console.log(searchGame)
 
   return (
     <View style={[styles.headerContainer, { height: height }]}>{/* height à modifier dans les fichiers screens */}
-      {showMeeple && (
-        <TouchableOpacity onPress={handleLogout}>
-          <View style={styles.logoContainer}>
-            <Image source={require('../assets/meeple.png')} style={styles.logoMeeple} />
-          </View>
-        </TouchableOpacity>
-      )}
+
     <View style={styles.header}>
-      <Text style={styles.headerTitle}>{title}</Text>{/* Titre du header à modifier dans les fichiers screeens */}
+      <View style={styles.staticHeader}>
+        {showMeeple && (
+        <TouchableOpacity style={styles.meepleBtn} onPress={handleLogout}>
+          {/* <View style={styles.logoContainer}> */}
+            <Image source={require('../assets/meeple.png')} style={styles.logoMeeple} />
+          {/* </View> */}
+        </TouchableOpacity>
+        )}
+        <Text style={styles.headerTitle}>{title}</Text>{/* Titre du header à modifier dans les fichiers screeens */}
+      </View>
       {/* Barre de recherche, conditionnellement affichée en fonction du screen */}
       {showSearchBar && (
+      <View style={styles.modularHeader}>
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchBar}
             placeholder={ !isInNotebook ? "Rechercher dans l'armoire..." : "Rechercher par jeu" }
             onChangeText={handleSearchChange}
-            value={searchGame}
+            value={ !isInNotebook ? searchGame : searchGamePlay}
           />
-          <View style={styles.bottomHeader}>
-            {!isInNotebook &&
-            <View style={styles.filterButton}>
-              <FontAwesome name="filter" color="#423D3D" style={styles.filterIcon} />
-            </View>
-            }
-            <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : toggleModalAddGamePlay } style={styles.buttonAddGame}>
-              <View style={styles.plusButton}>
-                <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
-              </View>
-              <Text>{ !isInNotebook ? "Ajouter un jeu" : "Ajouter une partie" }</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-        )}
+        <View style={styles.bottomHeader}>
+          {!isInNotebook &&
+          <View style={styles.filterButton}>
+            <FontAwesome name="filter" color="#423D3D" size={20} />
+          </View>
+          }
+          <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : toggleModalAddGamePlay } style={styles.buttonAddGame}>
+            <View style={styles.plusButton}>
+              <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
+            </View>
+            <Text>{ !isInNotebook ? "Ajouter un jeu" : "Ajouter une partie" }</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      )}
     </View>
   </View>
   );
 }
 const styles = StyleSheet.create({
     headerContainer: {
-        flexDirection: 'row',//contenu du header en row
-        alignItems: 'center',//contenu centré à la vertical
-        backgroundColor: '#6E9D9C',//couleur du background
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#6E9D9C',
       },
-
-      logoContainer: {
-        width: 40, //largeur
-        height: 40, //hauteur
-        marginLeft: 20, //espace gauche logoContainer
-        marginTop: 12, //espace haut logoContainer
-      },
-
       header: {
         flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        height: '100%',
-        marginTop: 20
+        marginTop: 10,
+        padding: 20,
+        gap: 25,
       },
-      headerTitle: {//titre de la section
+      staticHeader:{
+        justifyContent: 'center',
+      },
+      meepleBtn:{
+        width: 40, 
+        height: 40, 
+        position: 'absolute',
+      },   
+      logoMeeple: {
+        width: '100%',
+        height: 40, 
+        alignSelf: 'center',
+      },
+      headerTitle: {
         color: '#423D3D',
         fontSize: 24,
         fontWeight: 'bold',
+        alignSelf: 'center',
       },
-     
-      logoMeeple: {
-        width: '80%',//largeur du meeple
-        height: 40, //hauteur du meeple
-        alignSelf: 'center', // Pour centrer l'image horizontalement dans son conteneur
+      modularHeader:{
+        gap: 10,
       },
       searchContainer: {
-        justifyContent: 'space-around',
-        height: 100
+        width: '100%',
+        alignSelf: 'center',
       },
-      searchBar: { //barre de reserche à modifier !!!!
-        height: 40,
+      searchBar: {
+        padding: 12,
         borderRadius: 15,
-        marginTop: 5,
         paddingLeft: 10,
         backgroundColor: "white",
       },
       bottomHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
       },
       buttonAddGame: {
+        alignSelf: 'flex-end',
+        backgroundColor: '#88B7B6',
+        borderRadius: 20,
+        padding: 10,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 75,
-        marginBottom: 10,
-        backgroundColor: '#88B7B6',
-        borderRadius: 20,
-        width: 130,
-        height: 30
       },
       plusButton: {
         borderRadius: 50,
         marginRight: 5,
         backgroundColor:'#423D3D'
       },
-
       filterButton: {
-        justifyContent: 'center',
-        marginRight: 75,
+        position: 'absolute',
         borderRadius: 50,
-        backgroundColor: '#88B7B6'
+        backgroundColor: '#88B7B6',
+        padding: 10,
+        justifyContent: 'center',
       }
-  
 });
 
 export default Header;

@@ -59,7 +59,7 @@ export default function AddGame({props, toggleModalAddGame}) {
             .then(data => {
                 setGameInfos(data);
                 setGameType(data.game.gameType);
-                console.log(gameInfos);
+                // console.log(gameInfos);
                 setGameCardVisible(true);
             })
         }
@@ -151,7 +151,7 @@ export default function AddGame({props, toggleModalAddGame}) {
                     <AntDesign name="staro" style={{color: '#0A3332'}} />
                 </TouchableOpacity>
                 );
-                console.log(addPersonalNote);
+                // console.log(addPersonalNote);
             }
             
         }
