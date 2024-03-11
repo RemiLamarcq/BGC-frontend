@@ -2,10 +2,10 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import GamePlay from '../components/GamePlay';
 import { formatDate } from '../modules/formatDate';
-import Header from '../components/Header';
+import Header from '../components/Header'; 
 import AddGamePlay from '../components/AddGamePlay';
 
 export default function CahierScreen() {
@@ -19,6 +19,7 @@ export default function CahierScreen() {
   const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
   // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
   const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
+  
 
   /* Récupère l'ensemble des parties du user à l'initialisation et à chaque fermeture des modales 
      addGamePlay et FicheGamePlay. */
