@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     width : 173,
     marginTop: 40,
     marginBottom: 20,
-    marginRight:10,
+    marginRight:30,
   },
   fabtn: {
     marginLeft: 5,

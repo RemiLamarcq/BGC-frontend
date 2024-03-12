@@ -1,23 +1,17 @@
-const initialState = {
-  // ... autres propriétés
-  activeTimers: [],
-};
-
-const timerReducer = (state = initialState, action) => {
-  // ... votre logique actuelle du reducer
-
+const timerReducer = (state, action) => {
   switch (action.type) {
-    case 'START_TIMER':
-      return {
-        ...state,
-        activeTimers: [...state.activeTimers, { id: action.payload.id, type: action.payload.type }],
-      };
-    case 'STOP_TIMER':
-      return {
-        ...state,
-        activeTimers: state.activeTimers.filter(timer => timer.id !== action.payload.id),
-      };
-    // ... autres cas d'action
+    case 'ADD_TIMER':
+      return [...state, action.payload];
+    case 'REMOVE_TIMER':
+      return state.filter(timer => timer.key !== action.payload);
+    case 'UPDATE_TIMER':
+      return state.map(timer => 
+        timer.key === action.payload.key ? { ...timer, ...action.payload.updates } : timer
+      );
+    case 'UPDATE_TIMER_COUNT':
+      return state.map(timer => 
+        timer.key === action.payload.key ? { ...timer, count: action.payload.count } : timer
+      );
     default:
       return state;
   }
