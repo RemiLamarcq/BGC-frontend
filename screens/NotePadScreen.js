@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Alert } from 'react-native';
+import { Octicons } from '@expo/vector-icons';
 
 
 export default function StatScreen({navigation}) {
@@ -102,13 +103,7 @@ export default function StatScreen({navigation}) {
         <View style={styles.headLine}>
             <Text style={styles.title}>{savedNote.title}</Text>
             <TouchableOpacity style={styles.deleteTouchable} onPress={() => deleteNote(savedNote._id, savedNote.title)}>
-                        <FontAwesome 
-                            name="trash"
-                            color="#0A3332" 
-                            size={15}
-                            marginTop={10}
-                            marginRight={10}/>
-   
+            <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
                     </TouchableOpacity>
         </View>
         <View style={styles.textContent}>
@@ -124,15 +119,15 @@ export default function StatScreen({navigation}) {
     
     
     <View style={styles.container}>
-         <Header title="Bloc-notes" height={100}  showMeeple={true} style={styles.header} />
+         <Header title="Bloc-notes" height={100}  showMeeple={false} style={styles.header} />
         <TouchableOpacity style={styles.returnButton} onPress={handleBackToAccessooiresScreen}>
-            <AntDesign name="arrowleft" size={24} color="black" />
+            <AntDesign name="arrowleft" size={24} color="#423D3D" />
         </TouchableOpacity>
         
-        <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+        <Modal visible={isModalVisible} animationType="fade" transparent={true}>
         <View style={styles.modalContainer}>
         <TouchableOpacity style={styles.returnButton} onPress={() => setIsModalVisible(false)}>
-            <AntDesign name="arrowleft" size={24} color="black" />
+            <AntDesign name="arrowleft" size={24} color="#423D3D" />
         </TouchableOpacity>
           <Text style={{alignSelf: 'center', fontSize: 20, margin: 10}}>Nouvelle note</Text>
           <TextInput
@@ -156,7 +151,7 @@ export default function StatScreen({navigation}) {
       </Modal>
       
         <TouchableOpacity style={styles.addButton} onPress={() => setIsModalVisible(true)}>
-      <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="black"  />{/* Logo + de AntDesign */}
+      <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />{/* Logo + de AntDesign */}
         <Text style={styles.buttonText}>Nouvelle note</Text>
       </TouchableOpacity>
         <ScrollView contentContainerStyle={styles.scrollView}>
@@ -242,13 +237,9 @@ const styles = StyleSheet.create({
     justifyContent:'space-between',
     },
   deleteTouchable:{
-    justifyContent:"center",
-    alignContent:'center',
-    textAlign:'center',
-    borderRadius:50,
-    height:25,
-    width:25,
-    backgroundColor:'#88B7B6'
+    position: 'absolute',
+    top: -5,
+    right: -5,
    },
   modalContainer: {
     flex: 1,
