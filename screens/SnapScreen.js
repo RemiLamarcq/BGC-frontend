@@ -21,18 +21,20 @@ export default function SnapScreen() {
   const selectedPhoto = useSelector(state => state.addGamePlayInfos.value.selectedPhoto);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-      if(status !== 'granted'){
-        Alert.alert(
-          'Permission requise',
-          'Veuillez autoriser l\'accès à la caméra pour utiliser cette fonctionnalité',
-          [{ text: 'OK' }],
-          { cancelable: false }
-        );
-      }
-    })();
+    if(isFocused){
+      (async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === 'granted');
+        if(status !== 'granted'){
+          Alert.alert(
+            'Permission requise',
+            'Veuillez autoriser l\'accès à la caméra pour utiliser cette fonctionnalité',
+            [{ text: 'OK' }],
+            { cancelable: false }
+          );
+        }
+      })();
+    }
   }, []);
 
   // Par défaut, le SnapScreen est masqué par la modale AddGamePlay, il faut donc modifier l'état de la modale lorsqu'on navigue vers SnapScreen.
