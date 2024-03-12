@@ -4,15 +4,15 @@ const initialState = {
   value: null
 };
 
-export const selectedGameNameSlice = createSlice({
-  name: 'selectedGameName',
+export const defaultGameNameSlice = createSlice({
+  name: 'defaultGameName',
   initialState,
   reducers: {
-    setSelectedGameName: (state, action) => {
+    setDefaultGameName: (state, action) => {
       state.value = action.payload
     },
   },
 });
 
-export const { setSelectedGameName } = selectedGameNameSlice.actions;
-export default selectedGameNameSlice.reducer;
+export const { setDefaultGameName } = defaultGameNameSlice.actions;
+export default defaultGameNameSlice.reducer;
