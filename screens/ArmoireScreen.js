@@ -8,8 +8,7 @@ import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
 import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
-import { setSelectedGameName } from '../reducers/selectedGameName';
-import selectedGameName from '../reducers/selectedGameName';
+import { setDefaultGameName } from '../reducers/selectedGameName';
 export default function ArmoireScreen({navigation}) {
 
   const [gamesData, setGamesData] = useState([]);
@@ -21,7 +20,6 @@ export default function ArmoireScreen({navigation}) {
   // console.log(token)
 
   const dispatch = useDispatch();
-  const selectedGameName = useSelector(state => state.selectedGameName.value);
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -78,7 +76,7 @@ export default function ArmoireScreen({navigation}) {
 
   useEffect(() => {
     if (selectedGame) {
-      dispatch(setSelectedGameName(selectedGame.name));
+      dispatch(setDefaultGameName(selectedGame.name));
       console.log(selectedGame.name);
     }
   }, [selectedGame]);
