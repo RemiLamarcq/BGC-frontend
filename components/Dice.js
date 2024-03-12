@@ -1,19 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Octicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Clé de stockage pour AsyncStorage
+const STORAGE_KEY = 'diceValues';
 
 // Composant enfant de AccessoiresScreen.js
 function Dice() {
   // État pour stocker les valeurs des dés
-  const [diceValues, setDiceValues] = useState([{ value: null, numFaces: 6 }]);
+  const [diceValues, setDiceValues] = useState([]);
 
+ // Charger les données des dés sauvegardées lorsque le composant est monté
+ useEffect(() => {
+  const fetchDiceValues = async () => {
+    try {
+      const storedDiceValues = await AsyncStorage.getItem(STORAGE_KEY);
+      if (storedDiceValues !== null) {
+        setDiceValues(JSON.parse(storedDiceValues));
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des dés depuis AsyncStorage :', error);
+    }
+  };
+
+  fetchDiceValues();
+}, []);
+
+
+// Mettre à jour les données des dés et les sauvegarder dans AsyncStorage
+const updateAndSaveDiceValues = (updatedDiceValues) => {
+  setDiceValues(updatedDiceValues);
+  AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDiceValues))
+    .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
+};
   // Fonction pour ajouter un nouveau dé
   const addDice = () => {
     const defaultName = `Dé ${diceValues.length + 1}`;
-    setDiceValues([...diceValues, { value: null, numFaces: 6, name: defaultName }]);
+    const newDice = { value: null, numFaces: 6, name: defaultName };
+    updateAndSaveDiceValues([...diceValues, newDice]);
   };
+
 
   // Fonction pour générer un nombre aléatoire positif au lancer de dés
   const generateRandomNumber = (index) => {
@@ -45,11 +74,18 @@ function Dice() {
     setDiceValues(newDiceValues);
   };
 
+  // Fonction pour réinitialiser les valeurs des dés
+const resetDiceValues = () => {
+  const resetValues = diceValues.map(die => ({ ...die, value: null }));
+  updateAndSaveDiceValues(resetValues);
+};
+
+
   // Fonction pour supprimer un dé
   const removeDice = (index) => {
-    const newDiceValues = [...diceValues];
-    newDiceValues.splice(index, 1);
-    setDiceValues(newDiceValues);
+    const updatedDiceValues = [...diceValues];
+    updatedDiceValues.splice(index, 1);
+    updateAndSaveDiceValues(updatedDiceValues);
   };
 
   return (
@@ -104,6 +140,10 @@ function Dice() {
                       <Text style={styles.resultNumber}>dé</Text>
                     )}
                   </View>
+                  <TouchableOpacity onPress={resetDiceValues} style={styles.resetButton}>
+  <FontAwesome5 style={styles.fabtn} name="undo-alt" size={24} color="#423D3D" />
+  <Text style={styles.resetButtonText}>Réinitialiser</Text>
+</TouchableOpacity>
                 </View>
               </View>
               {/* Bouton pour supprimer le dé */}
@@ -241,5 +281,6 @@ const styles = StyleSheet.create({
     color: '#423D3D',
     marginBottom:-15,
   },
+  
 });
 export default Dice;
