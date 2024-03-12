@@ -1,28 +1,23 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const initialState = {
-  timers: [],
+  // ... autres propriétés
+  activeTimers: [],
 };
 
 const timerReducer = (state = initialState, action) => {
+  // ... votre logique actuelle du reducer
+
   switch (action.type) {
-    case 'ADD_TIMER':
-      const updatedTimersAdd = [...state.timers, action.payload];
-      AsyncStorage.setItem('timers', JSON.stringify(updatedTimersAdd));
+    case 'START_TIMER':
       return {
         ...state,
-        timers: updatedTimersAdd,
+        activeTimers: [...state.activeTimers, { id: action.payload.id, type: action.payload.type }],
       };
-    case 'REMOVE_TIMER':
-      const updatedTimersRemove = state.timers.filter((timer) => timer.key !== action.payload);
-      AsyncStorage.setItem('timers', JSON.stringify(updatedTimersRemove));
+    case 'STOP_TIMER':
       return {
         ...state,
-        timers: updatedTimersRemove,
+        activeTimers: state.activeTimers.filter(timer => timer.id !== action.payload.id),
       };
-    case 'UPDATE_TIMER':
-      // Ajoutez ici la logique pour mettre à jour un minuteur/chronomètre si nécessaire
-      return state;
+    // ... autres cas d'action
     default:
       return state;
   }

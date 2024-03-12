@@ -16,7 +16,7 @@ function AccessoryModal({ isVisible, closeModal, modalContent, modalTitle }) {
     {/*Modal pour afficher le contenu de la zone cliquée*/}
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={closeModal}>
       {/* Afficher le composant Header avec le titre dynamique */}
-      <Header title={modalTitle} height={80} />
+      <Header title={modalTitle} height={100} />
       {/* Conteneur principal de la modal */}
       <View style={styles.modalContainer}>
         {/* Bouton de fermeture de la modal */}
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#F2F4F1',
-    padding: 20,
+    padding: 10,
     alignItems: 'center',
   },
   closeButton: {
@@ -52,10 +52,11 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 1,
-    height: 24, 
+    height: 40, 
     width:40,
     margin: 5,
     alignItems: 'center',
+    justifyContent:'center',
 
   },
 });

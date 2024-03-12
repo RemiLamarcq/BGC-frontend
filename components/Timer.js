@@ -48,7 +48,7 @@ function Timer() {
         </TouchableOpacity>
 
         {/* Bouton pour ajouter un chronomètre */}
-        <TouchableOpacity style={styles.addButton} onPress={() => addTimer('stopwatch')}>
+        <TouchableOpacity style={styles.addButtonChrono} onPress={() => addTimer('stopwatch')}>
           <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />
           {/* Logo + de FA5 */}
           <Text style={styles.buttonText}>Ajouter un chrono</Text>
@@ -91,23 +91,29 @@ const styles = StyleSheet.create({
   },
   addButton: {
     flexDirection: 'row',
+    backgroundColor :"#88B7B6",
     alignItems: 'center',
-    backgroundColor: '#88B7B6',
-    borderRadius: 35,
-    width: 140,
+    borderRadius: 50,
     height: 40,
-    margin: 5,
+    width : 173,
+    marginTop: 40,
+    marginBottom: 20,
+    marginRight:40,
   },
-  timerContainer:{
-    marginTop:20,
+  addButtonChrono: {
+    flexDirection: 'row',
+    backgroundColor :"#88B7B6",
+    alignItems: 'center',
+    borderRadius: 50,
+    height: 40,
+    width : 173,
+    marginTop: 40,
+    marginBottom: 20,
+    marginRight:10,
   },
   fabtn: {
     marginLeft: 5,
     marginRight: 5,
-    height: 25,
-  },
-  buttonText: {
-    fontSize: 10,
   },
   timerName: {
     fontSize: 16,
