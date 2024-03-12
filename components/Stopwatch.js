@@ -134,3 +134,4 @@ const styles = StyleSheet.create({
 
 // Exportation du composant Stopwatch
 export default Stopwatch;
+
