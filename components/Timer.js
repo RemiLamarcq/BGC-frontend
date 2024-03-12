@@ -114,5 +114,5 @@ const styles = StyleSheet.create({
     color: "#423D3D",
   },
 });
-
+  
 export default Timer;
