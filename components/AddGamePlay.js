@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Alert, Platform, Image } from 'react-native';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
@@ -6,18 +6,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
 import { transformInDate, checkFormatDate } from '../modules/formatDate';
+import { useNavigation } from '@react-navigation/native';
+import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
+import {
+    setSelectedGameName,
+    toggleIsInterrupted,
+    setStartDate,
+    setEndDate,
+    setLocation,
+    setNewPlayer,
+    removePlayer,
+    toggleIsWinner,
+    setTeam,
+    setCharacter,
+    setScore,
+    resetPlayersInfos,
+    setSelectedPhoto,
+    setComment,
+} from '../reducers/addGamePlayInfos';
 import addGamePlayVisible from '../reducers/addGamePlayVisible';
 import { setSelectedGameName } from '../reducers/selectedGameName';
-import selectedGameName from '../reducers/selectedGameName';
 
-export default function AddGamePlay({toggleModalAddGamePlay}) {
+export default function AddGamePlay() {
+
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     const token = useSelector((state) => state.user.value.token);
-
     const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
-    const selectedGameName = useSelector(state => state.selectedGameName.value);
-
-    const dispatch = useDispatch();
+    const selectedGame = useSelector(state => state.selectedGame.value);
+    const gamePlayInfos = useSelector(state => state.addGamePlayInfos.value);
+    const { selectedGameName, isInterrupted, date, location, players, photosUri, comment } = gamePlayInfos;
+    const defaultGameName = useSelector(state => state.selectedGameName.value);
 
     // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
     // pour l'affichage dans la dropdown et pour filtrer les View dans les players
@@ -27,24 +47,12 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
     // Données formatées(noms des jeux / friends) pour l'affichage du contenu des dropdowns
     const formattedGameNames = [];
     const formattedFriendsList = [];
-    // Nom du jeu sélectionné par l'user
-    const [chosenGameName, setChosenGameName] = useState(null);
     // Objet jeu sélectionné par l'user
-    const chosenGame = gameList.find(game => game.name === chosenGameName);
-    // Booléen indiquant si la partie est interrompue(true) ou terminée (false)
-    const [isInterrupted, setIsInterrupted] = useState(false);
-    // Stocke l'heure de début et de fin de la partie
-    const [date, setDate] = useState({ startDate: null, endDate: null });
-    // Lieu où est joué la partie
-    const [location, setLocation] = useState('');
+    const chosenGame = gameList.find(game => game.name === selectedGameName);
     // Nom du nouveau joueur à enregistrer dans la friendsList
     const [newFriend, setNewFriend] = useState('');
     // Booléen déclenchant le fetch GET de la liste des friends lorsque celle-ci change
     const [friendRegistered, toggleFriendRegistered] = useState(false);
-    // Liste des joueurs de la partie et leurs infos(définies dans handleAddPlayer)
-    const [players, setPlayers] = useState([]);
-    // Commentaires à enregistrer avec la partie
-    const [comment, setComment] = useState('');
     //Affiche des messages lorsque certains champs entrés dans le formulaire sont incomplets
     const [invalidField, setInvalidField] = useState({
         globalMessage: false,
@@ -61,7 +69,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         fetch(`https://bgc-backend.vercel.app/games/allNames/${token}`)
         .then(response => response.json())
         .then(data => {
-            setGameList(data.gameData);
+            data.result && setGameList(data.gameData);
         });
     }, [addGamePlayVisible]);
 
@@ -75,8 +83,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
     }, [friendRegistered])
 
     // Formate les noms d'un jeu sous forme d'objet avec un id et un title(nécessaire pour le dropdown)
-    if (gameList.length > 0) {
-        for (let i = 0; i < gameList.length; i++) {
+    if (gameList?.length > 0) {
+        for (let i = 0; i < gameList?.length; i++) {
             let newObj = {
                 id: i + 1,
                 title: gameList[i].name
@@ -110,8 +118,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
         // Limiter la longueur du texte à 10 caractères (JJ/MM/AAAA)
         if (text.length <= 10) {
-            !isEndDate && setDate({ ...date, startDate: text });
-            isEndDate && setDate({ ...date, endDate: text })
+            !isEndDate && dispatch(setStartDate(text));
+            isEndDate && dispatch(setEndDate(text));
         }
     };
  
@@ -136,44 +144,18 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
     //Modifie l'état players en ajoutant un joueur
     function handleAddPlayer(friendName){
-        setPlayers([...players, {
+        dispatch(setNewPlayer({
             friendName,
             isWinner: false,
             team: '',
             character: '',
             score: '',
-        }]);
+        }));
     }
 
-    //Au clic du RadioButton vainqueur, modifie l'état players pour stocker le champ isWinner du joueur concerné
-    function handleIsWinner(i){
-        players[i] = { ...players[i], isWinner: !players[i].isWinner }
-        setPlayers([...players])
-    }
-
-    //Modifie l'état players pour stocker le nom de l'équipe du joueur concerné
-    function handleTeam(i, team){
-        players[i] = { ...players[i], team }
-        setPlayers([...players])
-    }
-
-    //Modifie l'état players pour stocker le nom du personnage utilisé par le joueur concerné
-    function handleCharacter(i, character){
-        players[i] = { ...players[i], character }
-        setPlayers([...players])
-    }
-
-    //Modifie l'état players pour stocker le score du joueur concerné
-    function handleScore(i, score){
-        players[i] = { ...players[i], score }
-        setPlayers([...players])
-    }
-
-    //Supprime un joueur de la partie
-    function handleRemovePlayer(player){
-        setPlayers(
-            players.filter(obj => obj.friendName !== player.friendName)
-        );
+    function handleNavigation(photoNumber){
+        dispatch(setSelectedPhoto(photoNumber));
+        navigation.navigate('Snap');
     }
 
     //Enregistre la partie
@@ -181,13 +163,13 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
         //Si un des champs suivants sont manquants(nom du jeu, date et 1 joueur minimum obligatoire), affiche un message d'erreur
         if(
-            !chosenGameName ||
+            !selectedGameName ||
             !checkFormatDate(date.startDate) || 
             !checkFormatDate(date.endDate) ||
             players.length === 0)
         {
             invalidField.globalMessage = true;
-            !chosenGameName ? (invalidField.gameMissing = true) : (invalidField.gameMissing = false);
+            !selectedGameName ? (invalidField.gameMissing = true) : (invalidField.gameMissing = false);
             (!checkFormatDate(date.startDate) || !checkFormatDate(date.endDate)) ?
                 (invalidField.invalidDate = true)
             :
@@ -201,7 +183,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     token,
-                    name: chosenGameName,
+                    name: selectedGameName,
                     startDate: transformInDate(date.startDate),
                     endDate: transformInDate(date.endDate),
                     isInterrupted,
@@ -212,8 +194,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                 }),
             })
             .then(result => result.json())
-            .then(data => data.result ? toggleModalAddGamePlay() : Alert(data.error))
-            .catch(error => Alert(error));
+            .then(data => data.result ? dispatch(setAddGamePlayVisible(!addGamePlayVisible)) : Alert.alert(data.error))
+            .catch(error => Alert.alert(error));
 
         }
     }
@@ -229,14 +211,14 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                             <RadioButton
                                 value="winner"
                                 status={isWinner ? 'checked' : 'unchecked'}
-                                onPress={() => handleIsWinner(i)}
+                                onPress={() => dispatch(toggleIsWinner(i))}
                                 style={styles.radioBtn}
                                 color="#0A3332"
                             />
                         </View>
                         <Text>Vainqueur</Text>
                     </View>
-                    <TouchableOpacity onPress={() => handleRemovePlayer(player)} style={styles.closeBtn} >
+                    <TouchableOpacity onPress={() => dispatch(removePlayer(i))} style={styles.closeBtn} >
                         <FontAwesome name="close" color="#0A3332" backgroundColor="#88B7B6" size={20} />
                     </TouchableOpacity>
                 </View>
@@ -247,7 +229,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         placeholder="Equipe"
                         placeholderTextColor= 'grey'
                         inputMode='text'
-                        onChangeText={value => handleTeam(i, value)}
+                        onChangeText={value => dispatch(setTeam({ index: i, team: value }))}
                         value={team}
                     />
                     }
@@ -257,7 +239,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         placeholder="Personnage"
                         placeholderTextColor= 'grey'
                         inputMode='text'
-                        onChangeText={value => handleCharacter(i, value)}
+                        onChangeText={value => dispatch(setCharacter({ index: i, character: value }))}
                         value={character}
                     />
                     }
@@ -267,7 +249,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         placeholder="Score"
                         placeholderTextColor= 'grey'
                         inputMode='text'
-                        onChangeText={value => handleScore(i, value)}
+                        onChangeText={value => dispatch(setScore({ index: i, score: value }))}
                         value={score}
                     />
                     }
@@ -278,9 +260,9 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
     useEffect(() => {
         if (formattedGameNames) {
-            console.log(selectedGameName);
+            // console.log(selectedGameName);
              // Le titre que vous cherchez
-            const titreRecherche = selectedGameName;
+            const titreRecherche = defaultGameName;
 
             // Recherche de l'objet correspondant
             const objetTrouve = formattedGameNames.find(obj => obj.title === titreRecherche);
@@ -300,19 +282,28 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
 
 
     return(
-            <AutocompleteDropdownContextProvider>
+        <AutocompleteDropdownContextProvider>
+            {/* <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}> */}
                 <ScrollView contentContainerStyle={ styles.scrollView } >
                     <View style={styles.container}>
                         <View style={styles.topContainer} >
-                            <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalAddGamePlay}>
+                            <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(setAddGamePlayVisible(!addGamePlayVisible))}>
                                 <FontAwesome name="arrow-left" color="#0A3332" backgroundColor="#88B7B6" size={20} />
                             </TouchableOpacity>
                             <Text style={ styles.title }>Ajouter une partie</Text>
                         </View>
                         <AutocompleteDropdown
                             dataSet={formattedGameNames}
-                            onSelectItem={item => item && setChosenGameName(item.title)}
-                            onClear={() => setChosenGameName(null)}
+                            onSelectItem={item => {
+                                if(item){
+                                    dispatch(setSelectedGameName(item.title));
+                                    dispatch(resetPlayersInfos());
+                                }
+                            }}
+                            onClear={() => {
+                                dispatch(setSelectedGameName(null));
+                                dispatch(resetPlayersInfos());
+                            }}
                             textInputProps={{
                                 placeholder: 'Rechercher un jeu',
                                 placeholderTextColor: 'grey',
@@ -335,7 +326,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                                 <RadioButton
                                     value="interrupt"
                                     status={isInterrupted ? 'checked' : 'unchecked'}
-                                    onPress={() => setIsInterrupted(!isInterrupted)}
+                                    onPress={() => dispatch(toggleIsInterrupted())}
                                     style={styles.radioBtn}
                                     color="#0A3332"
                                 />
@@ -366,7 +357,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                             placeholder="Lieu"
                             placeholderTextColor= 'grey'
                             inputMode='text'
-                            onChangeText={value => setLocation(value)}
+                            onChangeText={value => dispatch(setLocation(value))}
                             value={location}
                         />
                         <View style={styles.addPlayerCtn}>
@@ -407,14 +398,26 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         { invalidField.playerMissing && <Text style={styles.invalidField}>Sélectionner un joueur</Text> }
                         {playersJSX}
                         <View style={styles.photosCtn} >
-                            <TouchableOpacity style={styles.photo}>
-                                <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                            <TouchableOpacity style={styles.photoBtn} onPress={() => handleNavigation(0)} >
+                                {photosUri[0] ?
+                                    <Image source={{ uri: photosUri[0] }} style={styles.photo} />
+                                :
+                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                                }
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.photo}>
-                                <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                            <TouchableOpacity style={styles.photoBtn} onPress={() => handleNavigation(1)} >
+                                {photosUri[1] ?
+                                    <Image source={{ uri: photosUri[1] }} style={styles.photo} />
+                                :
+                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                                }
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.photo}>
-                                <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                            <TouchableOpacity style={styles.photoBtn} onPress={() => handleNavigation(2)} >
+                                {photosUri[2] ?
+                                    <Image source={{ uri: photosUri[2] }} style={styles.photo} />
+                                :
+                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                                }
                             </TouchableOpacity>
                         </View>
                         <View style={styles.commentCtn}>
@@ -423,7 +426,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                                 placeholder="Commentaire"
                                 placeholderTextColor= 'grey'
                                 inputMode='text'
-                                onChangeText={value => setComment(value)}
+                                onChangeText={value => dispatch(setComment(value))}
                                 value={comment}
                             />
                             <FontAwesome name="pencil" color="#0A3332" size={20} style={{ position: "absolute", left: 10 }} />                    
@@ -434,7 +437,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
-            </AutocompleteDropdownContextProvider>
+            {/* </KeyboardAvoidingView> */}
+        </AutocompleteDropdownContextProvider>
     );
 
 }
@@ -443,12 +447,11 @@ const styles = StyleSheet.create({
     scrollView: {
         flexGrow: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     container: {
         width: '100%',
-        minHeight:'95%',
+        marginTop: 50,
         backgroundColor: '#F2F4F1',
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
@@ -564,13 +567,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
-    photo: {
+    photoBtn: {
         width: 80,
         height: 80,
         backgroundColor: "#88B7B6",
         borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    photo: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 50,
     },
     commentCtn: {
         justifyContent: 'center',
