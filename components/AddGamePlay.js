@@ -25,7 +25,7 @@ import {
     setComment,
 } from '../reducers/addGamePlayInfos';
 import addGamePlayVisible from '../reducers/addGamePlayVisible';
-import { setSelectedGameName } from '../reducers/selectedGameName';
+//import { setSelectedGameName } from '../reducers/selectedGameName';
 
 export default function AddGamePlay() {
 
