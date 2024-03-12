@@ -2,18 +2,22 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Keyboa
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
 import { transformInDate, checkFormatDate } from '../modules/formatDate';
 import addGamePlayVisible from '../reducers/addGamePlayVisible';
+import { setSelectedGameName } from '../reducers/selectedGameName';
+import selectedGameName from '../reducers/selectedGameName';
 
 export default function AddGamePlay({toggleModalAddGamePlay}) {
 
     const token = useSelector((state) => state.user.value.token);
 
     const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
-    const selectedGame = useSelector(state => state.selectedGame.value);
+    const selectedGameName = useSelector(state => state.selectedGameName.value);
+
+    const dispatch = useDispatch();
 
     // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
     // pour l'affichage dans la dropdown et pour filtrer les View dans les players
@@ -49,7 +53,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         playerMissing: false
     });
 
-    console.log(players)
+    const [idInitialValue, setIdInitialValue] = useState(0);
+
 
     // A l'initialisation, récupère tous les jeux de la BDD sous forme {name, isTeam, isCharacter, isScore}
     useEffect(() => {
@@ -59,8 +64,6 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
             setGameList(data.gameData);
         });
     }, [addGamePlayVisible]);
-
-    console.log(gameList);
 
     // A l'initialisation et à chaque nouvel enregistrement d'un ami, récupère tous les noms des amis
     useEffect(() => {
@@ -111,7 +114,7 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
             isEndDate && setDate({ ...date, endDate: text })
         }
     };
-
+ 
     //Ajout d'un nouveau joueur à la liste d'amis
     function handleAddFriend(){
         if(newFriend === ''){
@@ -273,6 +276,27 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
         );
     })
 
+    useEffect(() => {
+        if (formattedGameNames) {
+            console.log(selectedGameName);
+             // Le titre que vous cherchez
+            const titreRecherche = selectedGameName;
+
+            // Recherche de l'objet correspondant
+            const objetTrouve = formattedGameNames.find(obj => obj.title === titreRecherche);
+
+            // Extraction de l'id si l'objet est trouvé, sinon null
+            const idTrouve = objetTrouve ? objetTrouve.id : null;
+
+            console.log("ID correspondant :", idTrouve);
+
+            setIdInitialValue(idTrouve);
+
+        }
+      }, [formattedGameNames]);
+
+        let initialValue = idInitialValue;
+    
 
 
     return(
@@ -302,6 +326,8 @@ export default function AddGamePlay({toggleModalAddGamePlay}) {
                                 borderRadius: 25,
                                 padding: 3,
                             }}
+                            initialValue={{id: initialValue}}
+
                         />
                         { invalidField.gameMissing && <Text style={styles.invalidField}>Sélectionner un jeu</Text> }
                         <View style={styles.radioBtnBloc}>

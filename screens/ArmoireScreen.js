@@ -8,19 +8,20 @@ import FicheGame from '../components/FicheGame';
 import AddGame from '../components/AddGame';
 import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
-import { setSelectedGame } from '../reducers/selectedGame';
-import selectedGame from '../reducers/selectedGame';
+import { setSelectedGameName } from '../reducers/selectedGameName';
+import selectedGameName from '../reducers/selectedGameName';
 export default function ArmoireScreen({navigation}) {
-
-  const dispatch = useDispatch();
-  const selectedGame = useSelector(state => state.selectedGame.value);
 
   const [gamesData, setGamesData] = useState([]);
   const [initialGames, setInitialGames] = useState([])
   const token = useSelector(state => state.user.value.token);
   const [isVisible, setIsVisible] = useState(false);
   const [addGameIsVisible, setAddGameIsVisible] = useState(false);
+  const [selectedGame, setSelectedGame] = useState(null);
   // console.log(token)
+
+  const dispatch = useDispatch();
+  const selectedGameName = useSelector(state => state.selectedGameName.value);
   
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
@@ -75,10 +76,17 @@ export default function ArmoireScreen({navigation}) {
     setAddGameIsVisible(!addGameIsVisible);
   }  
 
+  useEffect(() => {
+    if (selectedGame) {
+      dispatch(setSelectedGameName(selectedGame.name));
+      console.log(selectedGame.name);
+    }
+  }, [selectedGame]);
+
   const toggleModalVisibility = (gameData) => {
     setIsVisible(!isVisible);
     if (!isVisible) {
-      dispatch(setSelectedGame(gameData));
+      setSelectedGame(gameData);
     }
     // console.log("Selected game:", gameData);
   };
