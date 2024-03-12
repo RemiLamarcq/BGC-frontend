@@ -19,12 +19,9 @@ export default function CahierScreen() {
   const [gamePlays, setGamePlays] = useState([]);
   // Valeur du champ de l'input de recherche par jeu
   const [gamePlaysFilter, setGamePlaysFilter] = useState('');
-  // Contrôle la visibilité de la modale permettant d'ajouter une partie
-  // const [addGamePlayVisible, setAddGamePlayVisible] = useState(false);
-  // Contrôle la visibilité de la modale permettant de voir la fiche d'une partie
-  const [gamePlaySheetVisible, setGamePlaySheetVisible] = useState(false);
 
   const dispatch = useDispatch();
+    // Contrôle la visibilité de la modale permettant d'ajouter une partie
   const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
 
   /* Récupère l'ensemble des parties du user à l'initialisation et à chaque fermeture des modales 
@@ -54,10 +51,6 @@ export default function CahierScreen() {
       });
   }, [addGamePlayVisible, isFicheGamePlayVisible]); 
 
-  const toggleModalAddGamePlay = () => {
-    dispatch(setAddGamePlayVisible(!addGamePlayVisible));
-  }
-
   // Fonction qui permet de filtrer l'affichage des parties en fonction du nom du jeu inscrit dans la barre de recherche
   const handleGamePlaysFilter = (value) => {
     setGamePlaysFilter(value);
@@ -84,7 +77,6 @@ export default function CahierScreen() {
         showMeeple={true} 
         showSearchBar={true} 
         isInNotebook={true}
-        toggleModalAddGamePlay={toggleModalAddGamePlay}
         handleGamePlaysFilter={handleGamePlaysFilter}
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -95,7 +87,7 @@ export default function CahierScreen() {
             (<View>
               <Text style={styles.defaultTxt}>Aucune parties enregistrées</Text>
               <View style={styles.bigAddGamePlayCtn}>
-                <TouchableOpacity style={styles.bigPlusButton} onPress={toggleModalAddGamePlay}>
+                <TouchableOpacity style={styles.bigPlusButton} onPress={ () => dispatch(setAddGamePlayVisible(!addGamePlayVisible)) }>
                   <FontAwesome name="plus" size={40} color="#F2F4F1" backgroundColor="#423D3D" style={styles.bigAddIcon} />
                 </TouchableOpacity>
                 <Text style={styles.bigAddGamePlayTxt}>Ajouter une partie</Text>
@@ -104,7 +96,7 @@ export default function CahierScreen() {
           }
         </View>
         <Modal visible={addGamePlayVisible} animationType="slide" transparent={false}>
-            <AddGamePlay toggleModalAddGamePlay={toggleModalAddGamePlay}/>
+            <AddGamePlay />
         </Modal>
         <Modal visible={isFicheGamePlayVisible} animationType='slide' transparent={false}>
             <FicheGamePlay />

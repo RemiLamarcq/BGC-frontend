@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../reducers/user';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 
 //Composant enfant de AccessoiresScreen.js
 
@@ -17,7 +18,6 @@ function Header({
   showSearchBar, 
   showMeeple, 
   toggleModalAddGame, 
-  toggleModalAddGamePlay, 
   onSearchGameChange, 
   handleGamePlaysFilter,
   isInNotebook, 
@@ -27,6 +27,7 @@ function Header({
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
+    const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
     const [searchGame, setSearchGame] = useState('');
     const [searchGamePlay, setSearchGamePlay] = useState('');
     const handleLogout = () => {
@@ -84,7 +85,7 @@ function Header({
                 <Text style={styles.gameCounter}>{initialGames.length} jeux</Text>
             </View>
           )}
-          <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : toggleModalAddGamePlay } style={styles.buttonAddGame}>
+          <TouchableOpacity onPress={ !isInNotebook ? toggleModalAddGame : () => dispatch(setAddGamePlayVisible(!addGamePlayVisible)) } style={styles.buttonAddGame}>
             <View style={styles.plusButton}>
               <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
             </View>
