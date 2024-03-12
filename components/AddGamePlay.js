@@ -24,6 +24,8 @@ import {
     setSelectedPhoto,
     setComment,
 } from '../reducers/addGamePlayInfos';
+import addGamePlayVisible from '../reducers/addGamePlayVisible';
+import { setSelectedGameName } from '../reducers/selectedGameName';
 
 export default function AddGamePlay() {
 
@@ -35,6 +37,7 @@ export default function AddGamePlay() {
     const selectedGame = useSelector(state => state.selectedGame.value);
     const gamePlayInfos = useSelector(state => state.addGamePlayInfos.value);
     const { selectedGameName, isInterrupted, date, location, players, photosUri, comment } = gamePlayInfos;
+    const defaultGameName = useSelector(state => state.selectedGameName.value);
 
     // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
     // pour l'affichage dans la dropdown et pour filtrer les View dans les players
@@ -58,7 +61,8 @@ export default function AddGamePlay() {
         playerMissing: false
     });
 
-    // console.log(gamePlayInfos);
+    const [idInitialValue, setIdInitialValue] = useState(0);
+
 
     // A l'initialisation, récupère tous les jeux de la BDD sous forme {name, isTeam, isCharacter, isScore}
     useEffect(() => {
@@ -118,7 +122,7 @@ export default function AddGamePlay() {
             isEndDate && dispatch(setEndDate(text));
         }
     };
-
+ 
     //Ajout d'un nouveau joueur à la liste d'amis
     function handleAddFriend(){
         if(newFriend === ''){
@@ -254,6 +258,27 @@ export default function AddGamePlay() {
         );
     })
 
+    useEffect(() => {
+        if (formattedGameNames) {
+            // console.log(selectedGameName);
+             // Le titre que vous cherchez
+            const titreRecherche = defaultGameName;
+
+            // Recherche de l'objet correspondant
+            const objetTrouve = formattedGameNames.find(obj => obj.title === titreRecherche);
+
+            // Extraction de l'id si l'objet est trouvé, sinon null
+            const idTrouve = objetTrouve ? objetTrouve.id : null;
+
+            console.log("ID correspondant :", idTrouve);
+
+            setIdInitialValue(idTrouve);
+
+        }
+      }, [formattedGameNames]);
+
+        let initialValue = idInitialValue;
+    
 
 
     return(
@@ -292,6 +317,8 @@ export default function AddGamePlay() {
                                 borderRadius: 25,
                                 padding: 3,
                             }}
+                            initialValue={{id: initialValue}}
+
                         />
                         { invalidField.gameMissing && <Text style={styles.invalidField}>Sélectionner un jeu</Text> }
                         <View style={styles.radioBtnBloc}>

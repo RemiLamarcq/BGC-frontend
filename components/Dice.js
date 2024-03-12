@@ -63,7 +63,7 @@ function Dice() {
             <Text style={styles.buttonText}>Ajouter un dé</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={rollAllDice} style={styles.rollAllButton}>
-            <FontAwesome5 name="redo-alt" size={24} color="#423D3D" />
+            <FontAwesome5 style={styles.fabtn} name="redo-alt" size={24} color="#423D3D" />
             <Text style={styles.rollAllButtonText}>Lancer les dés</Text>
           </TouchableOpacity>
         </View>
@@ -144,15 +144,19 @@ const styles = StyleSheet.create({
   },
   addButton: {
     flexDirection: 'row',
+    backgroundColor :"#88B7B6",
     alignItems: 'center',
-    backgroundColor: '#88B7B6',
-    borderRadius: 35,
-    width: 110,
+    borderRadius: 50,
     height: 40,
+    width : 150,
+    marginTop: 60,
+    margin : 20,
+    marginBottom: 20,
+    alignSelf: 'flex-start',
   },
   addDiceSection:{
-    marginTop:-20,
-    marginBottom:30,
+    marginTop:-30,
+    marginBottom:10,
   },
   cardContainer: {
     height: 120,
@@ -176,9 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', 
     width: '70%', 
   },
-  buttonText: {
-    fontSize: 10,
-  },
+  
   resultContainer: {
     height: 80,
     padding: 12,
@@ -210,17 +212,19 @@ const styles = StyleSheet.create({
   },
   rollAllButton: {
     flexDirection: 'row',
+    backgroundColor :"#88B7B6",
     alignItems: 'center',
-    backgroundColor: '#88B7B6',
-    borderRadius: 35,
-    width: 110,
+    borderRadius: 50,
     height: 40,
+    width : 150,
+    marginTop: 60,
+    margin : 20,
+    marginBottom: 20,
+    alignSelf: 'flex-start',
   },
   rollAllButtonText: {
     color: '#fff',
-    fontSize: 10,
-    marginLeft: 5,
-    marginRight: 5,
+    margin:3,
   },
   buttonAddRoll: {
     flexDirection: 'row',

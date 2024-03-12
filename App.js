@@ -16,12 +16,12 @@ import login from './reducers/login';
 import ficheGamePlay from './reducers/ficheGamePlay';
 import addGamePlayVisible from './reducers/addGamePlayVisible';
 import addGamePlayInfos from './reducers/addGamePlayInfos';
-import selectedGame from './reducers/selectedGame';
+import selectedGameName from './reducers/selectedGameName';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const store = configureStore({
-  reducer: {user, login, addGamePlayVisible, addGamePlayInfos, selectedGame, ficheGamePlay},
+  reducer: {user, login, addGamePlayVisible, addGamePlayInfos, ficheGamePlay, selectedGameName},
  });
 
 
