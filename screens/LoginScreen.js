@@ -12,7 +12,7 @@ export default function LoginScreen({navigation}) {
     // console.log(navigation)
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-      <Signin navigation={navigation}/>
+        <Signin navigation={navigation}/>
       </TouchableWithoutFeedback>
     )
     
@@ -20,8 +20,8 @@ export default function LoginScreen({navigation}) {
 
   else if (login === 'Signup') {
     return (      
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-      <Signup navigation={navigation}/>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
+        <Signup navigation={navigation}/>
       </TouchableWithoutFeedback>
     )
   }

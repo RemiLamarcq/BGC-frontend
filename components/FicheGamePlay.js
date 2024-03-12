@@ -48,6 +48,7 @@ export default function FicheGamePlay(){
                     </View>
                 </View>
                 <View style={styles.playerCtnBottom}>
+                    { isTeam &&
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Equipe"
@@ -56,6 +57,8 @@ export default function FicheGamePlay(){
                         // onChangeText={value => handleTeam(i, value)}
                         value={team}
                     />
+                    }
+                    { isCharacter &&
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Personnage"
@@ -64,6 +67,8 @@ export default function FicheGamePlay(){
                         // onChangeText={value => handleCharacter(i, value)}
                         value={character}
                     />
+                    }
+                    { isScore &&
                     <TextInput
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Score"
@@ -72,6 +77,7 @@ export default function FicheGamePlay(){
                         // onChangeText={value => handleScore(i, value)}
                         value={score}
                     />
+                    }
                 </View>
             </View>
         );
@@ -121,12 +127,11 @@ const styles = StyleSheet.create({
     scrollView: {
         flexGrow: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     container: {
         width: '100%',
-        minHeight:'95%',
+        marginTop: 50,
         backgroundColor: '#F2F4F1',
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
