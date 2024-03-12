@@ -24,8 +24,6 @@ import {
     setSelectedPhoto,
     setComment,
 } from '../reducers/addGamePlayInfos';
-import addGamePlayVisible from '../reducers/addGamePlayVisible';
-//import { setSelectedGameName } from '../reducers/selectedGameName';
 
 export default function AddGamePlay() {
 
@@ -34,10 +32,9 @@ export default function AddGamePlay() {
 
     const token = useSelector((state) => state.user.value.token);
     const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
-    const selectedGame = useSelector(state => state.selectedGame.value);
     const gamePlayInfos = useSelector(state => state.addGamePlayInfos.value);
     const { selectedGameName, isInterrupted, date, location, players, photosUri, comment } = gamePlayInfos;
-    const defaultGameName = useSelector(state => state.selectedGameName.value);
+    const defaultGameName = useSelector(state => state.defaultGameName.value);
 
     // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
     // pour l'affichage dans la dropdown et pour filtrer les View dans les players
