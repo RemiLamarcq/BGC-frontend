@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button, Image, Dimensions, SafeAreaView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,8 @@ import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
+import { PieChart } from "react-native-chart-kit";
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
 export default function StatScreen() {
 
@@ -22,6 +24,7 @@ export default function StatScreen() {
   const [gameList, setGameList] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const [friendStats, setFriendStats] = useState({})
+  const [statsByTypes, setStatsByTypes] = useState([]);
   const formattedGameList = [];
   let topPlayersInfos;
   let formattedFriendsList = [];
@@ -40,8 +43,36 @@ export default function StatScreen() {
       .then(response => response.json())
       .then(data => {
         setFriendsList(data.friendsName)
+      });
+      fetch(`https://bgc-backend.vercel.app/stats/statsByTypes/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        const filteredEntries = Object.entries(data.percentages).filter(([_, valeur]) => valeur !== 0).map(([key,value]) => [key, Math.round(value)]).sort((a, b) => b[1] - a[1]);
+        const sum = filteredEntries.reduce((acc, [, value]) => acc + value, 0);
+        const adjustedData = filteredEntries.map(([name, value]) => [name, Math.round((value / sum) * 100)]);
+        const filteredObject = Object.fromEntries(adjustedData);
+        setStatsByTypes(filteredObject)
       })
   }, [isFocused]); 
+
+  // Initialisation de la valeur de la composante rouge (R)
+  let redValue = 131;
+  let greenValue = 157;
+  let blueValue = 156;
+  let alphaValue = 1;
+  const dataTypesChart  = Object.entries(statsByTypes).map(([name, valeur]) => {
+    redValue -=30;
+    alphaValue -=0.15;
+    greenValue +=10;
+    blueValue +=10;
+    return{
+    name,
+    valeur,
+    color:`rgba(${redValue}, ${greenValue}, ${blueValue}, ${alphaValue})`,
+    legendFontColor: "#423D3D",
+    legendFontSize: 10
+    }
+  });
 
   if (friendsList.length > 0) {
     for (let i = 0; i< friendsList.length; i++) {
@@ -212,6 +243,7 @@ export default function StatScreen() {
               </View>  
           </View> )}
           {!gameStats && (
+            <View style={styles.generalStatsContainer}>
             <View style={styles.infoStatsContainer}>
               <View style={styles.nbGamesInClosetContainer}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Nb de jeux dans l'armoire</Text>
@@ -235,7 +267,54 @@ export default function StatScreen() {
               <View style={styles.mostGamePlayed}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Jeu le plus joué</Text>
                 <Text>{generalStats.mostCommonGame}</Text>
-              </View>  
+              </View>
+            </View>
+              <View style={styles.pieChart}>
+                <SwiperFlatList showPagination paginationActiveColor={'#CDDCDB'}>
+                  <View style={styles.child}>
+                    <PieChart
+                    data={dataTypesChart}
+                    width={Dimensions.get('window').width}
+                    height={250}
+                    chartConfig={{
+                    backgroundColor: "#e26a00",
+                    backgroundGradientFrom: "#fb8c00",
+                    backgroundGradientTo: "#ffa726",
+                    decimalPlaces: 2, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    }}
+                    accessor={"valeur"}
+                    backgroundColor={"transparent"}
+                    paddingLeft={"15"}
+                    center={[0, 10]}
+                    absolute
+                    />
+                    <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Répartition des types de jeux dans l'armoire (en %)</Text>
+                  </View>
+                  <View style={styles.child}>
+                    <PieChart
+                    data={dataTypesChart}
+                    width={Dimensions.get('window').width}
+                    height={250}
+                    chartConfig={{
+                    backgroundColor: "#e26a00",
+                    backgroundGradientFrom: "#fb8c00",
+                    backgroundGradientTo: "#ffa726",
+                    decimalPlaces: 2, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    }}
+                    accessor={"valeur"}
+                    backgroundColor={"transparent"}
+                    paddingLeft={"15"}
+                    center={[0, 10]}
+                    absolute
+                    />
+                    <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Répartition des types de jeux dans l'armoire (en %)</Text>
+                  </View>
+                </SwiperFlatList> 
+              </View>
             </View>
           )}
           
@@ -331,10 +410,17 @@ const styles = StyleSheet.create({
   chessIcon: {
     borderRadius: 15,
   },
+  generalStatsContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   infoStatsContainer: {
     alignItems: 'center',
     marginTop: 50,
-    width: '80%'
+    width: '70%',
+  },
+  pieChart: {
+    height: 310
   },
   nbGamesInClosetContainer: {
     width: '100%',
