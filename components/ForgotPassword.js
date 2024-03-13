@@ -9,13 +9,30 @@ export default function ForgotPassword({toggleModalForgotPassword}) {
     const [codeNewPasswordModalVisible, setCodeNewPasswordModalVisible] = useState(false);
     const [error, setError] = useState('');
 
+    // const handleReset = () => {
+
+    //     console.log("Email:", email);
+        
+    //     fetch('https://bgc-backend.vercel.app/users/signin', {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ email }),
+    //     }).then(response => response.json())
+    //         .then(data => {
+    //           if(data.result) {
+    //             setEmail('');
+    //             toggleModalCodeNewPassword();
+
+    //           }else{
+    //             setError(data.error)
+    //           }
+    //         })
+    // };
+
+
     const toggleModalCodeNewPassword = () => {
         setCodeNewPasswordModalVisible(!codeNewPasswordModalVisible);
       }
-
-    const handleReset = () => {
-        toggleModalCodeNewPassword();
-    }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

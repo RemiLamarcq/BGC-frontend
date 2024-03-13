@@ -24,6 +24,7 @@ import {
     setSelectedPhoto,
     setComment,
 } from '../reducers/addGamePlayInfos';
+import { setDefaultGameName } from '../reducers/selectedGameName';
 
 export default function AddGamePlay() {
 
@@ -202,6 +203,12 @@ export default function AddGamePlay() {
             // .then(data => data.result ? dispatch(setAddGamePlayVisible(!addGamePlayVisible)) : Alert.alert(data.error))
             // .catch(error => Alert.alert(error));
         }
+        dispatch(setDefaultGameName(null));
+    }
+
+    const handleGoBack = () => {
+        dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+        dispatch(setDefaultGameName(null));
     }
 
     const playersJSX = players.map((player, i) => {
@@ -279,7 +286,7 @@ export default function AddGamePlay() {
             setIdInitialValue(idTrouve);
 
         }
-      }, [formattedGameNames]);
+      }, [formattedGameNames, addGamePlayVisible]);
 
         let initialValue = idInitialValue;
     
@@ -291,7 +298,7 @@ export default function AddGamePlay() {
                 <ScrollView contentContainerStyle={ styles.scrollView } >
                     <View style={styles.container}>
                         <View style={styles.topContainer} >
-                            <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(setAddGamePlayVisible(!addGamePlayVisible))}>
+                            <TouchableOpacity style={styles.goBackTouchable} onPress={handleGoBack}>
                                 <FontAwesome name="arrow-left" color="#0A3332" backgroundColor="#88B7B6" size={20} />
                             </TouchableOpacity>
                             <Text style={ styles.title }>Ajouter une partie</Text>
