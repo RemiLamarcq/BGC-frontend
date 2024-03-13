@@ -194,16 +194,25 @@ export default function AddGamePlay() {
                 comment,
             };
             formData.append('json', JSON.stringify(otherData));
-            //Envoi des données pour création de la nouvelle partie
+            console.log(formData);
+            // Envoi des données pour création de la nouvelle partie
             // fetch(`https://bgc-backend.vercel.app/gamePlays`, {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'multipart/form-data' },
-            //     body: formData,
-            // }).then(result => result.json())
-            // .then(data => data.result ? dispatch(setAddGamePlayVisible(!addGamePlayVisible)) : Alert.alert(data.error))
-            // .catch(error => Alert.alert(error));
+            fetch(`http://192.168.1.12:3000/gamePlays`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'multipart/form-data' },
+                body: formData,
+            })
+            .then(result => result.json())
+            .then(data => {
+                if(data.result){
+                    dispatch(setDefaultGameName(null));
+                    dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+                } else {
+                    Alert.alert(data.error);
+                }
+            })
+            .catch(error => Alert.alert(error));
         }
-        dispatch(setDefaultGameName(null));
     }
 
     const handleGoBack = () => {
