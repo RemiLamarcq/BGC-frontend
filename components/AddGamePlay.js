@@ -24,10 +24,6 @@ import {
     setSelectedPhoto,
     setComment,
 } from '../reducers/addGamePlayInfos';
-<<<<<<< HEAD
-import addGamePlayVisible from '../reducers/addGamePlayVisible';
-=======
->>>>>>> 8d32341a8b9c6aadee35a806f6cc7be4f99d53ed
 
 export default function AddGamePlay() {
 
