@@ -17,13 +17,21 @@ import ficheGamePlay from './reducers/ficheGamePlay';
 import addGamePlayVisible from './reducers/addGamePlayVisible';
 import addGamePlayInfos from './reducers/addGamePlayInfos';
 import defaultGameName from './reducers/selectedGameName';
+import cameraPermission from './reducers/cameraPermission';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const store = configureStore({
-  reducer: {user, login, addGamePlayVisible, addGamePlayInfos, ficheGamePlay, defaultGameName},
+  reducer: {
+    user,
+    login,
+    addGamePlayVisible,
+    addGamePlayInfos,
+    ficheGamePlay,
+    defaultGameName,
+    cameraPermission,
+  },
  });
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

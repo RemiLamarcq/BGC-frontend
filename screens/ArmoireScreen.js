@@ -9,6 +9,8 @@ import AddGame from '../components/AddGame';
 import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
 import { setDefaultGameName } from '../reducers/selectedGameName';
+import { setCameraPermission } from '../reducers/cameraPermission';
+
 export default function ArmoireScreen({navigation}) {
 
   const [gamesData, setGamesData] = useState([]);
@@ -21,6 +23,22 @@ export default function ArmoireScreen({navigation}) {
 
   const dispatch = useDispatch();
   
+  //Demande d'autorisation pour accéder à la caméra du téléphone
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      dispatch(setCameraPermission(status === 'granted'));
+      if(status !== 'granted'){
+        Alert.alert(
+          'Permission requise',
+          `Autoriser l'accès à la caméra pour pouvoir enregistrer des photos de parties`,
+          [{ text: 'OK' }],
+          { cancelable: false }
+        );
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/games/closet/${token}`)
       .then(response => response.json())
