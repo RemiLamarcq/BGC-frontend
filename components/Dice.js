@@ -17,11 +17,14 @@ function Dice() {
   useEffect(() => {
     const fetchDiceValues = async () => {
       try {
+        // Récupérer les valeurs des dés sauvegardées dans AsyncStorage
         const storedDiceValues = await AsyncStorage.getItem(STORAGE_KEY);
         if (storedDiceValues !== null) {
+          // Si des valeurs sont présentes, les définir comme état initial
           setDiceValues(JSON.parse(storedDiceValues));
         }
       } catch (error) {
+        // Gérer les erreurs de récupération des valeurs des dés
         console.error('Erreur lors du chargement des dés depuis AsyncStorage :', error);
       }
     };
@@ -32,57 +35,68 @@ function Dice() {
   // Mettre à jour les données des dés et les sauvegarder dans AsyncStorage
   const updateAndSaveDiceValues = (updatedDiceValues) => {
     setDiceValues(updatedDiceValues);
+    // Sauvegarder les nouvelles valeurs des dés dans AsyncStorage
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDiceValues))
       .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
   };
 
   // Fonction pour ajouter un nouveau dé
   const addDice = () => {
+    // Créer un nouveau dé avec des valeurs par défaut
     const defaultName = `Dé ${diceValues.length + 1}`;
     const newDice = { value: null, numFaces: 6, name: defaultName };
+    // Mettre à jour les valeurs des dés et les sauvegarder
     updateAndSaveDiceValues([...diceValues, newDice]);
   };
 
-// Fonction pour générer un nombre aléatoire positif au lancer de dés
-const generateRandomNumber = (index) => {
-  const newDiceValues = [...diceValues];
-  newDiceValues[index].value = Math.floor(Math.random() * newDiceValues[index].numFaces) + 1;
-  setDiceValues(newDiceValues);
-  // Sauvegarder les nouvelles valeurs des dés dans AsyncStorage
-  AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDiceValues))
-    .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
-};
+  // Fonction pour générer un nombre aléatoire positif au lancer de dés
+  const generateRandomNumber = (index) => {
+    const newDiceValues = [...diceValues];
+    // Générer un nombre aléatoire entre 1 et le nombre de faces du dé
+    newDiceValues[index].value = Math.floor(Math.random() * newDiceValues[index].numFaces) + 1;
+    // Mettre à jour les valeurs des dés et les sauvegarder
+    setDiceValues(newDiceValues);
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDiceValues))
+      .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
+  };
 
   // Fonction pour incrémenter le nombre de faces du dé
   const incrementFaces = (index) => {
     const newDiceValues = [...diceValues];
+    // Incrémenter le nombre de faces du dé tout en vérifiant la limite supérieure
     newDiceValues[index].numFaces = Math.min(newDiceValues[index].numFaces + 1, 100);
+    // Mettre à jour les valeurs des dés
     setDiceValues(newDiceValues);
   };
 
   // Fonction pour décrémenter le nombre de faces du dé
   const decrementFaces = (index) => {
     const newDiceValues = [...diceValues];
+    // Décrémenter le nombre de faces du dé tout en vérifiant la limite inférieure
     newDiceValues[index].numFaces = Math.max(newDiceValues[index].numFaces - 1, 1);
+    // Mettre à jour les valeurs des dés
     setDiceValues(newDiceValues);
   };
 
   // Fonction pour lancer tous les dés en même temps
-const rollAllDice = () => {
-  const newDiceValues = [...diceValues];
-  newDiceValues.forEach((die, index) => {
-    die.value = Math.floor(Math.random() * die.numFaces) + 1;
-  });
-  setDiceValues(newDiceValues);
-  // Sauvegarder les nouvelles valeurs des dés dans AsyncStorage
-  AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDiceValues))
-    .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
-};
+  const rollAllDice = () => {
+    const newDiceValues = [...diceValues];
+    // Générer une valeur aléatoire pour chaque dé
+    newDiceValues.forEach((die, index) => {
+      die.value = Math.floor(Math.random() * die.numFaces) + 1;
+    });
+    // Mettre à jour les valeurs des dés et les sauvegarder
+    setDiceValues(newDiceValues);
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDiceValues))
+      .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
+  };
 
   // Fonction pour supprimer un dé
   const removeDice = (index) => {
     const updatedDiceValues = [...diceValues];
+    // Supprimer le dé à l'index spécifié
     updatedDiceValues.splice(index, 1);
+    // Mettre à jour les valeurs des dés et les sauvegarder
     updateAndSaveDiceValues(updatedDiceValues);
   };
 
@@ -135,7 +149,7 @@ const rollAllDice = () => {
                     {die.value !== null ? (
                       <Text style={styles.resultNumber}>{die.value}</Text>
                     ) : (
-                      <Text style={styles.resultNumber}>dé</Text>
+                      <Text style={styles.resultNumber}>Dé</Text>
                     )}
                   </View>
                 </View>
@@ -217,22 +231,25 @@ const styles = StyleSheet.create({
   
   resultContainer: {
     height: 80,
-    padding: 12,
     backgroundColor: '#CDDCDB',
     borderRadius: 15,
     alignItems: 'center',
+   
   },
   resultCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 80,
+    height: 80,
+    borderRadius: 50,
     backgroundColor: '#F2F4F1',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
   },
   resultNumber: {
     color: '#423D3D',
-    fontSize: 18,
+    fontSize: 30,
+    fontWeight:'bold',
   },
   redo: {
     paddingLeft:100,
@@ -241,8 +258,8 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     position: 'absolute',
-    top: -5,
-    right: -5,
+    top: -1,
+    right: -1,
   },
   rollAllButton: {
     flexDirection: 'row',

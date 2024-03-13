@@ -132,7 +132,7 @@ export default function StatScreen() {
   return (
     <AutocompleteDropdownContextProvider>
     <View style={styles.container}>
-      <Header title="Stats" height={100}  showMeeple={true}/>
+      <Header title="Stats" height={100}  showMeeple={true} currentScreen="StatScreen"/>
       <View style={styles.statsContainer}>
         <View style={styles.gameOrPlayerButtons}>
           <TouchableOpacity style={styles.gameButton}>

@@ -78,6 +78,8 @@ export default function CahierScreen() {
         showSearchBar={true} 
         isInNotebook={true}
         handleGamePlaysFilter={handleGamePlaysFilter}
+        currentScreen="CahierScreen"
+
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View>

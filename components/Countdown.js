@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     position: 'absolute',
-    top: -5,
-    right: -5,
+    top: -1,
+    right: -1,
   },
  
 });

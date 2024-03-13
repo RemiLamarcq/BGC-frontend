@@ -57,7 +57,7 @@ export default function AccessoiresScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#F1F4F2' }}>
       {/* Affichage du composant Header avec le titre 'Accessoires' , une hauteur de 100, et le meeple à true pour logout depuis le screen */}
-      <Header title="Accessoires" height={100} showMeeple={true} />
+      <Header title="Accessoires" height={100} showMeeple={true} currentScreen="AccessoiresScreen"/>
       {/* Vue principale de la page */}
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {/* Vue contenant les zones cliquables avec une largeur de 90% de la vue parente */}

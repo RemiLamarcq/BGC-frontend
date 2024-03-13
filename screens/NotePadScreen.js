@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Alert } from 'react-native';
-import { Octicons } from '@expo/vector-icons';
 
 
 export default function StatScreen({navigation}) {
@@ -103,7 +102,11 @@ export default function StatScreen({navigation}) {
         <View style={styles.headLine}>
             <Text style={styles.title}>{savedNote.title}</Text>
             <TouchableOpacity style={styles.deleteTouchable} onPress={() => deleteNote(savedNote._id, savedNote.title)}>
-            <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
+            <FontAwesome 
+                            size={16}
+                            name="trash"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>
                     </TouchableOpacity>
         </View>
         <View style={styles.textContent}>
@@ -238,8 +241,13 @@ const styles = StyleSheet.create({
     },
   deleteTouchable:{
     position: 'absolute',
-    top: -5,
     right: -5,
+    height: 30,
+    width: 30,
+    borderRadius: 50,
+    backgroundColor: "#88B7B6",
+    justifyContent: 'center',
+    alignItems: 'center',
    },
   modalContainer: {
     flex: 1,

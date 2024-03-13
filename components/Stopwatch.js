@@ -123,12 +123,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
-    backgroundColor:  '#CDDCDB',
+    backgroundColor: '#CDDCDB',
   },
   removeButton: {
     position: 'absolute',
-    top: -5,
-    right: -5,
+    top: -1,
+    right: -1,
   },
 });
 

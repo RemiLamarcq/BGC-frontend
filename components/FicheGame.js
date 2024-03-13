@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import { addGamePlayVisible } from '../reducers/addGamePlayVisible';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export default function FicheGame({ toggleModalVisibility, selectedGame, handleDeleteGame, navigation }) {
 
@@ -85,15 +86,16 @@ const handleAddPlay = () => {
             <View style={styles.top}>
                 <View style={styles.topLeft}>
                     <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalVisibility}>
-                        <FontAwesome 
-                            name="arrow-left"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
+                    <AntDesign 
+                            name="arrowleft" 
+                            size={20} 
+                            color="#423D3D" />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.topRight}>
                     <TouchableOpacity style={styles.deleteTouchable} onPress={handleDeleteGame}>
                         <FontAwesome 
+                            size={16}
                             name="trash"
                             color="#0A3332" 
                             backgroundColor="#88B7B6"/>
@@ -117,18 +119,18 @@ const handleAddPlay = () => {
 
                 <View style={styles.typeAndDuration}>
                     <View style={styles.type}>
-                        <FontAwesome name="hashtag" style={{color: '#423D3D'}}/>
+                        <FontAwesome size={14} name="hashtag" style={{color: '#423D3D'}}/>
                         <Text style={{color: '#423D3D'}}> {selectedGame.gameType}</Text>
                     </View>
                     <View style={styles.durationAgain}>
-                        <AntDesign name="clockcircle" style={{color: '#423D3D'}}/>
+                        <AntDesign size={14} name="clockcircle" style={{color: '#423D3D'}}/>
                         <Text style={{color: '#423D3D'}}> {selectedGame.duration}</Text>
                     </View>
                 </View>
 
                 <View style={styles.nbPlayersAndStats}>
                     <View style={styles.nbPlayersAgain}>
-                        <FontAwesome name="users" style={{color: '#423D3D'}}/>
+                        <FontAwesome size={14} name="users" style={{color: '#423D3D'}}/>
                         <Text style={{color: '#423D3D'}}> {selectedGame.minPlayers} à {selectedGame.maxPlayers}</Text>
                     </View>
                     <TouchableOpacity style={styles.stats}>
@@ -138,7 +140,7 @@ const handleAddPlay = () => {
                 </View> 
 
                 <View style={styles.lastPlay}>
-                    <FontAwesome name="calendar" style={{color: '#423D3D'}}/>
+                    <FontAwesome size={14} name="calendar" style={{color: '#423D3D'}}/>
                     <Text style={{color: '#423D3D'}}> dernière partie : le 14/02/2024 à 15h</Text>
                 </View>
 
@@ -146,14 +148,14 @@ const handleAddPlay = () => {
                     <View style={styles.editStars}>
                       {editStars}
                       <TouchableOpacity style={styles.pencilEditStarsButton} onPress={handlePressPencil}>
-                        <FontAwesome name="pencil"  style={{color: '#0A3332'}}/>
+                        <FontAwesome size={14} name="pencil"  style={{color: '#0A3332'}}/>
                       </TouchableOpacity>
                       {vButton}
                     </View>
                     <View style={styles.AddPlay}>
                         <TouchableOpacity onPress={handleAddPlay} style={styles.buttonAddPlay}>
                             <View style={styles.plusButton}>
-                              <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
+                              <FontAwesome5 size={20} name="plus-circle" color="#423D3D" style={styles.AddIcon} />
                             </View>
                             <Text>Ajouter une partie</Text>
                       </TouchableOpacity>
@@ -312,10 +314,13 @@ const handleAddPlay = () => {
           
           plusButton: {
             borderRadius: 50,
-            marginRight: 5,
-            backgroundColor:'#423D3D',
-
+            marginRight: 1,
+            marginLeft:-1,
+            width:24,
+            height:24,
           },
-  
-  
+          AddIcon:{
+            marginLeft:3,
+            marginTop:1,
+          }
       })

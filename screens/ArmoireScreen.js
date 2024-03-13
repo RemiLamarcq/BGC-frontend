@@ -160,6 +160,7 @@ export default function ArmoireScreen({navigation}) {
       isInNotebook={false}
       showGameCounter={true}
       initialGames={initialGames}
+      currentScreen="ArmoireScreen"
     />
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
