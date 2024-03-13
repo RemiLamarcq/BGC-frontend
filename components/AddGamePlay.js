@@ -201,11 +201,18 @@ export default function AddGamePlay() {
                 method: 'POST',
                 headers: { 'Content-Type': 'multipart/form-data' },
                 body: formData,
-            }).then(result => result.json())
-            .then(data => data.result ? dispatch(setAddGamePlayVisible(!addGamePlayVisible)) : Alert.alert(data.error))
+            })
+            .then(result => result.json())
+            .then(data => {
+                if(data.result){
+                    dispatch(setDefaultGameName(null));
+                    dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+                } else {
+                    Alert.alert(data.error);
+                }
+            })
             .catch(error => Alert.alert(error));
         }
-        dispatch(setDefaultGameName(null));
     }
 
     const handleGoBack = () => {
