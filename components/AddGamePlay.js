@@ -207,8 +207,10 @@ export default function AddGamePlay() {
     }
 
     const handleGoBack = () => {
+        console.log(defaultGameName);
         dispatch(setAddGamePlayVisible(!addGamePlayVisible));
         dispatch(setDefaultGameName(null));
+        console.log(defaultGameName);
     }
 
     const playersJSX = players.map((player, i) => {

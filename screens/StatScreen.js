@@ -95,7 +95,8 @@ export default function StatScreen() {
 
 
   const handleClear = () => {
-    setGameStats(false) 
+    setGameStats(false);
+    setIdInitialValue(0); 
   }
 
   const handleClearFriends = () => {
@@ -109,7 +110,8 @@ export default function StatScreen() {
   }
 
   const handleUsersButton = () => {
-    setStatsByGame(false)
+    setStatsByGame(false);
+    setIdInitialValue(0);
   }
 
 
@@ -134,28 +136,35 @@ export default function StatScreen() {
     backgroundColorUsersButtonStyle = '#CDDCDB'
   }
 
-  // useEffect(() => {
-  //       // console.log(selectedGameName);
-  //        // Le titre que vous cherchez
-  //       const titreRecherche = defaultGameName;
+  useEffect(() => {
+    if(isFocused) {
+              // console.log(selectedGameName);
+         // Le titre que vous cherchez
+         const titreRecherche = defaultGameName;
 
-  //       // Recherche de l'objet correspondant
-  //       const objetTrouve = formattedGameList.find(obj => obj.title === titreRecherche);
+         // Recherche de l'objet correspondant
+         const objetTrouve = formattedGameList.find(obj => obj.title === titreRecherche);
+ 
+         // Extraction de l'id si l'objet est trouvé, sinon null
+         const idTrouve = objetTrouve ? objetTrouve.id : null;
+ 
+         // console.log("ID correspondant :", idTrouve);
+ 
+         setIdInitialValue(idTrouve);
+         console.log('okkkk');
+         console.log(defaultGameName);
+         console.log(idTrouve)
+         console.log(idInitialValue);
+    } else {
+      dispatch(setDefaultGameName(null));
+      setIdInitialValue(0);
+      console.log('lalalala');
+      console.log(defaultGameName);
+      console.log(idInitialValue);
+    }
 
-  //       // Extraction de l'id si l'objet est trouvé, sinon null
-  //       const idTrouve = objetTrouve ? objetTrouve.id : null;
+  }, [isFocused, defaultGameName]);
 
-  //       // console.log("ID correspondant :", idTrouve);
-
-  //       setIdInitialValue(idTrouve);
-
-  // }, [isFocused]);
-
-  // useEffect(() => {
-
-  //   dispatch(setDefaultGameName(null));
-
-  // }, [!isFocused]); 
 
   return (
     <AutocompleteDropdownContextProvider>
@@ -189,7 +198,7 @@ export default function StatScreen() {
                           width: 350
                           }}
                         ignoreAccents
-                        // initialValue={{id: idInitialValue}}
+                        initialValue={{id: idInitialValue}}
                     />
                   </View>
                   

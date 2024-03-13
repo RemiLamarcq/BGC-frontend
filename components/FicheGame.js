@@ -6,10 +6,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import { addGamePlayVisible } from '../reducers/addGamePlayVisible';
+import selectedGameName from '../reducers/selectedGameName';
+import { setDefaultGameName } from '../reducers/selectedGameName';
 
 export default function FicheGame({ toggleModalVisibility, selectedGame, handleDeleteGame, navigation }) {
 
 const dispatch = useDispatch();
+
+const defaultGameName = useSelector(state => state.defaultGameName.value);
 
 const [starsEditable, setStarsEditable] = useState(false);
 const [addPersonalNote, setAddPersonalNote] = useState(0);
@@ -69,6 +73,11 @@ if(!starsEditable) {
       }
       
   }
+}
+
+const handleGoToGameStats = () => {
+  navigation.navigate('Stats');
+  toggleModalVisibility();
 }
 
 const handleAddPlay = () => {
@@ -131,7 +140,7 @@ const handleAddPlay = () => {
                         <FontAwesome name="users" style={{color: '#423D3D'}}/>
                         <Text style={{color: '#423D3D'}}> {selectedGame.minPlayers} à {selectedGame.maxPlayers}</Text>
                     </View>
-                    <TouchableOpacity style={styles.stats}>
+                    <TouchableOpacity style={styles.stats} onPress={handleGoToGameStats}>
                         <AntDesign name="linechart" style={{color: '#423D3D'}}/>
                         <Text style={{color: '#423D3D'}}> voir les stats</Text>
                     </TouchableOpacity>
