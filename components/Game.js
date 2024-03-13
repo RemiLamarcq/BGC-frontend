@@ -16,6 +16,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
   const defaultGameName = useSelector(state => state.defaultGameName.value);
   
   const handleAddPlay = () => {
+    console.log(defaultGameName);
     dispatch(setDefaultGameName(name));
     dispatch(setAddGamePlayVisible(true));
     navigation.navigate('Cahier');
@@ -100,7 +101,8 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             selectedGame={selectedGame} 
             toggleModalVisibility={toggleModalVisibility} 
             handleDeleteGame={handleDeleteGame} 
-            navigation={navigation}/>
+            navigation={navigation}
+            name={name}/>
           
       }
     </Modal>

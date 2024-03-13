@@ -104,7 +104,7 @@ export default function ArmoireScreen({navigation}) {
     if (!isVisible) {
       setSelectedGame(gameData);
     }
-    // console.log("Selected game:", gameData);
+    console.log('hello', selectedGame.name);
   };
 
   const handleDeleteGame = () => {
