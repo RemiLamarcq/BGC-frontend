@@ -197,7 +197,6 @@ export default function AddGamePlay() {
             formData.append('json', JSON.stringify(otherData));
             console.log(formData);
             // Envoi des données pour création de la nouvelle partie
-            // fetch(`https://bgc-backend.vercel.app/gamePlays`, {
             fetch(`https://bgc-backend.vercel.app/gamePlays`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'multipart/form-data' },
