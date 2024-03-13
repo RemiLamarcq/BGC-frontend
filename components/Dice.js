@@ -1,26 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Octicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Clé de stockage pour AsyncStorage
+const STORAGE_KEY = 'diceValues';
 
 // Composant enfant de AccessoiresScreen.js
 function Dice() {
   // État pour stocker les valeurs des dés
-  const [diceValues, setDiceValues] = useState([{ value: null, numFaces: 6 }]);
+  const [diceValues, setDiceValues] = useState([]);
+
+  // Charger les données des dés sauvegardées lorsque le composant est monté
+  useEffect(() => {
+    const fetchDiceValues = async () => {
+      try {
+        const storedDiceValues = await AsyncStorage.getItem(STORAGE_KEY);
+        if (storedDiceValues !== null) {
+          setDiceValues(JSON.parse(storedDiceValues));
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des dés depuis AsyncStorage :', error);
+      }
+    };
+
+    fetchDiceValues();
+  }, []);
+
+  // Mettre à jour les données des dés et les sauvegarder dans AsyncStorage
+  const updateAndSaveDiceValues = (updatedDiceValues) => {
+    setDiceValues(updatedDiceValues);
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDiceValues))
+      .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
+  };
 
   // Fonction pour ajouter un nouveau dé
   const addDice = () => {
     const defaultName = `Dé ${diceValues.length + 1}`;
-    setDiceValues([...diceValues, { value: null, numFaces: 6, name: defaultName }]);
+    const newDice = { value: null, numFaces: 6, name: defaultName };
+    updateAndSaveDiceValues([...diceValues, newDice]);
   };
 
-  // Fonction pour générer un nombre aléatoire positif au lancer de dés
-  const generateRandomNumber = (index) => {
-    const newDiceValues = [...diceValues];
-    newDiceValues[index].value = Math.floor(Math.random() * newDiceValues[index].numFaces) + 1;
-    setDiceValues(newDiceValues);
-  };
+// Fonction pour générer un nombre aléatoire positif au lancer de dés
+const generateRandomNumber = (index) => {
+  const newDiceValues = [...diceValues];
+  newDiceValues[index].value = Math.floor(Math.random() * newDiceValues[index].numFaces) + 1;
+  setDiceValues(newDiceValues);
+  // Sauvegarder les nouvelles valeurs des dés dans AsyncStorage
+  AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDiceValues))
+    .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
+};
 
   // Fonction pour incrémenter le nombre de faces du dé
   const incrementFaces = (index) => {
@@ -37,19 +68,22 @@ function Dice() {
   };
 
   // Fonction pour lancer tous les dés en même temps
-  const rollAllDice = () => {
-    const newDiceValues = [...diceValues];
-    newDiceValues.forEach((die, index) => {
-      die.value = Math.floor(Math.random() * die.numFaces) + 1;
-    });
-    setDiceValues(newDiceValues);
-  };
+const rollAllDice = () => {
+  const newDiceValues = [...diceValues];
+  newDiceValues.forEach((die, index) => {
+    die.value = Math.floor(Math.random() * die.numFaces) + 1;
+  });
+  setDiceValues(newDiceValues);
+  // Sauvegarder les nouvelles valeurs des dés dans AsyncStorage
+  AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDiceValues))
+    .catch(error => console.error('Erreur lors de la sauvegarde des dés dans AsyncStorage :', error));
+};
 
   // Fonction pour supprimer un dé
   const removeDice = (index) => {
-    const newDiceValues = [...diceValues];
-    newDiceValues.splice(index, 1);
-    setDiceValues(newDiceValues);
+    const updatedDiceValues = [...diceValues];
+    updatedDiceValues.splice(index, 1);
+    updateAndSaveDiceValues(updatedDiceValues);
   };
 
   return (
@@ -241,5 +275,6 @@ const styles = StyleSheet.create({
     color: '#423D3D',
     marginBottom:-15,
   },
+  
 });
 export default Dice;
