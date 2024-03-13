@@ -134,28 +134,28 @@ export default function StatScreen() {
     backgroundColorUsersButtonStyle = '#CDDCDB'
   }
 
-  useEffect(() => {
-        // console.log(selectedGameName);
-         // Le titre que vous cherchez
-        const titreRecherche = defaultGameName;
+  // useEffect(() => {
+  //       // console.log(selectedGameName);
+  //        // Le titre que vous cherchez
+  //       const titreRecherche = defaultGameName;
 
-        // Recherche de l'objet correspondant
-        const objetTrouve = formattedGameList.find(obj => obj.title === titreRecherche);
+  //       // Recherche de l'objet correspondant
+  //       const objetTrouve = formattedGameList.find(obj => obj.title === titreRecherche);
 
-        // Extraction de l'id si l'objet est trouvé, sinon null
-        const idTrouve = objetTrouve ? objetTrouve.id : null;
+  //       // Extraction de l'id si l'objet est trouvé, sinon null
+  //       const idTrouve = objetTrouve ? objetTrouve.id : null;
 
-        // console.log("ID correspondant :", idTrouve);
+  //       // console.log("ID correspondant :", idTrouve);
 
-        setIdInitialValue(idTrouve);
+  //       setIdInitialValue(idTrouve);
 
-  }, [isFocused]);
+  // }, [isFocused]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    dispatch(setDefaultGameName(null));
+  //   dispatch(setDefaultGameName(null));
 
-  }, [!isFocused]); 
+  // }, [!isFocused]); 
 
   return (
     <AutocompleteDropdownContextProvider>
@@ -189,7 +189,7 @@ export default function StatScreen() {
                           width: 350
                           }}
                         ignoreAccents
-                        initialValue={{id: idInitialValue}}
+                        // initialValue={{id: idInitialValue}}
                     />
                   </View>
                   
