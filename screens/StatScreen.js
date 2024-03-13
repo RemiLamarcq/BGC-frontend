@@ -2,13 +2,14 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, Modal, Button, Image, Dimensions, SafeAreaView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Header';
 import formatDate from '../modules/formatDate';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
+import { setDefaultGameName } from '../reducers/selectedGameName';
 import { PieChart } from "react-native-chart-kit";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
@@ -28,6 +29,10 @@ export default function StatScreen() {
   const formattedGameList = [];
   let topPlayersInfos;
   let formattedFriendsList = [];
+  const [idInitialValue, setIdInitialValue] = useState(0);
+
+  const defaultGameName = useSelector(state => state.defaultGameName.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetch(`https://bgc-backend.vercel.app/stats/getGeneralsStats/${user.token}`)
@@ -160,6 +165,29 @@ export default function StatScreen() {
     backgroundColorUsersButtonStyle = '#CDDCDB'
   }
 
+  // useEffect(() => {
+  //       // console.log(selectedGameName);
+  //        // Le titre que vous cherchez
+  //       const titreRecherche = defaultGameName;
+
+  //       // Recherche de l'objet correspondant
+  //       const objetTrouve = formattedGameList.find(obj => obj.title === titreRecherche);
+
+  //       // Extraction de l'id si l'objet est trouvé, sinon null
+  //       const idTrouve = objetTrouve ? objetTrouve.id : null;
+
+  //       // console.log("ID correspondant :", idTrouve);
+
+  //       setIdInitialValue(idTrouve);
+
+  // }, [isFocused]);
+
+  // useEffect(() => {
+
+  //   dispatch(setDefaultGameName(null));
+
+  // }, [!isFocused]); 
+
   return (
     <AutocompleteDropdownContextProvider>
     <View style={styles.container}>
@@ -192,6 +220,7 @@ export default function StatScreen() {
                           width: 350
                           }}
                         ignoreAccents
+                        // initialValue={{id: idInitialValue}}
                     />
                   </View>
                   
