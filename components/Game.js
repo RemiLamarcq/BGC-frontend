@@ -1,12 +1,32 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, Modal, Button } from 'react-native';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AntDesign } from '@expo/vector-icons';
 import FicheGame from './FicheGame';
+import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
+import { setDefaultGameName } from '../reducers/selectedGameName';
+import selectedGameName from '../reducers/selectedGameName';
 
 export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame, stars, handleDeleteGame }) {
+
+  const dispatch = useDispatch();
+
+  const defaultGameName = useSelector(state => state.defaultGameName.value);
+  
+  const handleAddPlay = () => {
+    dispatch(setDefaultGameName(name));
+    dispatch(setAddGamePlayVisible(true));
+    navigation.navigate('Cahier');
+    console.log(defaultGameName);
+  }
+  
+  const handleGoToGameStats = () => {
+    dispatch(setDefaultGameName(name));
+    navigation.navigate('Stats');
+    console.log(defaultGameName);
+  }
 
    return (
     //1 jeu
@@ -23,13 +43,13 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
             </View>
 
             <View style={styles.editAndStats}>
-                <TouchableOpacity style={styles.editTouchable}>
+                <TouchableOpacity style={styles.editTouchable} onPress={handleAddPlay}>
                     <AntDesign 
                         name="addfile"
                         color="#0A3332" 
                         backgroundColor="#88B7B6"/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.statsTouchable}>
+                <TouchableOpacity style={styles.statsTouchable} onPress={handleGoToGameStats}>
                     <AntDesign 
                         name="linechart"
                         color="#0A3332" 
@@ -73,6 +93,7 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
    {/* modale et contenu qui sera à déplacer */}     
 
     <Modal visible={isVisible} animationType="fade" transparent={true}>
+
         {selectedGame && 
 
           <FicheGame 
