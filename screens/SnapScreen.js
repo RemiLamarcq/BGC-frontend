@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useEffect, useState } from "react";
@@ -13,29 +13,12 @@ export default function SnapScreen() {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [hasPermission, setHasPermission] = useState(false);
   const isFocused = useIsFocused();
   const [type, setType] = useState(CameraType.back);
   let cameraRef = useRef(null);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
   const selectedPhoto = useSelector(state => state.addGamePlayInfos.value.selectedPhoto);
-
-  useEffect(() => {
-    if(isFocused){
-      (async () => {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        setHasPermission(status === 'granted');
-        if(status !== 'granted'){
-          Alert.alert(
-            'Permission requise',
-            'Veuillez autoriser l\'accès à la caméra pour utiliser cette fonctionnalité',
-            [{ text: 'OK' }],
-            { cancelable: false }
-          );
-        }
-      })();
-    }
-  }, []);
+  const hasCameraPermission = useSelector(state => state.cameraPermission.value);
 
   // Par défaut, le SnapScreen est masqué par la modale AddGamePlay, il faut donc modifier l'état de la modale lorsqu'on navigue vers SnapScreen.
   isFocused && dispatch(setAddGamePlayVisible(false));
@@ -43,23 +26,7 @@ export default function SnapScreen() {
   const takePicture = async () => {
     const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
     const uri = photo?.uri;
-    const formData = new FormData();
-
-    formData.append('photoFromFront', {
-      uri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
-    });
-
     dispatch(setPhoto({ uri, selectedPhoto }));
-
-    // fetch('http://192.168.1.12:3000/gamePlays/upload', {
-    //   method: 'POST',
-    //   body: formData,
-    // }).then(response => response.json())
-    //   .then(data => {
-    //     data.result && dispatch(setPhoto({ uri: data.url, selectedPhoto }));
-    //   });
   }
 
   function toggleFlash(){
@@ -67,42 +34,48 @@ export default function SnapScreen() {
     setFlashMode(FlashMode.on) : setFlashMode(FlashMode.off);
   }
 
-  if(!hasPermission || !isFocused){
+  if(!hasCameraPermission || !isFocused){
     return <View></View>;
   }
 
   return (
     <Camera flashMode={flashMode} ref={ref => cameraRef = ref} type={type} style={styles.container}>
       <View style={styles.topIcons}>
-        <FontAwesome 
-          onPress={() => { dispatch(setAddGamePlayVisible()); navigation.navigate('TabNavigator'); }} 
-          name="arrow-left" 
-          style={styles.button}
-          color="white" 
-        />
+        <TouchableOpacity>
+          <FontAwesome 
+            onPress={() => { dispatch(setAddGamePlayVisible()); navigation.navigate('TabNavigator'); }} 
+            name="arrow-left" 
+            style={styles.icons}
+            color="white" 
+          />
+        </TouchableOpacity>
         <View style={styles.topRightIcons}>
-          <FontAwesome 
-            onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)} 
-            style={styles.button} 
-            name="rotate-right" 
-            color="white" 
-          />
-          <FontAwesome 
-            onPress={() => toggleFlash()} 
-            style={styles.button} 
-            name="flash" 
-            color="white" 
-          />
+          <TouchableOpacity>
+            <FontAwesome 
+              onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)} 
+              style={styles.icons} 
+              name="rotate-right" 
+              color="white" 
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <FontAwesome 
+              onPress={() => toggleFlash()} 
+              style={styles.icons}
+              name="flash" 
+              color="white" 
+            />
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.bottomIcons}>
+      <TouchableOpacity>
         <FontAwesome 
           name="circle-thin" 
-          style={[styles.button, { fontSize: 80 }]} 
+          style={[styles.icons, { fontSize: 80 }]} 
           color="white" 
           onPress={() => takePicture()} 
         />
-      </View>
+      </TouchableOpacity>
     </Camera>
   );
 }
@@ -127,8 +100,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  button: {
+  icons:{
     fontSize: 50,
     textAlign: 'center',
-  },
+  }
 });

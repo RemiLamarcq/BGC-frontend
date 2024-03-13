@@ -57,9 +57,7 @@ export default function AddGamePlay() {
         invalidDate: false,
         playerMissing: false
     });
-
     const [idInitialValue, setIdInitialValue] = useState(0);
-
 
     // A l'initialisation, récupère tous les jeux de la BDD sous forme {name, isTeam, isCharacter, isScore}
     useEffect(() => {
@@ -155,9 +153,8 @@ export default function AddGamePlay() {
         navigation.navigate('Snap');
     }
 
-    //Enregistre la partie
+    //Enregistre la nouvelle partie
     function handleSaveGamePlay(){
-
         //Si un des champs suivants sont manquants(nom du jeu, date et 1 joueur minimum obligatoire), affiche un message d'erreur
         if(
             !selectedGameName ||
@@ -175,25 +172,35 @@ export default function AddGamePlay() {
             setInvalidField({ ...invalidField });
         }
         else{
-            fetch(`https://bgc-backend.vercel.app/gamePlays`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    token,
-                    name: selectedGameName,
-                    startDate: transformInDate(date.startDate),
-                    endDate: transformInDate(date.endDate),
-                    isInterrupted,
-                    place: location,
-                    players,
-                    urlImage: ['test'],
-                    comment,
-                }),
-            })
-            .then(result => result.json())
-            .then(data => data.result ? dispatch(setAddGamePlayVisible(!addGamePlayVisible)) : Alert.alert(data.error))
-            .catch(error => Alert.alert(error));
-
+            // Formatage des données avant le fetch POST
+            const formData = new FormData();
+            photosUri.forEach((uri, index) => {
+                const photoName = `photoFromFront${index + 1}.jpg`;
+                formData.append(photoName, {
+                    uri,
+                    name: photoName,
+                    type: 'image/jpeg',
+                });
+            });
+            const otherData = {
+                token,
+                name: selectedGameName,
+                startDate: transformInDate(date.startDate),
+                endDate: transformInDate(date.endDate),
+                isInterrupted,
+                place: location,
+                players,
+                comment,
+            };
+            formData.append('json', JSON.stringify(otherData));
+            //Envoi des données pour création de la nouvelle partie
+            // fetch(`https://bgc-backend.vercel.app/gamePlays`, {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'multipart/form-data' },
+            //     body: formData,
+            // }).then(result => result.json())
+            // .then(data => data.result ? dispatch(setAddGamePlayVisible(!addGamePlayVisible)) : Alert.alert(data.error))
+            // .catch(error => Alert.alert(error));
         }
     }
 
@@ -267,7 +274,7 @@ export default function AddGamePlay() {
             // Extraction de l'id si l'objet est trouvé, sinon null
             const idTrouve = objetTrouve ? objetTrouve.id : null;
 
-            console.log("ID correspondant :", idTrouve);
+            // console.log("ID correspondant :", idTrouve);
 
             setIdInitialValue(idTrouve);
 
