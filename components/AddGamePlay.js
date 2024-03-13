@@ -1,6 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Alert, Platform, Image } from 'react-native';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Octicons } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
@@ -223,7 +224,7 @@ export default function AddGamePlay() {
                         <Text>Vainqueur</Text>
                     </View>
                     <TouchableOpacity onPress={() => dispatch(removePlayer(i))} style={styles.closeBtn} >
-                        <FontAwesome name="close" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                    <Octicons name="x-circle-fill" size={24} color="#6E9D9C" />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.playerCtnBottom}>
@@ -292,9 +293,9 @@ export default function AddGamePlay() {
                     <View style={styles.container}>
                         <View style={styles.topContainer} >
                             <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(setAddGamePlayVisible(!addGamePlayVisible))}>
-                                <FontAwesome name="arrow-left" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                            <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
                             </TouchableOpacity>
-                            <Text style={ styles.title }>Ajouter une partie</Text>
+                            <Text style={styles.title}>Ajouter une partie</Text>
                         </View>
                         <AutocompleteDropdown
                             dataSet={formattedGameNames}
@@ -319,7 +320,7 @@ export default function AddGamePlay() {
                             inputContainerStyle={{
                                 backgroundColor: 'white',
                                 borderRadius: 25,
-                                padding: 3,
+                                padding: 3, 
                             }}
                             initialValue={{id: initialValue}}
 
@@ -389,15 +390,17 @@ export default function AddGamePlay() {
                                 suggestionsListContainerStyle={{
                                     backgroundColor: '#CDDCDB',
                                     position: 'relative',
+                                    
                                 }}
                                 inputContainerStyle={{
                                     backgroundColor: 'white',
                                     borderRadius: 25,
                                     padding: 3,
                                     paddingLeft: 30,
+                                    height: 40, 
                                 }}
                             />
-                            <AntDesign name="adduser" style={styles.adduser} size={22}/>
+                            <AntDesign name="adduser" style={styles.adduser} size={24}/>
                         </View>
                         { invalidField.playerMissing && <Text style={styles.invalidField}>Sélectionner un joueur</Text> }
                         {playersJSX}
@@ -406,21 +409,21 @@ export default function AddGamePlay() {
                                 {photosUri[0] ?
                                     <Image source={{ uri: photosUri[0] }} style={styles.photo} />
                                 :
-                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={30} />
                                 }
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.photoBtn} onPress={() => handleNavigation(1)} >
                                 {photosUri[1] ?
                                     <Image source={{ uri: photosUri[1] }} style={styles.photo} />
                                 :
-                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={30} />
                                 }
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.photoBtn} onPress={() => handleNavigation(2)} >
                                 {photosUri[2] ?
                                     <Image source={{ uri: photosUri[2] }} style={styles.photo} />
                                 :
-                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={50} />
+                                    <FontAwesome name="camera" color="#0A3332" backgroundColor="#88B7B6" size={30} />
                                 }
                             </TouchableOpacity>
                         </View>
@@ -437,7 +440,7 @@ export default function AddGamePlay() {
                         </View>
                         { invalidField.globalMessage && <Text style={styles.invalidField}>Renseigner le nom du jeu, la date et au moins 1 joueur</Text> }
                         <TouchableOpacity onPress={() => handleSaveGamePlay()} style={styles.saveBtn}>
-                            <Text style={styles.saveText}>Enregistrer</Text>
+                        <Text style={{color: '#F2F4F1', fontWeight: 600}}>Enregistrer</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -467,26 +470,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     goBackTouchable: {
-        height: 45,
-        width: 55,
         borderRadius: 50,
         backgroundColor: "#88B7B6",
         position: 'absolute',
         left: 0,
         justifyContent: 'center',
         alignItems: 'center',
+        height: 30,
+        width: 30,
+        alignSelf: 'flex-start',
     },
     title: {
         alignSelf: 'center',
         fontSize: 20,
-        margin: 10,
-        fontWeight: 'bold',
+        marginTop: 50,
         color: '#423D3D'
     },
     radioBtnBloc: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
+        marginRight:90,
     },
     radioBtnCtn: {
         backgroundColor: '#FFFFFF',
@@ -506,7 +510,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 25,
         padding: 15,
-        fontSize: 15,
+        fontSize: 12,
     },
     addPlayerToGameplay: {
         position: 'relative',
@@ -535,12 +539,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#88B7B6",
         justifyContent: 'center',
         alignItems: 'center',
-        height: 35,
-        width: 35,
+        height: 30,
+        width: 30,
     },
     playerCtn: {
         backgroundColor: '#CDDCDB',
-        borderRadius: 30,
+        borderRadius: 15,
         padding: 15,
         gap: 10,
     },
@@ -554,12 +558,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     closeBtn: {
-        height: 40,
-        width: 40,
-        borderRadius: 50,
-        backgroundColor: "#88B7B6",
-        justifyContent: 'center',
-        alignItems: 'center',
+        position: 'absolute',
+        top: -15,
+        right: -15,
     },
     playerCtnBottom: {
         gap: 8,
@@ -572,8 +573,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     photoBtn: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         backgroundColor: "#88B7B6",
         borderRadius: 50,
         alignItems: 'center',
@@ -594,11 +595,13 @@ const styles = StyleSheet.create({
     },
     saveBtn: {
         alignSelf: 'center',
-        backgroundColor: "#88B7B6",
-        borderRadius: 25,
-        padding: 16,
+        borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: "#0A3332",
+        height: 30,
+        width: 150, 
+        marginTop:10,
     },
     saveText: {
         fontSize: 16,

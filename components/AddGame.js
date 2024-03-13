@@ -121,7 +121,7 @@ export default function AddGame({props, toggleModalAddGame}) {
     else {
         buttonCard =
         <TouchableOpacity onPress={() => handleAdd()} style={styles.buttonX}>
-            <Text style={{color: '#423D3D', fontWeight: 600}}>Ajouter à l'armoire</Text>
+            <Text style={{color: '#F2F4F1', fontWeight: 600}}>Ajouter à l'armoire</Text>
         </TouchableOpacity>
     }
 
@@ -188,10 +188,11 @@ export default function AddGame({props, toggleModalAddGame}) {
         return (
             <View style={styles.container}>
                 <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalAddGame}>
-                        <FontAwesome 
-                            name="arrow-left"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
+                <AntDesign 
+                    name="arrowleft" 
+                    size={24} 
+                    color="#423D3D" 
+                />
                 </TouchableOpacity>
                 <AutocompleteDropdownContextProvider>
                     <Text style={{alignSelf: 'center', fontSize: 20, margin: 10}}>Ajouter un jeu</Text>
@@ -293,13 +294,13 @@ export default function AddGame({props, toggleModalAddGame}) {
 
         buttonX: {
             borderRadius: 50,
-            backgroundColor: "#88B7B6",
+            flexDirection:'row',
+            backgroundColor: "#0A3332",
             justifyContent: 'center',
-            alignItems: 'center',
-            height: 40,
+            alignItems:'center',
+            height: 30,
             width: 150, 
             margin: 10,
-            marginTop: 10
         }
 
       });

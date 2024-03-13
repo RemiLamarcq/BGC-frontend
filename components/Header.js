@@ -6,6 +6,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } fro
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import { AntDesign } from '@expo/vector-icons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 function Header({ 
   title, 
@@ -146,7 +147,7 @@ function Header({
                 {/* Bouton d'ajout de jeu ou de partie de jeu */}
                 <TouchableOpacity onPress={!isInNotebook ? toggleModalAddGame : () => dispatch(setAddGamePlayVisible(!addGamePlayVisible))} style={styles.buttonAddGame}>
                   <View style={styles.plusButton}>
-                    <FontAwesome name="plus" color="#88B7B6" style={styles.AddIcon} />
+                  <FontAwesome5 name="plus-circle" size={24} color="#423D3D" style={styles.AddIcon} />
                   </View>
                   <Text>{!isInNotebook ? "Ajouter un jeu" : "Ajouter une partie"}</Text>
                 </TouchableOpacity>
@@ -163,6 +164,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#6E9D9C',
+        marginBottom:20,
       },
       header: {
         flex: 1,
@@ -202,7 +204,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
       },
       searchBar: {
-        padding: 12,
+        padding: 4,
         borderRadius: 15,
         paddingLeft: 10,
         backgroundColor: "white",
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         backgroundColor: '#88B7B6',
         borderRadius: 20,
-        padding: 10,
+        padding: 5,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -222,7 +224,6 @@ const styles = StyleSheet.create({
       plusButton: {
         borderRadius: 50,
         marginRight: 5,
-        backgroundColor:'#423D3D',
       },
       filterButton: {
         position: 'absolute',
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
         marginRight: 30,
         marginBottom: -20,
         marginTop: 15, 
-        color: '#88B7B6'
+        color: '#423D3D',
       },
       //meepleOpen page Armoire et cahier
       meepleSectionFirst: {
