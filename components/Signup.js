@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F4F1',
     alignItems: 'center',
     justifyContent: 'center',
-    margin:-30,
+    marginTop:'50%',
     },
     logoTitle:{
       flex:0.5,
