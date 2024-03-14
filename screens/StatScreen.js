@@ -4,7 +4,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Header';
-import formatDate from '../modules/formatDate';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -12,6 +11,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { setDefaultGameName } from '../reducers/selectedGameName';
 import { PieChart, BarChart } from "react-native-chart-kit";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { transformInDate, formatDate} from '../modules/formatDate';
 
 export default function StatScreen() {
 
@@ -156,7 +156,6 @@ export default function StatScreen() {
 
   const handleChessButton = () => {
     setStatsByGame(true)
-    setGameStats(false) 
   }
 
   const handleUsersButton = () => {
@@ -274,26 +273,27 @@ export default function StatScreen() {
               <View style={styles.nbGamesPlayedContainer}>
                 <View style={styles.nbGamesPlayedTextContainer}>
                   <Text style={{fontWeight: 700, color:'#423D3D'}}>Parties Jouées</Text>
+                  <Text>{gameStatsInfos.gameInfo.numberOfGames}</Text>
                 </View>
-                <View style={styles.nbGamesPlayedByFrequencyContainer}>
+                {/* <View style={styles.nbGamesPlayedByFrequencyContainer}>
                   <View style={styles.nbGamesPlayedTotalContainer}>
                     <Text>Total</Text>
                     <Text>{gameStatsInfos.gameInfo.numberOfGames}</Text>
                   </View>
                   <View style={styles.nbGamesPlayedMonthlyContainer}>
-                    {/* <Text>Ce mois-ci</Text>
-                    <Text>--</Text> */}
+                     <Text>Ce mois-ci</Text>
+                    <Text>--</Text>
                   </View>
-                </View>
+                </View> */}
               </View>
               <View style={styles.mostGamePlayed}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Durée moyenne d'une partie</Text>
-                {gameStatsInfos.gameInfo.numberOfGames !== 0 && (<Text>{gameStatsInfos.gameInfo.averageDuration}</Text>)}
+                {gameStatsInfos.gameInfo.numberOfGames !== 0 && (<Text>45 min</Text>)}
                 {gameStatsInfos.gameInfo.numberOfGames === 0 && (<Text>--</Text>)}
               </View> 
               <View style={styles.mostGamePlayed}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Dernière partie</Text>
-                {gameStatsInfos.gameInfo.numberOfGames !== 0 && (<Text>{gameStatsInfos.gameInfo.lastGameDate}</Text>)}
+                {gameStatsInfos.gameInfo.numberOfGames !== 0 && (<Text>{formatDate(gameStatsInfos.gameInfo.lastGameDate)}</Text>)}
                 {gameStatsInfos.gameInfo.numberOfGames === 0 && (<Text>--</Text>)}
               </View>  
           </View> )}
@@ -307,17 +307,18 @@ export default function StatScreen() {
               <View style={styles.nbGamesPlayedContainer}>
                 <View style={styles.nbGamesPlayedTextContainer}>
                   <Text style={{fontWeight: 700, color:'#423D3D'}}>Parties Jouées</Text>
+                  <Text>{generalStats.gamePlaysNumber}</Text>
                 </View>
-                <View style={styles.nbGamesPlayedByFrequencyContainer}>
+                {/* <View style={styles.nbGamesPlayedByFrequencyContainer}>
                   <View style={styles.nbGamesPlayedTotalContainer}>
                     <Text style={{fontWeight: 500, color:'#423D3D'}}>Total</Text>
                     <Text>{generalStats.gamePlaysNumber}</Text>
                   </View>
                   <View style={styles.nbGamesPlayedMonthlyContainer}>
-                    {/* <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
-                    <Text>5</Text> */}
+                     <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
+                    <Text>5</Text> 
                   </View>
-                </View>
+                </View> */}
               </View>
               <View style={styles.mostGamePlayed}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Jeu le plus joué</Text>
@@ -400,17 +401,17 @@ export default function StatScreen() {
             <View style={styles.nbGamesPlayedContainer}>
               <View style={styles.nbGamesPlayedTextContainer}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Parties Jouées</Text>
+                <Text>{friendStats.friendStats.totalGames}</Text>
               </View>
-              <View style={styles.nbGamesPlayedByFrequencyContainer}>
+              {/* <View style={styles.nbGamesPlayedByFrequencyContainer}>
                 <View style={styles.nbGamesPlayedTotalContainer}>
                   <Text style={{fontWeight: 500, color:'#423D3D'}}>Total</Text>
-                  <Text>{friendStats.friendStats.totalGames}</Text>
                 </View>
-                {/* <View style={styles.nbGamesPlayedMonthlyContainer}>
+                <View style={styles.nbGamesPlayedMonthlyContainer}>
                   <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
                   <Text>5</Text>
-                </View> */}
-              </View>
+                </View>
+              </View> */}
             </View>
             <View style={styles.mostGamePlayed}>
                 <Text style={{fontWeight: 700, color:'#423D3D'}}>Nb de victoires</Text>
@@ -495,6 +496,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#CDDCDB',
     borderRadius: 30,
     padding: 15
+  },
+  nbGamesPlayedTextContainer: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    width: '100%'
   },
   nbGamesPlayedContainer: {
     width: '100%',
