@@ -31,6 +31,7 @@ export default function CahierScreen() {
       .then(response => response.json())
       .then(data => {
         if(data.result){
+          console.log(data)
             const formatedData = data.gamePlays.map(gamePlay => {
               const { _id, idGame, startDate, endDate, players, urlImage, comment, place, isInterrupted } = gamePlay;
               return { 
@@ -59,6 +60,7 @@ export default function CahierScreen() {
   const gamePlaysJSX = 
     gamePlays
     .filter(gamePlay => gamePlay.game.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
+    .reverse()
     .map((gamePlay, i) => {
       return (
         <GamePlay  
