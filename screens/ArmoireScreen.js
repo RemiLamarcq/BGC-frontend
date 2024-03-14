@@ -104,7 +104,6 @@ export default function ArmoireScreen({navigation}) {
     if (!isVisible) {
       setSelectedGame(gameData);
     }
-    console.log('hello', selectedGame.name);
   };
 
   const handleDeleteGame = () => {
@@ -122,7 +121,7 @@ export default function ArmoireScreen({navigation}) {
           text: 'Supprimer',
           onPress: () => {
             // Effectuer la suppression si l'utilisateur confirme
-            fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
+            fetch(`https://bgc-backend.vercel.app/pwdRecovery/sendEMail/${selectedGame.name}/${token}`,{
               method: 'DELETE',
               headers: { 'Content-Type': 'application/json' },
               }).then(response=> response.json())
