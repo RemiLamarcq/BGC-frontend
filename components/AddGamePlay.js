@@ -202,7 +202,6 @@ const [inputValue, setInputValue] = useState('');
             };
             formData.append('json', JSON.stringify(otherData));
             // Envoi des données pour création de la nouvelle partie
-            // fetch(`https://bgc-backend.vercel.app/gamePlays`, {
             fetch(`https://bgc-backend.vercel.app/gamePlays`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'multipart/form-data' },
