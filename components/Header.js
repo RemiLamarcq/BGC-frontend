@@ -101,7 +101,9 @@ function Header({
               </TouchableOpacity>
             )}
             {/* Titre de la section */}
-            <Text style={styles.headerTitle}>{title}</Text>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={styles.headerTitle}>{title}</Text>
+            </View>
           </View>
           {/* Section "meeple" */}
           {isMeepleSectionOpen && (
@@ -196,7 +198,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         alignSelf: 'center',
-        marginLeft:100,
       },
       modularHeader:{
         gap: 10,
