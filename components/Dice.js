@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Header from '../components/Header';
 import { AntDesign } from '@expo/vector-icons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Octicons } from '@expo/vector-icons';
@@ -12,6 +13,8 @@ const STORAGE_KEY = 'diceValues';
 function Dice() {
   // État pour stocker les valeurs des dés
   const [diceValues, setDiceValues] = useState([]);
+ 
+
 
   // Charger les données des dés sauvegardées lorsque le composant est monté
   useEffect(() => {
@@ -178,6 +181,8 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     marginTop:30,
+    height: '70%', 
+
   },
   numberOfFaces: {
     flexDirection: 'row',
@@ -294,4 +299,6 @@ const styles = StyleSheet.create({
   },
   
 });
+
+
 export default Dice;

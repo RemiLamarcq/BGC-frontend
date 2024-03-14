@@ -75,12 +75,11 @@ export default function CahierScreen() {
     <View style={styles.mainContainer}>
       <Header 
         title="Cahier" 
-        height={200} 
+        height={220} 
         showMeeple={true} 
         showSearchBar={true} 
         isInNotebook={true}
         handleGamePlaysFilter={handleGamePlaysFilter}
-        currentScreen="CahierScreen"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View>

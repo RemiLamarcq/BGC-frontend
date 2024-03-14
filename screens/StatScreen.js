@@ -200,7 +200,7 @@ export default function StatScreen() {
   return (
     <AutocompleteDropdownContextProvider>
     <View style={styles.container}>
-      <Header title="Stats" height={100}  showMeeple={true} currentScreen="StatScreen"/>
+      <Header title="Stats" height={100}  showMeeple={true}/>
       <View style={styles.statsContainer}>
         <View style={styles.gameOrPlayerButtons}>
           <TouchableOpacity style={styles.gameButton}>
@@ -225,8 +225,8 @@ export default function StatScreen() {
                           }}
                         inputContainerStyle={{
                           backgroundColor: 'white',
-                          borderRadius: 25,
-                          width: 350
+                          borderRadius: 20,
+                          width: '90%'
                           }}
                         ignoreAccents
                         initialValue={{id: idInitialValue}}
@@ -371,8 +371,8 @@ export default function StatScreen() {
               }}
             inputContainerStyle={{
               backgroundColor: 'white',
-              borderRadius: 25,
-              width: 350
+              borderRadius: 20,
+              width: '90%'
               }}
             ignoreAccents
             />
@@ -426,15 +426,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F4F1',
   },
   dropdownContainer: {
-    alignItems: 'center'
-    },
+    alignItems: 'center',
+  },
   gameOrPlayerButtons: {
     flexDirection: 'row',
     justifyContent: 'center',
-    margin: 25
+    margin: 20
   },
   gameStatsContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
+    
   },
   playerStatsContainer: {
     alignItems:'center'
@@ -448,17 +449,21 @@ const styles = StyleSheet.create({
   chessIcon: {
     borderRadius: 15,
   },
+  usersIcon: {
+    borderRadius: 10,
+  },
   generalStatsContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width:'100%',
   },
   infoStatsContainer: {
     alignItems: 'center',
-    marginTop: 50,
-    width: '70%',
+    marginTop: 30,
+    width: '80%',
   },
   pieChart: {
-    height: 310
+    height: 310,
   },
   nbGamesInClosetContainer: {
     width: '100%',
@@ -474,10 +479,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#CDDCDB',
     borderRadius: 30,
-    padding: 5,
+    padding: 15,
     paddingLeft: 15,
     alignItems: 'center',
-    marginTop: 30
+    marginTop: 20
   },
   nbGamesPlayedByFrequencyContainer: {
     marginRight: 15,
@@ -498,6 +503,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#CDDCDB',
     borderRadius: 30,
     padding: 15,
-    marginTop: 30 
+    marginTop: 20 
   }
 });

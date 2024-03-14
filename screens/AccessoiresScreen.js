@@ -57,7 +57,7 @@ export default function AccessoiresScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#F1F4F2' }}>
       {/* Affichage du composant Header avec le titre 'Accessoires' , une hauteur de 100, et le meeple à true pour logout depuis le screen */}
-      <Header title="Accessoires" height={100} showMeeple={true} currentScreen="AccessoiresScreen" />
+      <Header title="Accessoires" height={100} showMeeple={true} />
       {/* Vue principale de la page */}
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {/* Vue contenant les zones cliquables avec une largeur de 90% de la vue parente */}
@@ -67,7 +67,8 @@ export default function AccessoiresScreen() {
             name="Lancer de dés"
             image={require('../assets/dice.png')}
             onPress={() => handleZoneClick(1)}
-          />
+            height={{ height: 100 }} // Passer la hauteur sous forme d'objet props
+/>
           {/* Composant Accessories pour la zone 2 (Timer) avec une fonction onPress */}
           <Accessories
             name="Timer"
@@ -89,6 +90,7 @@ export default function AccessoiresScreen() {
       closeModal={closeModal} 
       modalContent={modalContent} 
       modalTitle={modalTitle} 
+    
       />
     </View>
   );

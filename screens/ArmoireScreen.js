@@ -151,7 +151,7 @@ export default function ArmoireScreen({navigation}) {
   <View style={styles.mainContainer}>
     <Header 
       title="Armoire" 
-      height={200} 
+      height={220} 
       showMeeple={true} 
       showSearchBar={true} 
       toggleModalAddGame={toggleModalAddGame} 
@@ -160,7 +160,6 @@ export default function ArmoireScreen({navigation}) {
       isInNotebook={false}
       showGameCounter={true}
       initialGames={initialGames}
-      currentScreen="ArmoireScreen"
     />
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>
