@@ -22,7 +22,7 @@ export default function GamePlay(props) {
         <View style={styles.left}>
             <View style={styles.image}>
                 <Image 
-                source={{uri: gameImage}}git pu
+                source={{uri: gameImage}}
                 style={{height: 70, width: 70, borderRadius: 50}}/>
             </View>
         </View>
