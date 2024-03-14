@@ -10,7 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import { setDefaultGameName } from '../reducers/selectedGameName';
-import { PieChart } from "react-native-chart-kit";
+import { PieChart, BarChart } from "react-native-chart-kit";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 
 export default function StatScreen() {
@@ -26,6 +26,7 @@ export default function StatScreen() {
   const [friendsList, setFriendsList] = useState([]);
   const [friendStats, setFriendStats] = useState({})
   const [statsByTypes, setStatsByTypes] = useState([]);
+  const [statsByMostPlayedGames, setStatsByMostPlayedGames] = useState ({});
   const formattedGameList = [];
   let topPlayersInfos;
   let formattedFriendsList = [];
@@ -57,9 +58,27 @@ export default function StatScreen() {
         const adjustedData = filteredEntries.map(([name, value]) => [name, Math.round((value / sum) * 100)]);
         const filteredObject = Object.fromEntries(adjustedData);
         setStatsByTypes(filteredObject)
+      });
+      fetch(`https://bgc-backend.vercel.app/stats/statsByGame/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        data.stats.sort((a, b) => b.count - a.count);
+        const topThree = data.stats.slice(0, 3);
+        let newData = {
+          labels: [],
+          datasets: [{
+            data: []
+          }]
+        };
+        topThree.forEach(item => {
+          newData.labels.push(item.name);
+          newData.datasets[0].data.push(item.count);
+        });     
+        setStatsByMostPlayedGames(newData)
+        console.log(statsByMostPlayedGames)
+        console.log(statsByMostPlayedGames.datasets)
       })
   }, [isFocused]); 
-
   // Initialisation de la valeur de la composante rouge (R)
   let redValue = 131;
   let greenValue = 157;
@@ -182,14 +201,12 @@ export default function StatScreen() {
          // console.log("ID correspondant :", idTrouve);
  
          setIdInitialValue(idTrouve);
-         console.log('okkkk');
          console.log(defaultGameName);
          console.log(idTrouve)
          console.log(idInitialValue);
     } else {
       dispatch(setDefaultGameName(null));
       setIdInitialValue(0);
-      console.log('lalalala');
       console.log(defaultGameName);
       console.log(idInitialValue);
     }
@@ -297,8 +314,8 @@ export default function StatScreen() {
                     <Text>{generalStats.gamePlaysNumber}</Text>
                   </View>
                   <View style={styles.nbGamesPlayedMonthlyContainer}>
-                    <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
-                    <Text>5</Text>
+                    {/* <Text style={{fontWeight: 500, color:'#423D3D'}}>Ce mois-ci</Text>
+                    <Text>5</Text> */}
                   </View>
                 </View>
               </View>
@@ -307,7 +324,7 @@ export default function StatScreen() {
                 <Text>{generalStats.mostCommonGame}</Text>
               </View>
             </View>
-              <View style={styles.pieChart}>
+              {gameList.length>0 && (<View style={styles.pieChart}>
                 <SwiperFlatList showPagination paginationActiveColor={'#CDDCDB'}>
                   <View style={styles.child}>
                     <PieChart
@@ -330,29 +347,31 @@ export default function StatScreen() {
                     />
                     <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Répartition des types de jeux dans l'armoire (en %)</Text>
                   </View>
-                  <View style={styles.child}>
-                    <PieChart
-                    data={dataTypesChart}
-                    width={Dimensions.get('window').width}
-                    height={250}
-                    chartConfig={{
-                    backgroundColor: "#e26a00",
-                    backgroundGradientFrom: "#fb8c00",
-                    backgroundGradientTo: "#ffa726",
-                    decimalPlaces: 2, // optional, defaults to 2dp
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                    }}
-                    accessor={"valeur"}
-                    backgroundColor={"transparent"}
-                    paddingLeft={"15"}
-                    center={[0, 10]}
-                    absolute
+                  {statsByMostPlayedGames.labels && (<View style={styles.child}>
+                    <BarChart
+                      style={{
+                      marginVertical: 8,
+                      borderRadius: 16,  
+                      }}
+                      data={statsByMostPlayedGames}
+                      width={Dimensions.get('window').width-30}
+                      height={235}
+                      fromNumber={Math.max(...statsByMostPlayedGames.datasets[0].data) > 4 ? Math.max(...statsByMostPlayedGames.datasets[0].data) : 4 }
+                      verticalLabelRotation={0}
+                      chartConfig={{
+                        backgroundColor: "#FFFFFF",
+                        backgroundGradientFrom: "#FFFFFF",
+                        backgroundGradientTo: "#FFFFFF",
+                        decimalPlaces: 0, // optional, defaults to 2dp
+                        color: (opacity = 1) => `rgba(10, 51, 50, ${opacity})`,
+                        labelColor: (opacity = 1) => `rgba(10, 51, 50, ${opacity})`,
+                        }}
+                        fromZero
                     />
-                    <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Répartition des types de jeux dans l'armoire (en %)</Text>
-                  </View>
+                    <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Top 3 des jeux les plus joués</Text>
+                  </View>)}
                 </SwiperFlatList> 
-              </View>
+              </View>)}
             </View>
           )}
           
@@ -456,6 +475,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
     width: '70%',
+  },
+  child: {
+    marginLeft: 5,
+    marginRight: 5
   },
   pieChart: {
     height: 310
