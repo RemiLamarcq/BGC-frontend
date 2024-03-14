@@ -217,14 +217,17 @@ export default function StatScreen() {
     <AutocompleteDropdownContextProvider>
     <View style={styles.container}>
       <Header title="Stats" height={100}  showMeeple={true}/>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.statsContainer}>
         <View style={styles.gameOrPlayerButtons}>
-          <TouchableOpacity style={styles.gameButton}>
-            <FontAwesome5 name="chess-pawn" size={60} color="#423D3D" backgroundColor={backgroundColorChessButtonStyle} style={styles.chessIcon} onPress={handleChessButton}/>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.usersButton}>
-            <FontAwesome name="users" size={60} color="#423D3D" backgroundColor={backgroundColorUsersButtonStyle} style={styles.usersIcon} onPress={handleUsersButton}/>
-          </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+            <TouchableOpacity style={[styles.roundButton, { backgroundColor: backgroundColorChessButtonStyle }]} onPress={handleChessButton}>
+              <FontAwesome5 name="chess-pawn" size={60} color="#423D3D" onPress={handleChessButton} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.roundButton, { backgroundColor: backgroundColorUsersButtonStyle }]} onPress={handleUsersButton}>
+              <FontAwesome name="users" size={60} color="#423D3D" onPress={handleUsersButton} />
+            </TouchableOpacity>
+        </View>
         </View>
         {statsByGame && (         
           <View style={styles.gameStatsContainer}>
@@ -349,6 +352,8 @@ export default function StatScreen() {
                     <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Répartition des types de jeux dans l'armoire (en %)</Text>
                   </View>)}
                   {statsByMostPlayedGames.labels && (<View style={styles.child}>
+                    <View style={{ alignItems: 'center' }}>
+
                     <BarChart
                       style={{
                       marginVertical: 8,
@@ -369,6 +374,7 @@ export default function StatScreen() {
                         }}
                         fromZero
                     />
+                    </View>
                     <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Top 3 des jeux les plus joués</Text>
                   </View>)}
                 </SwiperFlatList> 
@@ -433,8 +439,8 @@ export default function StatScreen() {
           )}
         </View>
         )}
-      
       </View>
+      </ScrollView>
     </View>
     </AutocompleteDropdownContextProvider>
   );
@@ -442,6 +448,10 @@ export default function StatScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#F2F4F1',
+  },
+  scrollViewContainer: {
     flex: 1,
     backgroundColor: '#F2F4F1',
   },
@@ -467,10 +477,12 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   chessIcon: {
-    borderRadius: 15,
+    borderRadius: 10,
+    padding: 10,
   },
   usersIcon: {
     borderRadius: 10,
+    padding:10,
   },
   generalStatsContainer: {
     justifyContent: 'center',
@@ -481,10 +493,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     width: '80%',
+    margin:30,
   },
   child: {
     marginLeft: 5,
-    marginRight: 5
+    marginRight:5,
   },
   pieChart: {
     height: 310,
@@ -532,6 +545,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#CDDCDB',
     borderRadius: 30,
     padding: 15,
-    marginTop: 20 
+    marginTop: 20,
+  },
+  statsContainer:{
+    marginBottom:30,
+  },
+  roundButton: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin:20,
   }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
@@ -143,13 +143,13 @@ export default function AddGame({props, toggleModalAddGame}) {
             if (i < addPersonalNote) {
                 starsAddGame.push(
                 <TouchableOpacity key={i} onPress={() => setAddPersonalNote(i+1)}>
-                    <AntDesign name="star" style={{color: '#0A3332'}} />
+                    <AntDesign name="star" style={{color: '#0A3332', margin: 3}} size={20}/>
                 </TouchableOpacity>
                 );
             } else {
                 starsAddGame.push(
                 <TouchableOpacity key={i} onPress={() => setAddPersonalNote(i+1)}>
-                    <AntDesign name="staro" style={{color: '#0A3332'}} />
+                    <AntDesign name="staro" style={{color: '#0A3332', margin: 3}} size={20}/>
                 </TouchableOpacity>
                 );
                 // console.log(addPersonalNote);
@@ -186,38 +186,40 @@ export default function AddGame({props, toggleModalAddGame}) {
     
 
         return (
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalAddGame}>
-                <AntDesign 
-                    name="arrowleft" 
-                    size={24} 
-                    color="#423D3D" 
-                />
-                </TouchableOpacity>
-                <AutocompleteDropdownContextProvider>
-                    <Text style={{alignSelf: 'center', fontSize: 20, margin: 10}}>Ajouter un jeu</Text>
-                <AutocompleteDropdown
-                    dataSet={formattedGameList}
-                    onSelectItem={(item) => handleSelect(item)}
-                    textInputProps={{ placeholder: 'Rechercher un jeu' }}
-                    closeOnSubmit
-                    suggestionsListContainerStyle={{
-                        backgroundColor: '#CDDCDB',
-                        marginTop: -40,
-                        borderRadius: 20
-                      }}
-                    inputContainerStyle={{
-                        backgroundColor: 'white',
-                        borderRadius: 25,
-                        width: 350
-                      }}
-                    onClear={handleClearGameCard}
-                    onOpenSuggestionsList={handleClearGameCard}
-                    ignoreAccents
-                />
-                </AutocompleteDropdownContextProvider>
-                {gameCardVisible && gameCard}
-            </View>
+                <View style={styles.container}>
+                    <TouchableOpacity style={styles.goBackTouchable} onPress={toggleModalAddGame}>
+                    <AntDesign 
+                        name="arrowleft" 
+                        size={24} 
+                        color="#423D3D" 
+                    />
+                    </TouchableOpacity>
+                    <AutocompleteDropdownContextProvider>
+                        <Text style={{alignSelf: 'center', fontSize: 20, margin: 10}}>Ajouter un jeu</Text>
+                    <AutocompleteDropdown
+                        dataSet={formattedGameList}
+                        onSelectItem={(item) => handleSelect(item)}
+                        textInputProps={{ placeholder: 'Rechercher un jeu' }}
+                        closeOnSubmit
+                        suggestionsListContainerStyle={{
+                            backgroundColor: '#CDDCDB',
+                            marginTop: -40,
+                            borderRadius: 20
+                        }}
+                        inputContainerStyle={{
+                            backgroundColor: 'white',
+                            borderRadius: 25,
+                            width: 350
+                        }}
+                        onClear={handleClearGameCard}
+                        onOpenSuggestionsList={handleClearGameCard}
+                        ignoreAccents
+                    />
+                    </AutocompleteDropdownContextProvider>
+                    <ScrollView>
+                        {gameCardVisible && gameCard}
+                    </ScrollView>
+                </View>
         );
       }
 
@@ -228,7 +230,7 @@ export default function AddGame({props, toggleModalAddGame}) {
           width: '100%',
           borderRadius: 40,
           padding: 20, 
-          alignItems: 'center'
+          alignItems: 'center',
         },
 
         goBackTouchable: {

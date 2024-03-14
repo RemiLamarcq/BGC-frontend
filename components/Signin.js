@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F4F1',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop:'50%',
     },
     logoTitle:{
       padding: 24,

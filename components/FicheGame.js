@@ -51,22 +51,22 @@ let editStars = [];
 if(!starsEditable) {
   for(let i= 0; i < 5; i++){
     if (i < selectedGame.personalNote) {
-        editStars.push(<AntDesign name="star" style={{color: '#0A3332'}} size={15} />);
+        editStars.push(<AntDesign  key={i} name="star" style={{color: '#0A3332'}} size={15} />);
     } else {
-        editStars.push(<AntDesign name="staro" style={{color: '#0A3332'}} size={15}/>);
+        editStars.push(<AntDesign  key={i} name="staro" style={{color: '#0A3332'}} size={15}/>);
     }
   }
 }else{
   for(let i= 0; i < 5; i++){
       if (i < addPersonalNote) {
           editStars.push(
-          <TouchableOpacity onPress={() => setAddPersonalNote(i+1)}>
+          <TouchableOpacity  key={i} onPress={() => setAddPersonalNote(i+1)}>
               <AntDesign name="star" style={{color: '#88B7B6'}} size={15}/>
           </TouchableOpacity>
           );
       } else {
           editStars.push(
-          <TouchableOpacity onPress={() => setAddPersonalNote(i+1)}>
+          <TouchableOpacity  key={i} onPress={() => setAddPersonalNote(i+1)}>
               <AntDesign name="staro" style={{color: '#88B7B6'}} size={15}/>
           </TouchableOpacity>
           );
