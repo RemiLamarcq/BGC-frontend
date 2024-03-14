@@ -253,6 +253,7 @@ export default function AddGamePlay() {
                 <View style={styles.playerCtnBottom}>
                     { chosenGame?.isTeam &&
                     <TextInput
+                        key="teamTextInput"
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Equipe"
                         placeholderTextColor= 'grey'
@@ -263,6 +264,7 @@ export default function AddGamePlay() {
                     }
                     { chosenGame?.isCharacter &&
                     <TextInput
+                        key="characterTextInput"
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Personnage"
                         placeholderTextColor= 'grey'
@@ -273,6 +275,7 @@ export default function AddGamePlay() {
                     }
                     { chosenGame?.isScore &&
                     <TextInput
+                        key="scoreTextInput"
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Score"
                         placeholderTextColor= 'grey'
