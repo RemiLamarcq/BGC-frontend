@@ -141,7 +141,9 @@ function Header({
                 {/* Compteur de jeux */}
                 {showGameCounter && (
                   <View>
-                    <Text style={styles.gameCounter}>{initialGames.length} {initialGames.length === 1 ? 'jeu' : 'jeux'}</Text>
+                   <Text style={styles.gameCounter}>
+                    {initialGames.length} {initialGames.length === 1 ? 'jeu' : 'jeux'}
+                  </Text>
                   </View>
                 )}
                 {/* Bouton d'ajout de jeu ou de partie de jeu */}
