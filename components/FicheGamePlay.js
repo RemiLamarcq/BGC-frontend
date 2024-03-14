@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetFicheGamePlay } from '../reducers/ficheGamePlay';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { AntDesign } from '@expo/vector-icons';
+
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -103,13 +105,17 @@ export default function FicheGamePlay(){
                 <View style={styles.topCtn}>
                     <View style={styles.gameAndBtns}>
                         <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(resetFicheGamePlay())}>
-                            <FontAwesome name="arrow-left" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                        <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
                         </TouchableOpacity>
                         <Text style={styles.game}>
                             {name}
                         </Text>
                         <TouchableOpacity style={styles.trash} onPress={handleRemoveGamePlay} >
-                            <FontAwesome name="trash" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                        <FontAwesome 
+                            size={16}
+                            name="trash"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>                        
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.date}>{endDate}</Text>
@@ -163,14 +169,15 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     goBackTouchable: {
-        height: 45,
-        width: 55,
-        borderRadius: 25,
+        borderRadius: 50,
         backgroundColor: "#88B7B6",
         position: 'absolute',
         left: 0,
         justifyContent: 'center',
         alignItems: 'center',
+        height: 30,
+        width: 30,
+        alignSelf: 'flex-start',
     },
     game: {
         fontSize: 22,
@@ -179,12 +186,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     trash:{
-        height: 45,
-        width: 45,
-        borderRadius: 25,
-        backgroundColor: "#88B7B6",
         position: 'absolute',
-        right: 0,
+        right: -5,
+        height: 30,
+        width: 30,
+        borderRadius: 50,
+        backgroundColor: "#88B7B6",
         justifyContent: 'center',
         alignItems: 'center',
     },
