@@ -98,6 +98,13 @@ export default function StatScreen({ navigation }) {
 };
 
     const handlPressAddNote = () => {
+          // Vérifier si le titre est vide
+        if (!noteTitle.trim()) {
+          // Afficher un message d'erreur
+          alert('Veuillez saisir au moins un titre pour la note.');
+          return; // Arrêter l'exécution de la fonction
+  }
+
         const notePad = {
             title: noteTitle,
             content: noteContent
@@ -270,6 +277,7 @@ const styles = StyleSheet.create({
     },
   deleteTouchable:{
     position: 'absolute',
+    margin: 6,
     right: -5,
     height: 30,
     width: 30,
@@ -314,7 +322,6 @@ const styles = StyleSheet.create({
       textAlign:'center',
       fontSize: 20,
       fontWeight:'bold',
-      border : '#000000', 
       marginBottom: 20
     },
     selectedNoteContentArea:{
