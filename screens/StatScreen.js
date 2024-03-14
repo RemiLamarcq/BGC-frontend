@@ -324,9 +324,9 @@ export default function StatScreen() {
                 <Text>{generalStats.mostCommonGame}</Text>
               </View>
             </View>
-              {gameList.length>0 && (<View style={styles.pieChart}>
+              <View style={styles.pieChart}>
                 <SwiperFlatList showPagination paginationActiveColor={'#CDDCDB'}>
-                  <View style={styles.child}>
+                  {dataTypesChart.length >0 && (<View style={styles.child}>
                     <PieChart
                     data={dataTypesChart}
                     width={Dimensions.get('window').width}
@@ -346,7 +346,7 @@ export default function StatScreen() {
                     absolute
                     />
                     <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Répartition des types de jeux dans l'armoire (en %)</Text>
-                  </View>
+                  </View>)}
                   {statsByMostPlayedGames.labels && (<View style={styles.child}>
                     <BarChart
                       style={{
@@ -371,7 +371,7 @@ export default function StatScreen() {
                     <Text style={{fontWeight: 500, color:'#423D3D', alignSelf:'center'}}>Top 3 des jeux les plus joués</Text>
                   </View>)}
                 </SwiperFlatList> 
-              </View>)}
+              </View>
             </View>
           )}
           
