@@ -1,168 +1,197 @@
-import React from 'react';
-import { StyleSheet, Text, View , TouchableOpacity,ScrollView ,Modal, TextInput, KeyboardAvoidingView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Modal, TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import Header from '../components/Header';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Importer FontAwesome5
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Alert } from 'react-native';
+import Header from '../components/Header';
 
-
-export default function StatScreen({navigation}) {
-
+export default function StatScreen({ navigation }) {
     const [notes, setNotes] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [noteTitle, setNoteTitle] = useState(''); 
+    const [noteTitle, setNoteTitle] = useState('');
     const [noteContent, setNoteContent] = useState('');
-  
+    const [selectedNote, setSelectedNote] = useState(null);
+
     const token = useSelector(state => state.user.value.token);
 
-    const handleBackToAccessooiresScreen = () => {
-        // Return to accesoires Screen
-        navigation.navigate('TabNavigator',{ screen: 'Accessoires' })
-      };
+    const handleBackToAccessoriesScreen = () => {
+        navigation.navigate('TabNavigator', { screen: 'Accessoires' });
+    };
 
-    //Fetch GET pour récuperer les notes existantes de l'utilisateur en BDD
-  useEffect(() => {
-    fetch(`https://bgc-backend.vercel.app/notePad/${token}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.result) {
-            setNotes(data.notePad);
-        
-        } else {
-          console.error(data.error);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [notes]);
-
-  const deleteNote = (id, title) => {
-    // Utiliser Alert pour demander confirmation
-    Alert.alert(
-      'Confirmation',
-      `Voulez-vous vraiment supprimer la note "${title}" ?`,
-      [
-        {
-          text: 'Annuler',
-          style: 'cancel',
-        },
-        {
-          text: 'Supprimer',
-          onPress: () => {
-            // Effectuer la suppression si l'utilisateur confirme
-            fetch(`https://bgc-backend.vercel.app/notePad/${token}/${id}`, {
-              method: 'DELETE',
-              headers: { 'Content-Type': 'application/json' },
+    useEffect(() => {
+        fetch(`https://bgc-backend.vercel.app/notePad/${token}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    setNotes(data.notePad);
+                } else {
+                    console.error(data.error);
+                }
             })
-              .then(response => response.json())
-              .then(() => {
-                const updatedNotes = notes.filter(note => note._id !== id);
-                setNotes(updatedNotes);
-                console.log('Note supprimée');
-              })
-              .catch(error => {
-                console.error('Erreur lors de la suppression de la note:', error);
-              });
-          },
-        },
-      ]
-    );
+            .catch(error => {
+                console.error(error);
+            });
+    }, [notes]);
+
+    const deleteNote = (id, title) => {
+        Alert.alert(
+            'Confirmation',
+            `Voulez-vous vraiment supprimer la note "${title}" ?`,
+            [
+                {
+                    text: 'Annuler',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Supprimer',
+                    onPress: () => {
+                        fetch(`https://bgc-backend.vercel.app/notePad/${token}/${id}`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                            .then(response => response.json())
+                            .then(() => {
+                                const updatedNotes = notes.filter(note => note._id !== id);
+                                setNotes(updatedNotes);
+                                console.log('Note supprimée');
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors de la suppression de la note:', error);
+                            });
+                    },
+                },
+            ]
+        );
+    };
+
+    const resetNoteFields = () => {
+      setNoteTitle('');
+      setNoteContent('');
+      setSelectedNote(null);
+      console.log('je suis ici')
   };
 
-  const handlPressAddNote = () => {
-    // POST d'ajout de note
-    // construction de l'objet notePade 
-        const notePad = {
-          title : noteTitle,
-          content : noteContent
-        }
-      console.log('clic')
-      console.log('token : ', token)
-      console.log('notePad', notePad)
-      fetch(`https://bgc-backend.vercel.app/notePad`,{
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({token,notePad})
-              })
-          .then(response=> response.json())
-          .then((data) => {
-            console.log("fetch ok",data)
-            setIsModalVisible(false)
-          })
-      
-  }
-
-  const notesCards = notes.map((savedNote, index) => {
-    return (
-    <View style={styles.notesCards}key={index}>
-        <View style={styles.headLine}>
-            <Text style={styles.title}>{savedNote.title}</Text>
-            <TouchableOpacity style={styles.deleteTouchable} onPress={() => deleteNote(savedNote._id, savedNote.title)}>
-            <FontAwesome 
-                            size={16}
-                            name="trash"
-                            color="#0A3332" 
-                            backgroundColor="#88B7B6"/>
-                    </TouchableOpacity>
-        </View>
-        <View style={styles.textContent}>
-        <   Text style={styles.content}>{savedNote.content}</Text>
-        </View>
-    </View>
-    )
-    
-  })
-
+  const truncateTitle = (title) => {
+    const maxLength = 30;
+    if (title.length > maxLength) {
+        return title.substring(0, maxLength) + '...';
+    }
+    return title;
+};
   
-  return (
-    
-    
-    <View style={styles.container}>
-         <Header title="Bloc-notes" height={100}  showMeeple={false} style={styles.header} />
-        <TouchableOpacity style={styles.returnButton} onPress={handleBackToAccessooiresScreen}>
-            <AntDesign name="arrowleft" size={24} color="#423D3D" />
-        </TouchableOpacity>
-        
-        <Modal visible={isModalVisible} animationType="fade" transparent={true}>
-        <View style={styles.modalContainer}>
-        <TouchableOpacity style={styles.returnButton} onPress={() => setIsModalVisible(false)}>
-            <AntDesign name="arrowleft" size={24} color="#423D3D" />
-        </TouchableOpacity>
-          <Text style={{alignSelf: 'center', fontSize: 20, margin: 10}}>Nouvelle note</Text>
-          <TextInput
-            style={styles.noteTitle}
-            placeholder="Titre"
-            value={noteTitle}
-            onChangeText={(value) => setNoteTitle(value)}
-            />
-          <TextInput
-            style={styles.noteContent}
-            placeholder="Contenu"
-            multiline={true}
-            value={noteContent}
-            onChangeText={(value) => setNoteContent(value)}
+  const handlPressNewNote = () => {
+    resetNoteFields ();
+    setIsModalVisible(true);
+  };
 
-          />
-        <TouchableOpacity onPress={() => handlPressAddNote()} style={styles.buttonX}>
-            <Text style={{color: '#423D3D', fontWeight: 600}} >Enregistrer la note</Text>
-        </TouchableOpacity>
+  const handlePressNote = (selectedNote) => {
+    setSelectedNote(selectedNote);
+    setIsModalVisible(true);
+    if (!selectedNote) {
+      console.log("Nouvelle note sélectionnée, réinitialisation des champs");
+      resetNoteFields(); // Réinitialiser les champs si c'est une nouvelle note
+  } else {
+      console.log("Note existante sélectionnée, pas de réinitialisation des champs");
+  }
+};
+
+    const handlPressAddNote = () => {
+        const notePad = {
+            title: noteTitle,
+            content: noteContent
+        }
+        fetch(`https://bgc-backend.vercel.app/notePad`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, notePad })
+        })
+            .then(response => response.json())
+            .then((data) => {
+                console.log("fetch ok", data)
+                setIsModalVisible(false)
+            })
+    };
+
+    const notesCards = notes.map((savedNote, index) => {
+        return (
+            <TouchableOpacity key={index} onPress={() => handlePressNote(savedNote)}>
+                <View style={styles.notesCards}>
+                    <View style={styles.headLine}>
+                        <Text style={styles.title}>{truncateTitle(savedNote.title)}</Text>
+                        <TouchableOpacity style={styles.deleteTouchable} onPress={() => deleteNote(savedNote._id, savedNote.title)}>
+                            <FontAwesome
+                                size={16}
+                                name="trash"
+                                color="#0A3332"
+                                backgroundColor="#88B7B6" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.textContent}>
+                        <Text style={styles.content}>{savedNote.content}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    });
+
+    return (
+        <View style={styles.container}>
+            <Header title="Bloc-notes" height={100} showMeeple={false} style={styles.header} />
+            <TouchableOpacity style={styles.returnButton} onPress={handleBackToAccessoriesScreen}>
+                <AntDesign name="arrowleft" size={24} color="#423D3D" />
+            </TouchableOpacity>
+
+            <Modal visible={isModalVisible} animationType="fade" transparent={true}>
+                <View style={styles.modalContainer}>
+                    <TouchableOpacity style={styles.returnButton} onPress={() => setIsModalVisible(false)}>
+                        <AntDesign name="arrowleft" size={24} color="#423D3D" />
+                    </TouchableOpacity>
+                    {selectedNote ? (
+                        <>
+                            <Text style={{ alignSelf: 'center', fontSize: 20, margin: 10 }}>Détails de la note</Text>
+                            <Text style={styles.selectedNoteTitle}>{selectedNote.title}</Text>
+                            <View style={styles.selectedNoteContentArea}>
+                              <Text style={styles.selectedNoteContent}>{selectedNote.content}</Text>
+                            </View>
+                            
+                        </>
+                    ) : (
+                        <>
+                            <Text style={{ alignSelf: 'center', fontSize: 20, margin: 10 }}>Nouvelle note</Text>
+                            <TextInput
+                                style={styles.noteTitle}
+                                placeholder="Titre"
+                                value={noteTitle}
+                                onChangeText={(value) => setNoteTitle(value)}
+                            />
+                            <TextInput
+                                style={styles.noteContent}
+                                placeholder="Contenu"
+                                multiline={true}
+                                value={noteContent}
+                                onChangeText={(value) => setNoteContent(value)}
+                            />
+                            <TouchableOpacity onPress={() => handlPressAddNote()} style={styles.buttonX}>
+                                <Text style={{ color: '#423D3D', fontWeight: 600 }} >Enregistrer la note</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
+
+                </View>
+            </Modal>
+
+            <TouchableOpacity style={styles.addButton} onPress={() => handlPressNewNote()}>
+                <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />
+                <Text style={styles.buttonText}>Nouvelle note</Text>
+            </TouchableOpacity>
+
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                {notesCards}
+            </ScrollView>
         </View>
-      </Modal>
-      
-        <TouchableOpacity style={styles.addButton} onPress={() => setIsModalVisible(true)}>
-      <FontAwesome5 style={styles.fabtn} name="plus-circle" size={24} color="#423D3D" />{/* Logo + de AntDesign */}
-        <Text style={styles.buttonText}>Nouvelle note</Text>
-      </TouchableOpacity>
-        <ScrollView contentContainerStyle={styles.scrollView}>
-      {notesCards}
-        </ScrollView>
-    </View>
-
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -280,5 +309,19 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       height: 200,
       width:'80%',
-}
+},
+    selectedNoteTitle:{
+      textAlign:'center',
+      fontSize: 20,
+      fontWeight:'bold',
+      border : '#000000', 
+      marginBottom: 20
+    },
+    selectedNoteContentArea:{
+      padding: 10,
+      backgroundColor:'white', 
+      borderRadius: 20,
+      width: '90%',
+      height: 500,
+    }
 })

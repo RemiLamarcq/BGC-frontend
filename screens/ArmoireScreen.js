@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
 import { setDefaultGameName } from '../reducers/selectedGameName';
 import { setCameraPermission } from '../reducers/cameraPermission';
+import { Camera } from 'expo-camera';
 
 export default function ArmoireScreen({navigation}) {
 
