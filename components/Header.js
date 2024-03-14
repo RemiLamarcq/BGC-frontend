@@ -140,7 +140,7 @@ function Header({
                 {showGameCounter && (
                   <View>
                    <Text style={styles.gameCounter}>
-                    {initialGames.length} {initialGames.length === 1 ? 'jeu' : 'jeux'}
+                    {initialGames.length} {initialGames.length === 0 || 1 ? 'jeu' : 'jeux'}
                   </Text>
                   </View>
                 )}

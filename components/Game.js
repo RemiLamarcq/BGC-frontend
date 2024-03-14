@@ -8,6 +8,7 @@ import FicheGame from './FicheGame';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import { setDefaultGameName } from '../reducers/selectedGameName';
 import selectedGameName from '../reducers/selectedGameName';
+import { ScrollView } from 'react-native-web';
 
 export default function Game({name, image, gameType, minPlayers, maxPlayers, duration, personalNote, id, navigation, toggleModalVisibility, isVisible, game, selectedGame, stars, handleDeleteGame }) {
 
@@ -91,18 +92,18 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
 
         </View>
 
-   {/* modale et contenu qui sera à déplacer */}     
+   {/* modale */}     
 
     <Modal visible={isVisible} animationType="fade" transparent={true}>
 
         {selectedGame && 
 
-          <FicheGame 
-            selectedGame={selectedGame} 
-            toggleModalVisibility={toggleModalVisibility} 
-            handleDeleteGame={handleDeleteGame} 
-            navigation={navigation}
-            name={name}/>
+            <FicheGame 
+              selectedGame={selectedGame} 
+              toggleModalVisibility={toggleModalVisibility} 
+              handleDeleteGame={handleDeleteGame} 
+              navigation={navigation}
+              name={name}/>
           
       }
     </Modal>
