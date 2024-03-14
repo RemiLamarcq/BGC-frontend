@@ -39,7 +39,7 @@ export default function AddGamePlay() {
     const gamePlayInfos = useSelector(state => state.addGamePlayInfos.value);
     const { selectedGameName, isInterrupted, date, location, players, photosUri, comment } = gamePlayInfos;
     const defaultGameName = useSelector(state => state.defaultGameName.value);
-console.log(gamePlayInfos)
+
     // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
     // pour l'affichage dans la dropdown et pour filtrer les View dans les players
     const [gameList, setGameList] = useState([]);
@@ -62,7 +62,7 @@ console.log(gamePlayInfos)
         playerMissing: false
     });
     const [idInitialValue, setIdInitialValue] = useState(0);
-// console.log(addGamePlayVisible)
+
     // A l'initialisation, récupère tous les jeux de la BDD sous forme {name, isTeam, isCharacter, isScore}
     useEffect(() => {
         fetch(`https://bgc-backend.vercel.app/games/allNames/${token}`)
@@ -215,7 +215,6 @@ const [inputValue, setInputValue] = useState('');
                         "La partie a été enregistrée avec succès",
                         [
                             { text: "OK", onPress: () => {
-                                // console.log(1);
                                 dispatch(resetAddGamePlay());
                                 dispatch(setDefaultGameName(null));
                                 dispatch(setAddGamePlayVisible(!addGamePlayVisible));

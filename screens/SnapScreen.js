@@ -43,7 +43,7 @@ export default function SnapScreen() {
       <View style={styles.topIcons}>
         <TouchableOpacity>
           <FontAwesome 
-            onPress={() => { dispatch(setAddGamePlayVisible()); navigation.navigate('TabNavigator'); }} 
+            onPress={() => { dispatch(setAddGamePlayVisible(true)); navigation.navigate('TabNavigator'); }} 
             name="arrow-left" 
             style={styles.icons}
             color="white" 
