@@ -46,6 +46,7 @@ fetch('https://bgc-backend.vercel.app/users/signin', {
 
   const handleForgotPassword = () => {
     toggleModalForgotPassword();
+    setError('');
   }
 
   const toggleModalForgotPassword = () => {
@@ -90,9 +91,9 @@ fetch('https://bgc-backend.vercel.app/users/signin', {
         value={password}
         onChangeText={(value) => setPassword(value)}
       />
-      <TextInput style={styles.errorMsg}>
-        {error}
-      </TextInput>
+      <Text style={styles.errorMsg}>
+          {error}
+      </Text>
 
       <TouchableOpacity style={styles.forgotPasswordButton} onPress={handleForgotPassword}>
         <Text style={styles.forgotPasswordButtonText}>Mot de passe oublié</Text>
@@ -192,7 +193,8 @@ const styles = StyleSheet.create({
     }, 
     errorMsg:{
       color : 'red', 
-      textAlign:'center'
+      textAlign:'center', 
+      margin: 20
     },
 
     forgotPasswordButton: {

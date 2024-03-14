@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
 import { transformInDate, checkFormatDate } from '../modules/formatDate';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import {
     setSelectedGameName,
@@ -24,6 +24,7 @@ import {
     resetPlayersInfos,
     setSelectedPhoto,
     setComment,
+    resetAddGamePlay,
 } from '../reducers/addGamePlayInfos';
 import { setDefaultGameName } from '../reducers/selectedGameName';
 
@@ -31,13 +32,14 @@ export default function AddGamePlay() {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const isFocused = useIsFocused();
 
     const token = useSelector((state) => state.user.value.token);
     const addGamePlayVisible = useSelector(state => state.addGamePlayVisible.value);
     const gamePlayInfos = useSelector(state => state.addGamePlayInfos.value);
     const { selectedGameName, isInterrupted, date, location, players, photosUri, comment } = gamePlayInfos;
     const defaultGameName = useSelector(state => state.defaultGameName.value);
-
+console.log(gamePlayInfos)
     // gameList stocke tous les jeux sous forme {name, isTeam, isCharacter, isScore} 
     // pour l'affichage dans la dropdown et pour filtrer les View dans les players
     const [gameList, setGameList] = useState([]);
@@ -60,7 +62,7 @@ export default function AddGamePlay() {
         playerMissing: false
     });
     const [idInitialValue, setIdInitialValue] = useState(0);
-
+// console.log(addGamePlayVisible)
     // A l'initialisation, récupère tous les jeux de la BDD sous forme {name, isTeam, isCharacter, isScore}
     useEffect(() => {
         fetch(`https://bgc-backend.vercel.app/games/allNames/${token}`)
@@ -68,7 +70,7 @@ export default function AddGamePlay() {
         .then(data => {
             data.result && setGameList(data.gameData);
         });
-    }, [addGamePlayVisible]);
+    }, [isFocused]);
 
     // A l'initialisation et à chaque nouvel enregistrement d'un ami, récupère tous les noms des amis
     useEffect(() => {
@@ -138,7 +140,8 @@ export default function AddGamePlay() {
             };
         })
     }
-
+const [isPlayerToGPSelected, setIsPlayerToGPSelected] = useState(false);
+const [inputValue, setInputValue] = useState('');
     //Modifie l'état players en ajoutant un joueur
     function handleAddPlayer(friendName){
         dispatch(setNewPlayer({
@@ -148,6 +151,9 @@ export default function AddGamePlay() {
             character: '',
             score: '',
         }));
+        setIsPlayerToGPSelected(true);
+        setInputValue('');
+        setTimeout(() => setIsPlayerToGPSelected(false), 1000);
     }
 
     function handleNavigation(photoNumber){
@@ -195,10 +201,8 @@ export default function AddGamePlay() {
                 comment,
             };
             formData.append('json', JSON.stringify(otherData));
-            console.log(formData);
             // Envoi des données pour création de la nouvelle partie
-            // fetch(`https://bgc-backend.vercel.app/gamePlays`, {
-            fetch(`http://192.168.1.12:3000/gamePlays`, {
+            fetch(`https://bgc-backend.vercel.app/gamePlays`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'multipart/form-data' },
                 body: formData,
@@ -206,8 +210,18 @@ export default function AddGamePlay() {
             .then(result => result.json())
             .then(data => {
                 if(data.result){
-                    dispatch(setDefaultGameName(null));
-                    dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+                    Alert.alert(
+                        "Succès",
+                        "La partie a été enregistrée avec succès",
+                        [
+                            { text: "OK", onPress: () => {
+                                // console.log(1);
+                                dispatch(resetAddGamePlay());
+                                dispatch(setDefaultGameName(null));
+                                dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+                            }}
+                        ]
+                    );
                 } else {
                     Alert.alert(data.error);
                 }
@@ -217,10 +231,9 @@ export default function AddGamePlay() {
     }
 
     const handleGoBack = () => {
-        console.log(defaultGameName);
         dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+        dispatch(resetAddGamePlay());
         dispatch(setDefaultGameName(null));
-        console.log(defaultGameName);
     }
 
     const playersJSX = players.map((player, i) => {
@@ -248,6 +261,7 @@ export default function AddGamePlay() {
                 <View style={styles.playerCtnBottom}>
                     { chosenGame?.isTeam &&
                     <TextInput
+                        key="teamTextInput"
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Equipe"
                         placeholderTextColor= 'grey'
@@ -258,6 +272,7 @@ export default function AddGamePlay() {
                     }
                     { chosenGame?.isCharacter &&
                     <TextInput
+                        key="characterTextInput"
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Personnage"
                         placeholderTextColor= 'grey'
@@ -268,6 +283,7 @@ export default function AddGamePlay() {
                     }
                     { chosenGame?.isScore &&
                     <TextInput
+                        key="scoreTextInput"
                         style={[ styles.input, styles.playerInput ]}
                         placeholder="Score"
                         placeholderTextColor= 'grey'
@@ -283,26 +299,17 @@ export default function AddGamePlay() {
 
     useEffect(() => {
         if (formattedGameNames) {
-            // console.log(selectedGameName);
              // Le titre que vous cherchez
             const titreRecherche = defaultGameName;
-
             // Recherche de l'objet correspondant
             const objetTrouve = formattedGameNames.find(obj => obj.title === titreRecherche);
-
             // Extraction de l'id si l'objet est trouvé, sinon null
             const idTrouve = objetTrouve ? objetTrouve.id : null;
-
-            // console.log("ID correspondant :", idTrouve);
-
             setIdInitialValue(idTrouve);
-
         }
-      }, [formattedGameNames, addGamePlayVisible]);
+    }, [formattedGameNames, addGamePlayVisible]);
 
-        let initialValue = idInitialValue;
-    
-
+    let initialValue = idInitialValue;
 
     return(
         <AutocompleteDropdownContextProvider>
@@ -310,8 +317,8 @@ export default function AddGamePlay() {
                 <ScrollView contentContainerStyle={ styles.scrollView } >
                     <View style={styles.container}>
                         <View style={styles.topContainer} >
-                            <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(setAddGamePlayVisible(!addGamePlayVisible))}>
-                            <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
+                            <TouchableOpacity style={styles.goBackTouchable} onPress={() => handleGoBack()}>
+                                <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
                             </TouchableOpacity>
                             <Text style={styles.title}>Ajouter une partie</Text>
                         </View>
@@ -403,6 +410,8 @@ export default function AddGamePlay() {
                                 textInputProps={{ 
                                     placeholder: 'Ajouter un joueur à la partie',
                                     placeholderTextColor: 'grey',
+                                    value: isPlayerToGPSelected ? '' : inputValue,
+                                    onChangeText: value => setInputValue(value),
                                 }}
                                 closeOnSubmit
                                 suggestionsListContainerStyle={{
@@ -418,7 +427,11 @@ export default function AddGamePlay() {
                                     height: 40, 
                                 }}
                             />
-                            <AntDesign name="adduser" style={styles.adduser} size={24}/>
+                            {!isPlayerToGPSelected ?
+                                <AntDesign name="adduser" style={styles.adduser} size={24} color='#423D3D'/>
+                            :
+                                <AntDesign name="checkcircle" style={styles.adduser} size={24} color='#88B7B6'/>
+                            }
                         </View>
                         { invalidField.playerMissing && <Text style={styles.invalidField}>Sélectionner un joueur</Text> }
                         {playersJSX}
@@ -458,7 +471,7 @@ export default function AddGamePlay() {
                         </View>
                         { invalidField.globalMessage && <Text style={styles.invalidField}>Renseigner le nom du jeu, la date et au moins 1 joueur</Text> }
                         <TouchableOpacity onPress={() => handleSaveGamePlay()} style={styles.saveBtn}>
-                        <Text style={{color: '#F2F4F1', fontWeight: 600}}>Enregistrer</Text>
+                            <Text style={{color: '#F2F4F1', fontWeight: 600}}>Enregistrer</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -536,7 +549,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     adduser: {
-        color: '#423D3D',
         position: "absolute",
         left: 14,
         top: 12,

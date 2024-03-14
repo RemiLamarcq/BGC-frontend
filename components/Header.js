@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import { AntDesign } from '@expo/vector-icons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Modal from 'react-native-modal';
 
 function Header({ 
   title, 
@@ -19,7 +20,6 @@ function Header({
   isInNotebook, 
   showGameCounter,
   initialGames, 
-  currentScreen,
 }) {
     // Dispatch pour exécuter les actions Redux
     const dispatch = useDispatch();
@@ -35,6 +35,8 @@ function Header({
     const [searchGamePlay, setSearchGamePlay] = useState('');
     // État local pour déterminer si la section "meeple" est ouverte ou non
     const [isMeepleSectionOpen, setIsMeepleSectionOpen] = useState(false); 
+    // État pour contrôler la visibilité de la modal
+    const [showModal, setShowModal] = useState(false); // État pour contrôler la visibilité de la modal
 
     // Fonction pour gérer le changement de recherche
     const handleSearchChange = (value) => {
@@ -49,6 +51,7 @@ function Header({
 
     // Fonction pour gérer la déconnexion de l'utilisateur
     const handleLogout = () => {
+      setShowModal(true); // Ouvrir la modal
       Alert.alert(
         'Confirmation',
         'Êtes-vous sûr de vouloir vous déconnecter ?',
@@ -82,13 +85,10 @@ function Header({
     // Fonction pour basculer l'état de la section "meeple" entre ouverte et fermée
     const toggleMeepleSection = () => {
       setIsMeepleSectionOpen(!isMeepleSectionOpen);
+      setShowModal(!showModal); // Ouvrir ou fermer la modal
       console.log("isMeepleSectionOpen:", isMeepleSectionOpen);
     };
 
-    // Fonction pour fermer la section "meeple"
-    const handleGoBack = () => {
-      setIsMeepleSectionOpen(false); // Fermer la section "meeple"
-    };
 
     return (
       <View style={[styles.headerContainer, { height: height }]}>
@@ -101,23 +101,21 @@ function Header({
               </TouchableOpacity>
             )}
             {/* Titre de la section */}
-            <Text style={styles.headerTitle}>{title}</Text>
-          </View>
-          {/* Section "meeple" */}
-          {isMeepleSectionOpen && (
-            <View style={[(currentScreen === 'ArmoireScreen' || currentScreen === 'CahierScreen') ? styles.meepleSectionFirst : styles.meepleSectionOther]}>
-              {/* Bouton pour revenir en arrière dans la section "meeple" */}
-              <TouchableOpacity style={styles.goBackButton} onPress={handleGoBack}>
-              <AntDesign name="arrowleft" size={24} color="#423D3D" />
-              </TouchableOpacity>
-              {/* Message de bienvenue à l'utilisateur */}
-              <Text style={styles.meepleText}>Bonjour {user.username} !</Text>
-              {/* Bouton de déconnexion */}
-              <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.meepleTextLogout}>Déconnexion</Text>
-              </TouchableOpacity>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={styles.headerTitle}>{title}</Text>
             </View>
-          )}
+          </View>
+              {/* Modal pour la déconnexion */}
+              <Modal isVisible={showModal} onBackdropPress={() => setShowModal(false)} animationType='none'>
+                <View style={styles.modalContent}> 
+                  {/* Message de bienvenue à l'utilisateur */}
+                  <Text style={styles.meepleText}>Bonjour {user.username} !</Text>
+                  {/* Bouton de déconnexion */}
+                  <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                    <Text style={styles.meepleTextLogout}>Déconnexion</Text>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
           {/* Barre de recherche, filtre et bouton d'ajout */}
           {showSearchBar && (
             <View style={styles.modularHeader}>
@@ -141,7 +139,9 @@ function Header({
                 {/* Compteur de jeux */}
                 {showGameCounter && (
                   <View>
-                    <Text style={styles.gameCounter}>{initialGames.length} {initialGames.length === 1 ? 'jeu' : 'jeux'}</Text>
+                   <Text style={styles.gameCounter}>
+                    {initialGames.length} {initialGames.length === 1 ? 'jeu' : 'jeux'}
+                  </Text>
                   </View>
                 )}
                 {/* Bouton d'ajout de jeu ou de partie de jeu */}
@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         alignSelf: 'center',
-        marginLeft:100,
       },
       modularHeader:{
         gap: 10,
@@ -240,35 +239,34 @@ const styles = StyleSheet.create({
         marginTop: 15, 
         color: '#423D3D',
       },
-      //meepleOpen page Armoire et cahier
-      meepleSectionFirst: {
-        backgroundColor: '#F4F1F2',
-        paddingBottom:5,
-        borderRadius: 15,
-        padding: 20,
-        marginTop: 20,
-        width:"50%",
-      },
+     
       logoutButton: {
         backgroundColor: "#88B7B6",
         borderRadius: 5,
-        padding: 5,
+        padding: 10,
         alignItems: 'center',
       },
       meepleText: {
         color: '#423D3D',
         fontWeight:'bold',
+        fontSize:20,
       },
       meepleTextLogout: {
         color: '#423D3D',
       },
-      //meepleOpen page Stat et accessoires 
-      meepleSectionOther:{
-        backgroundColor: '#F4F1F2',
-        borderRadius: 15,
-        padding: 20,
-        width:"50%",
-        height:80,
+      modalContent: {
+        backgroundColor: '#F2F4F1',
+        padding: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 50,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        marginTop: 20, // Espacement par rapport au haut de l'écran
+        marginRight: 20, // Espacement par rapport à la droite de l'écran
+        width: 200, // Largeur de la modal (ajustez selon vos besoins)
       },
 });
 

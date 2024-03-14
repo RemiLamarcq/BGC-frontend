@@ -130,9 +130,9 @@ export default function AddGame({props, toggleModalAddGame}) {
     let starsAddGame = [];
     for(let i= 0; i < 5; i++){
         if (i < gameInfos.personalNote -1) {
-            starsAddGame.push(<AntDesign name="star" style={{color: '#0A3332'}}/>);
+            starsAddGame.push(<AntDesign key={i} name="star" style={{color: '#0A3332'}}/>);
         } else {
-            starsAddGame.push(<AntDesign name="staro" style={{color: '#0A3332'}}/>);
+            starsAddGame.push(<AntDesign key={i} name="staro" style={{color: '#0A3332'}}/>);
         }
         
     }
@@ -142,13 +142,13 @@ export default function AddGame({props, toggleModalAddGame}) {
         for(let i= 0; i < 5; i++){
             if (i < addPersonalNote) {
                 starsAddGame.push(
-                <TouchableOpacity onPress={() => setAddPersonalNote(i+1)}>
+                <TouchableOpacity key={i} onPress={() => setAddPersonalNote(i+1)}>
                     <AntDesign name="star" style={{color: '#0A3332'}} />
                 </TouchableOpacity>
                 );
             } else {
                 starsAddGame.push(
-                <TouchableOpacity onPress={() => setAddPersonalNote(i+1)}>
+                <TouchableOpacity key={i} onPress={() => setAddPersonalNote(i+1)}>
                     <AntDesign name="staro" style={{color: '#0A3332'}} />
                 </TouchableOpacity>
                 );

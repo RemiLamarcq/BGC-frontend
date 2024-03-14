@@ -2,18 +2,35 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
 
-export default function ForgotPassword({toggleModalForgotPassword, toggleModalCodeNewPassword}) {
+export default function ForgotPassword({toggleModalForgotPassword, toggleModalCodeNewPassword, email}) {
 
-    const [code, setCode] = useState('');
-    const [newPassword, setNewPassword] = useState('');
+    const [checkCode, setCheckCode] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleSubmit = () => {
+        console.log(email);
+        console.log(checkCode);
+        console.log(password);
+
+        fetch(`https://bgc-backend.vercel.app/pwdRecovery/verifyCode/${email}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ checkCode, password }),
+        })
+        .then(response => response.json())
+            .then(data => {
+              if(data.result) {
+                setCheckCode('');
+                setPassword('');
+                console.log('waw')
+              }else{
+                setError(data.error);
+                console.log('pop')
+              }
+            })
+
         toggleModalCodeNewPassword();
         toggleModalForgotPassword();
-    }
-
-    const handleResend = () => {
-
     }
 
     const handleBackToLogin = () => {
@@ -30,16 +47,16 @@ export default function ForgotPassword({toggleModalForgotPassword, toggleModalCo
                 style={styles.inputVerificationCode}
                 placeholder="Code de vérification"
                 autoCapitalize='none'
-                value={code}
-                onChangeText={(value) => setCode(value)}
+                value={checkCode}
+                onChangeText={(value) => setCheckCode(value)}
             />
 
             <TextInput
                 style={styles.inputNewPassword}
                 placeholder="Nouveau mot de passe"
                 secureTextEntry={true}
-                value={newPassword}
-                onChangeText={(value) => setNewPassword(value)}
+                value={password}
+                onChangeText={(value) => setPassword(value)}
             />
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>

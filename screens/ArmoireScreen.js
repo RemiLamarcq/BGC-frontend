@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Header from '../components/Header';
 import { setDefaultGameName } from '../reducers/selectedGameName';
 import { setCameraPermission } from '../reducers/cameraPermission';
+import { Camera } from 'expo-camera';
 
 export default function ArmoireScreen({navigation}) {
 
@@ -104,7 +105,6 @@ export default function ArmoireScreen({navigation}) {
     if (!isVisible) {
       setSelectedGame(gameData);
     }
-    console.log('hello', selectedGame.name);
   };
 
   const handleDeleteGame = () => {
@@ -122,7 +122,7 @@ export default function ArmoireScreen({navigation}) {
           text: 'Supprimer',
           onPress: () => {
             // Effectuer la suppression si l'utilisateur confirme
-            fetch(`https://bgc-backend.vercel.app/games/closet/remove/${selectedGame.name}/${token}`,{
+            fetch(`https://bgc-backend.vercel.app/pwdRecovery/sendEMail/${selectedGame.name}/${token}`,{
               method: 'DELETE',
               headers: { 'Content-Type': 'application/json' },
               }).then(response=> response.json())
@@ -151,7 +151,7 @@ export default function ArmoireScreen({navigation}) {
   <View style={styles.mainContainer}>
     <Header 
       title="Armoire" 
-      height={200} 
+      height={220} 
       showMeeple={true} 
       showSearchBar={true} 
       toggleModalAddGame={toggleModalAddGame} 
@@ -160,7 +160,6 @@ export default function ArmoireScreen({navigation}) {
       isInNotebook={false}
       showGameCounter={true}
       initialGames={initialGames}
-      currentScreen="ArmoireScreen"
     />
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View>

@@ -20,7 +20,7 @@ export const ficheGamePlaySlice = createSlice({
         resetFicheGamePlay: state => {
             state.value.isModalVisible = initialState.value.isModalVisible;
             state.value.gamePlay = initialState.value.gamePlay;
-        }        
+        }
     },
 });
 

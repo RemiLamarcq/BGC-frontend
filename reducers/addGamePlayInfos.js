@@ -70,6 +70,9 @@ export const addGamePlayInfosSlice = createSlice({
     setComment: (state, action) => {
         state.value.comment = action.payload;
     },
+    resetAddGamePlay: state => {
+        state.value = initialState.value;
+    },
   },
 });
 
@@ -89,6 +92,7 @@ export const {
     setPhoto,
     setSelectedPhoto,
     setComment,
+    resetAddGamePlay,
 } = addGamePlayInfosSlice.actions;
 
 export default addGamePlayInfosSlice.reducer;

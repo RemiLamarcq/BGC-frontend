@@ -59,6 +59,7 @@ export default function CahierScreen() {
   const gamePlaysJSX = 
     gamePlays
     .filter(gamePlay => gamePlay.game.name.toLowerCase().includes(gamePlaysFilter.toLowerCase()))
+    .reverse()
     .map((gamePlay, i) => {
       return (
         <GamePlay  
@@ -73,12 +74,11 @@ export default function CahierScreen() {
     <View style={styles.mainContainer}>
       <Header 
         title="Cahier" 
-        height={200} 
+        height={220} 
         showMeeple={true} 
         showSearchBar={true} 
         isInNotebook={true}
         handleGamePlaysFilter={handleGamePlaysFilter}
-        currentScreen="CahierScreen"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View>

@@ -1,9 +1,14 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Alert, Image, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { RadioButton } from 'react-native-paper';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetFicheGamePlay } from '../reducers/ficheGamePlay';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { AntDesign } from '@expo/vector-icons';
+
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function FicheGamePlay(){
 
@@ -29,13 +34,22 @@ export default function FicheGamePlay(){
         }).catch(error => Alert.alert(error));
     }
 
+    const photosJSX = gamePlayImages.map((imgUrl, i) => {
+        return(
+            <View key={i} style={styles.photoCtn}>
+                <Image source={{ uri: imgUrl }} style={styles.photo} />
+            </View>
+        );
+    });
+
     const playersJSX = players.map((player, i) => {
         const { friendName, isWinner, team, character, score } = player;
         return (
             <View key={i} style={styles.playerCtn}>
-                <View style={styles.playerCtnTop}>
+                <View style={styles.playerRowCtn}>
                     <Text style={ styles.player }>{friendName}</Text>
                     <View style={styles.radioBtnBloc}>
+                        <Text>Vainqueur</Text>
                         <View style={styles.radioBtnCtn}>
                             <RadioButton
                                 value="winner"
@@ -44,39 +58,41 @@ export default function FicheGamePlay(){
                                 color="#0A3332"
                             />
                         </View>
-                        <Text>Vainqueur</Text>
                     </View>
                 </View>
                 <View style={styles.playerCtnBottom}>
                     { isTeam &&
-                    <TextInput
-                        style={[ styles.input, styles.playerInput ]}
-                        placeholder="Equipe"
-                        placeholderTextColor= 'grey'
-                        inputMode='text'
-                        // onChangeText={value => handleTeam(i, value)}
-                        value={team}
-                    />
+                    <View style={styles.playerRowCtn}>
+                        <Text>Equipe</Text>                        
+                        <TextInput
+                            style={[ styles.input, styles.playerInput ]}
+                            inputMode='text'
+                            editable={false}
+                            value={team}
+                        />
+                    </View>
                     }
                     { isCharacter &&
-                    <TextInput
-                        style={[ styles.input, styles.playerInput ]}
-                        placeholder="Personnage"
-                        placeholderTextColor= 'grey'
-                        inputMode='text'
-                        // onChangeText={value => handleCharacter(i, value)}
-                        value={character}
-                    />
+                    <View style={styles.playerRowCtn}>
+                        <Text>Personnage</Text>                        
+                        <TextInput
+                            style={[ styles.input, styles.playerInput ]}
+                            inputMode='text'
+                            editable={false}
+                            value={character}
+                        />
+                    </View>                    
                     }
                     { isScore &&
-                    <TextInput
-                        style={[ styles.input, styles.playerInput ]}
-                        placeholder="Score"
-                        placeholderTextColor= 'grey'
-                        inputMode='text'
-                        // onChangeText={value => handleScore(i, value)}
-                        value={score}
-                    />
+                    <View style={styles.playerRowCtn}>
+                        <Text>Score</Text>
+                        <TextInput
+                            style={[ styles.input, styles.playerInput ]}
+                            inputMode='text'
+                            editable={false}
+                            value={score}
+                        />
+                    </View>
                     }
                 </View>
             </View>
@@ -89,33 +105,39 @@ export default function FicheGamePlay(){
                 <View style={styles.topCtn}>
                     <View style={styles.gameAndBtns}>
                         <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(resetFicheGamePlay())}>
-                            <FontAwesome name="arrow-left" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                        <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
                         </TouchableOpacity>
                         <Text style={styles.game}>
                             {name}
                         </Text>
                         <TouchableOpacity style={styles.trash} onPress={handleRemoveGamePlay} >
-                            <FontAwesome name="trash" color="#0A3332" backgroundColor="#88B7B6" size={20} />
+                        <FontAwesome 
+                            size={16}
+                            name="trash"
+                            color="#0A3332" 
+                            backgroundColor="#88B7B6"/>                        
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.date}>{endDate}</Text>
                 </View>
-                <View style={styles.slider}>
-                    <View style={styles.photo}>
-
-                    </View>
-                    <View style={styles.sliderCircles}>
-                        <View style={styles.circle}></View>
-                        <View style={styles.circle}></View>
-                        <View style={styles.circle}></View>
-                    </View>
+                { photosJSX.length !== 0 &&
+                <View style={styles.swiperCtn}>
+                    <SwiperFlatList 
+                        showPagination
+                        paginationDefaultColor={'#CDDCDB'}
+                        paginationActiveColor={'#88B7B6'}
+                        paginationStyle={{ bottom: - 35 }}
+                    >
+                        {photosJSX}
+                    </SwiperFlatList>
                 </View>
+                }
                 <View style={styles.playersCtn}>
                     {playersJSX}
                 </View>
                 <View style={styles.commentCtn}>
                     <Text style={styles.comment}>
-                        {comment}
+                        {comment ? comment : `Aucune note enregistrée`}
                     </Text>
                 </View>
             </View>
@@ -147,26 +169,29 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     goBackTouchable: {
-        height: 45,
-        width: 55,
-        borderRadius: 25,
+        borderRadius: 50,
         backgroundColor: "#88B7B6",
         position: 'absolute',
         left: 0,
         justifyContent: 'center',
         alignItems: 'center',
+        height: 30,
+        width: 30,
+        alignSelf: 'flex-start',
     },
     game: {
         fontSize: 22,
         fontWeight: 'bold',
+        maxWidth: '60%',
+        textAlign: 'center',
     },
     trash:{
-        height: 45,
-        width: 45,
-        borderRadius: 25,
-        backgroundColor: "#88B7B6",
         position: 'absolute',
-        right: 0,
+        right: -5,
+        height: 30,
+        width: 30,
+        borderRadius: 50,
+        backgroundColor: "#88B7B6",
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -174,28 +199,18 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         fontSize: 20,
     },
-    slider: {
-        alignItems: 'center',
-        gap: 10,
-    },
-    photo: {
-        width:'100%',
+    swiperCtn: {
         height: 150,
-        backgroundColor: 'pink',
+        marginBottom: 20,
     },
-    sliderCircles: {
-        width: '40%',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
+    photoCtn:{
+        width: screenWidth - 40,
     },
-    circle: {
-        width: 15,
-        height: 15,
-        backgroundColor: '#88B7B6',
-        borderRadius: 25,
+    photo:{
+        flex: 1,
     },
     playersCtn: {
-        gap: 20,
+        gap: 15,
     },
     playerCtn: {
         backgroundColor: '#CDDCDB',
@@ -203,7 +218,7 @@ const styles = StyleSheet.create({
         padding: 15,
         gap: 10,
     },
-    playerCtnTop: {
+    playerRowCtn:{
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -227,7 +242,7 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     playerInput: {
-        width: '80%',
+        width: '60%',
         backgroundColor: 'white',
         borderRadius: 25,
         padding: 10,

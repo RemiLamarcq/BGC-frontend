@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Clé de stockage pour AsyncStorage
 const STORAGE_KEY = 'timerState';
 
-function Timer() {
+function Timer(height) {
   // État pour stocker les minuteries
   const [timers, setTimers] = useState([]);
 
@@ -54,7 +54,7 @@ function Timer() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height: height }]}>
       {/* Titre de la section */}
       <Text style={styles.addTimer}>Ajouter un timer :</Text>
 
