@@ -195,9 +195,9 @@ export default function AddGamePlay() {
                 comment,
             };
             formData.append('json', JSON.stringify(otherData));
-            console.log(formData);
             // Envoi des données pour création de la nouvelle partie
-            fetch(`https://bgc-backend.vercel.app/gamePlays`, {
+            // fetch(`https://bgc-backend.vercel.app/gamePlays`, {
+            fetch(`http://192.168.1.12:3000/gamePlays`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'multipart/form-data' },
                 body: formData,
@@ -205,8 +205,16 @@ export default function AddGamePlay() {
             .then(result => result.json())
             .then(data => {
                 if(data.result){
-                    dispatch(setDefaultGameName(null));
-                    dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+                    Alert.alert(
+                        "Succès",
+                        "La partie a été enregistrée avec succès",
+                        [
+                            { text: "OK", onPress: () => {
+                                dispatch(setAddGamePlayVisible(!addGamePlayVisible));
+                                dispatch(setDefaultGameName(null));
+                            }}
+                        ]
+                    );
                 } else {
                     Alert.alert(data.error);
                 }
@@ -216,10 +224,8 @@ export default function AddGamePlay() {
     }
 
     const handleGoBack = () => {
-        console.log(defaultGameName);
         dispatch(setAddGamePlayVisible(!addGamePlayVisible));
         dispatch(setDefaultGameName(null));
-        console.log(defaultGameName);
     }
 
     const playersJSX = players.map((player, i) => {
@@ -309,8 +315,8 @@ export default function AddGamePlay() {
                 <ScrollView contentContainerStyle={ styles.scrollView } >
                     <View style={styles.container}>
                         <View style={styles.topContainer} >
-                            <TouchableOpacity style={styles.goBackTouchable} onPress={() => dispatch(setAddGamePlayVisible(!addGamePlayVisible))}>
-                            <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
+                            <TouchableOpacity style={styles.goBackTouchable} onPress={() => handleGoBack()}>
+                                <AntDesign name="arrowleft" size={24} color="#423D3D" />                            
                             </TouchableOpacity>
                             <Text style={styles.title}>Ajouter une partie</Text>
                         </View>
