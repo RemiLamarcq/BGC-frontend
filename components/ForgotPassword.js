@@ -9,25 +9,20 @@ export default function ForgotPassword({toggleModalForgotPassword}) {
     const [codeNewPasswordModalVisible, setCodeNewPasswordModalVisible] = useState(false);
     const [error, setError] = useState('');
 
-    // const handleReset = () => {
-
-    //     console.log("Email:", email);
+    const handleReset = () => {
         
-    //     fetch('https://bgc-backend.vercel.app/users/signin', {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify({ email }),
-    //     }).then(response => response.json())
-    //         .then(data => {
-    //           if(data.result) {
-    //             setEmail('');
-    //             toggleModalCodeNewPassword();
-
-    //           }else{
-    //             setError(data.error)
-    //           }
-    //         })
-    // };
+        fetch(`https://bgc-backend.vercel.app/pwdRecovery/sendEmail/${email}`)
+        .then(response => response.json())
+            .then(data => {
+              if(data.result) {
+                toggleModalCodeNewPassword();
+                console.log('oin oin')
+              }else{
+                setError(data.error);
+                console.log('pq')
+              }
+            })
+    };
 
 
     const toggleModalCodeNewPassword = () => {
@@ -67,7 +62,8 @@ export default function ForgotPassword({toggleModalForgotPassword}) {
                 <View style={styles.modalContainer}>
                     <CodeNewPassword 
                         toggleModalForgotPassword={toggleModalForgotPassword} 
-                        toggleModalCodeNewPassword={toggleModalCodeNewPassword}/>
+                        toggleModalCodeNewPassword={toggleModalCodeNewPassword}
+                        email={email}/>
                 </View>
             </Modal>
 
@@ -98,7 +94,8 @@ const styles = StyleSheet.create({
 
       errorMsg:{
         color : 'red', 
-        textAlign:'center'
+        textAlign:'center', 
+        margin: 10
       },
 
       button:{
@@ -114,12 +111,12 @@ const styles = StyleSheet.create({
       modalContainer: {
         flex: 1,
         width: '90%',
-        height: '80%',
+        height: '85%',
         backgroundColor: '#88B7B6',
         borderRadius: 40,
         padding: 15,
         alignSelf: 'center',
-        marginBottom: 100,
+        marginBottom: 70,
         marginTop: 100
       },
 })  
