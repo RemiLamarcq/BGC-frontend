@@ -110,9 +110,9 @@ return (
         value={password}
         onChangeText={(value) => setPassword(value)}
       />
-      <TextInput style={styles.errorMsg}>
+      <Text style={styles.errorMsg}>
         {error}
-      </TextInput>
+      </Text>
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>S'inscrire</Text>
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F4F1',
     alignItems: 'center',
     justifyContent: 'center',
+    margin:-30,
     },
     logoTitle:{
       flex:0.5,
