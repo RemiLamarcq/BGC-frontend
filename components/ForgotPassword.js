@@ -16,10 +16,8 @@ export default function ForgotPassword({toggleModalForgotPassword}) {
             .then(data => {
               if(data.result) {
                 toggleModalCodeNewPassword();
-                console.log('oin oin')
               }else{
                 setError(data.error);
-                console.log('pq')
               }
             })
     };

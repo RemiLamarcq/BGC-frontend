@@ -23,11 +23,9 @@ const token = useSelector(state => state.user.value.token);
 
 const handlePressPencil = () => {
   setStarsEditable(!starsEditable);
-  console.log('ok');
 }
 
 const handlePressV = () => {
-    console.log('yo');
     fetch(`https://bgc-backend.vercel.app/games/score/${selectedGame.name}/${token}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -70,7 +68,6 @@ if(!starsEditable) {
               <AntDesign name="staro" style={{color: '#88B7B6'}} size={15}/>
           </TouchableOpacity>
           );
-          console.log(addPersonalNote);
       }
       
   }

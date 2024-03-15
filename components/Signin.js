@@ -18,8 +18,8 @@ export default function Signin({navigation}) {
 
   const handleSignIn = () => {
 
-console.log("Email:", email);
-console.log("Password:", password);
+// console.log("Email:", email);
+// console.log("Password:", password);
 
 fetch('https://bgc-backend.vercel.app/users/signin', {
   method: 'POST',

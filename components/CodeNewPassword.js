@@ -8,9 +8,9 @@ export default function ForgotPassword({toggleModalForgotPassword, toggleModalCo
     const [password, setPassword] = useState('');
 
     const handleSubmit = () => {
-        console.log(email);
-        console.log(checkCode);
-        console.log(password);
+        // console.log(email);
+        // console.log(checkCode);
+        // console.log(password);
 
         fetch(`https://bgc-backend.vercel.app/pwdRecovery/verifyCode/${email}`, {
             method: 'POST',
@@ -22,10 +22,8 @@ export default function ForgotPassword({toggleModalForgotPassword, toggleModalCo
               if(data.result) {
                 setCheckCode('');
                 setPassword('');
-                console.log('waw')
               }else{
                 setError(data.error);
-                console.log('pop')
               }
             })
 

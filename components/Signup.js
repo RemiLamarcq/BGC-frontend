@@ -19,9 +19,9 @@ const [error, setError] = useState('')
 
 const handleSignUp = () => {
 
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
+    // console.log("Username:", username);
+    // console.log("Email:", email);
+    // console.log("Password:", password);
 
     fetch('https://bgc-backend.vercel.app/users/signup', {
       method: 'POST',

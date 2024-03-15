@@ -85,8 +85,7 @@ function Header({
     // Fonction pour basculer l'état de la section "meeple" entre ouverte et fermée
     const toggleMeepleSection = () => {
       setIsMeepleSectionOpen(!isMeepleSectionOpen);
-      setShowModal(!showModal); // Ouvrir ou fermer la modal
-      console.log("isMeepleSectionOpen:", isMeepleSectionOpen);
+      setShowModal(!showModal);
     };
 
 
@@ -96,12 +95,14 @@ function Header({
           <View style={styles.staticHeader}>
             {/* Bouton pour basculer l'état de la section "meeple" */}
             {showMeeple && (
-              <TouchableOpacity style={styles.meepleBtn} onPress={toggleMeepleSection}>
-                <Image source={require('../assets/meeple.png')} style={styles.logoMeeple} />
-              </TouchableOpacity>
+              <View style={styles.meepleBtn}>
+                <TouchableOpacity onPress={toggleMeepleSection}>
+                  <Image source={require('../assets/meeple.png')} style={styles.logoMeeple} />
+                </TouchableOpacity>
+              </View>
             )}
             {/* Titre de la section */}
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={styles.titleCtn}>
               <Text style={styles.headerTitle}>{title}</Text>
             </View>
           </View>
@@ -177,17 +178,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       meepleBtn:{
-        width: 40, 
-        height: 40, 
         position: 'absolute',
+        zIndex: 1,
       },
-      goBackButton: {
-        position: 'absolute',
-      },  
       logoMeeple: {
-        width: '100%',
+        width: 40,
         height: 40, 
         alignSelf: 'center',
+      },
+      titleCtn: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
       },
       headerTitle: {
         color: '#423D3D',

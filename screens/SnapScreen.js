@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAddGamePlayVisible } from '../reducers/addGamePlayVisible';
 import { useNavigation } from '@react-navigation/native';
 import { setPhoto } from '../reducers/addGamePlayInfos';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 export default function SnapScreen() {
 
@@ -21,12 +22,23 @@ export default function SnapScreen() {
   const hasCameraPermission = useSelector(state => state.cameraPermission.value);
 
   // Par défaut, le SnapScreen est masqué par la modale AddGamePlay, il faut donc modifier l'état de la modale lorsqu'on navigue vers SnapScreen.
-  isFocused && dispatch(setAddGamePlayVisible(false));
+  // isFocused && dispatch(setAddGamePlayVisible(false));
+  useEffect(() => { isFocused && dispatch(setAddGamePlayVisible(false))}, [isFocused])
 
   const takePicture = async () => {
     const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-    const uri = photo?.uri;
-    dispatch(setPhoto({ uri, selectedPhoto }));
+    if(photo){
+      // Redimensionne l'image à une taille maximale de 1024x1024
+      const resizedPhoto = await ImageManipulator.manipulateAsync(
+        photo?.uri,
+        // [{ resize: { width: 1024, height: 1024 } }],
+        [{ resize: { width: 1024 } }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      // Enregistre l'image redimensionnée et compressée
+      const uri = resizedPhoto?.uri;
+      dispatch(setPhoto({ uri, selectedPhoto }));
+    }
   }
 
   function toggleFlash(){

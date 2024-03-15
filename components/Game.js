@@ -17,17 +17,14 @@ export default function Game({name, image, gameType, minPlayers, maxPlayers, dur
   const defaultGameName = useSelector(state => state.defaultGameName.value);
   
   const handleAddPlay = () => {
-    console.log(defaultGameName);
     dispatch(setDefaultGameName(name));
     dispatch(setAddGamePlayVisible(true));
     navigation.navigate('Cahier');
-    console.log(defaultGameName);
   }
   
   const handleGoToGameStats = () => {
     dispatch(setDefaultGameName(name));
     navigation.navigate('Stats');
-    console.log(defaultGameName);
   }
 
    return (
